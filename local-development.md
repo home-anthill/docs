@@ -230,7 +230,7 @@ ipconfig /a
 
 You'll get something like `192.168.1.???`, for example `192.168.1.7`.
 
-In this way, you can create a new file called `home-anthill-server-config/secrets-local.yaml` with this content:
+In this way, you can create a new file called `private-config/secrets-local.yaml` with this content:
 
 ```yaml
 # development configuration used locally

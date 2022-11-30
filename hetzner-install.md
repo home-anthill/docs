@@ -275,9 +275,9 @@ A wwww <ac-mosquitto-floating-ip_IP_ADDRESS>
 
 1. Define personal config in a private repository
 
-Create a new private repository to store your secrets and private configurations, for instance `home-anthill-server-config`
+Create a new private repository to store your secrets and private configurations, for instance `private-config`
 
-2. Create a custom values file in `home-anthill-server-config/custom-values.yaml` with a specific configuration like:
+2. Create a custom values file in `private-config/custom-values.yaml` with a specific configuration like:
 
 ```yaml
 domains:
@@ -304,14 +304,14 @@ mongodbUrl: "mongodb+srv://<MONGODB_ATLAS_USERNAME>:<MONGODB_ATLAS_PASSWORD>@clu
 
 ```bash
 cd helm/ac
-helm template -f values.yaml -f ../../home-anthill-server-config/custom-values.yaml . > output-manifests-no-ssl.yaml
+helm template -f values.yaml -f ../../private-config/custom-values.yaml . > output-manifests-no-ssl.yaml
 ```
 
 4. Deploy with Helm
 
 ```bash
 cd helm/ac
-helm install -f values.yaml -f ../../home-anthill-server-config/custom-values.yaml ac .
+helm install -f values.yaml -f ../../private-config/custom-values.yaml ac .
 ```
 
 5. Check kubernetes services! You should see 2 LoadBalancers with the right Floating IPs assigned.
@@ -323,9 +323,9 @@ helm install -f values.yaml -f ../../home-anthill-server-config/custom-values.ya
 
 1. Define personal config in a private repository
 
-Create a new private repository to store your secrets and private configurations, for instance `home-anthill-server-config`
+Create a new private repository to store your secrets and private configurations, for instance `private-config`
 
-2. Create a custom values file in `home-anthill-server-config/custom-values.yaml` with a specific configuration like:
+2. Create a custom values file in `private-config/custom-values.yaml` with a specific configuration like:
 
 ```yaml
 domains:
@@ -358,14 +358,14 @@ mongodbUrl: "mongodb+srv://<MONGODB_ATLAS_USERNAME>:<MONGODB_ATLAS_PASSWORD>@clu
 
 ```bash
 cd helm/ac
-helm template -f values.yaml -f ../../../home-anthill-server-config/custom-values.yaml . > output-manifests.yaml
+helm template -f values.yaml -f ../../private-config/custom-values.yaml . > output-manifests.yaml
 ```
 
 4. Deploy with Helm
 
 ```bash
 cd helm/ac
-helm install -f values.yaml -f ../../../home-anthill-server-config/custom-values.yaml  ac .
+helm install -f values.yaml -f ../../private-config/custom-values.yaml  ac .
 ```
 
 5. Check kubernetes services! You should see 2 LoadBalancers with the right Floating IPs assigned.

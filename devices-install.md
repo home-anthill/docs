@@ -28,7 +28,7 @@ Additionally, you need to manually add other libraries in Arduino folder. To do 
 - `Infineon - DPS310 Pressure Sensor` by Infineon (latest version on `master branch` or commit hash `ed02f803fc780cbcab54ed8b35dd3d718f2ebbda` [FROM GITHUB](https://github.com/Infineon/DPS310-Pressure-Sensor)).
 
 
-3. Create a new file `home-anthill-server-config/secrets.yaml` file with this content
+3. Create a new file `private-config/secrets.yaml` file with this content
 
 ```yaml
 wifi_ssid: '<YOUR WIFI SSID>'
