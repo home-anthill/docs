@@ -27,7 +27,7 @@ On server-side, I'm using a Kubernetes cluster with a simple microservice archit
 ## :house: Architecture :house:
 
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/air-condirioner-architecture.png" alt="ks89/home-anthill">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/home-anthill-architecture.png" alt="ks89/home-anthill">
 <br/>
 
 ### Devices sequence diagrams
