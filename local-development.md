@@ -56,21 +56,8 @@ Install Docker Desktop from [HERE](https://www.docker.com/products/docker-deskto
 
 ## 6. Download repos
 
-```bash
-mkdir home-anthill
-cd home-anthill
-git clone https://github.com/home-anthill/gui.git
-git clone https://github.com/home-anthill/api-server.git
-git clone https://github.com/home-anthill/api-devices.git
-git clone https://github.com/home-anthill/producer.git
-git clone https://github.com/home-anthill/consumer.git
-git clone https://github.com/home-anthill/register.git
-git clone https://github.com/home-anthill/esp32-configurator.git
-git clone https://github.com/home-anthill/mosquitto.git
-git clone https://github.com/home-anthill/devices.git
-git clone https://github.com/home-anthill/sensors.git
-git clone https://github.com/home-anthill/deployer.git
-```
+
+Run [this script](download-full-project.sh) in the location where you want to store `home-anthill` project.
 
 
 ## 7. Deploy local docker containers

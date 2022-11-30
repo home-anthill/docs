@@ -9,7 +9,7 @@ Home Anthill
 
 home-anthill is a project to control your home remotely with ESP32 devices.
 
-There are 2 types of devices that I call in this way:
+There are 2 types of devices. I chose this categorization:
 - `devices`: ESP32 devices to control something, like Air Conditioners.
 - `sensors`: ESP32 devices to read physical phenomenons like temperature, humidity, air quality.
 
@@ -23,6 +23,7 @@ Feel free to extend this project to match your requirements.
 
 On server-side, I'm using a Kubernetes cluster with a simple microservice architecture.
 
+<br/>
 
 ## :house: Architecture :house:
 
@@ -48,17 +49,23 @@ On server-side, I'm using a Kubernetes cluster with a simple microservice archit
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/4-notification-sensors.png" alt="Sequence diagram notification sensors">
 <br/>
 
+<br/>
 
 ## :building_construction: Local development :building_construction:
 
-To setup this project on your PC to develop and run these microservices, please take a look at `docs/local-development.md`
+To setup this project on your PC to develop and run these microservices, please take a look at [docs/local-development.md](docs/local-development.md)
 
+If everything works as expected, you can proceed to the next step and try to use the production configuration using a real remote server and domains.
+
+<br/>
 
 ## :earth_africa: Production installation and deploy :earth_africa:
 
 ### Server
 
-Check the official tutorial: `docs/hetzner-install.md`
+First you have to create a MongoDB database, for example on [MongoDB Atlas](https://www.mongodb.com/atlas) using a free account.
+Then, you can check the official tutorial [docs/hetzner-install.md](docs/hetzner-install.md) to setup your Kubernetes cluster.
+Before continue, you should verify that everything works fine, for example trying to login to the web interface with your GitHub account.
 
 ### Devices and Sensors
 
@@ -72,8 +79,9 @@ Supported devices:
 
 As you can see, devices are not working with `ESP32 S2 DevKit-C (ESP32-S2-SOLO)` because of [this issue](https://github.com/crankyoldgit/IRremoteESP8266/issues/1922)
 
-**Follow this guide `docs/devices-install.md`.**
+To configure and flash firmwares, follow this guide [docs/devices-install.md](docs/devices-install.md).
 
+<br/>
 <br/>
 
 ## :sparkling_heart: A big thank you to :sparkling_heart:
@@ -82,6 +90,7 @@ As you can see, devices are not working with `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`
 
 - <a href="https://www.freepik.com/free-vector/underground-ant-nest-with-red-ants_18582279.htm">Image by brgfx</a> from <a href="https://www.freepik.com/" title="Freepik">Freepik</a>
 
+<br/>
 <br/>
 
 # :copyright: License :copyright:
