@@ -16,11 +16,11 @@ Then try to build and flash an an official example to see if everything is ok!
 - `ArduinoJson` by Benoit Blanchon (version `6.19.4`)
 - `HttpClient` by Adrian McEwen (version `2.2.0`)
 - `PubSubClient` by Nick O'Leary (version `2.8`)
-- `Time` by Michael Margolis (version `1.6.1`)
 - `TimeAlarms` by Michael Margolis (version `1.5`)
 - `Arduino Unified Sensor` by Adafruit (version `1.1.6`)
 - `DHT sensor library` by Adafruit (version `1.4.4`)
 - `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.8.4`)
+- `Time` by Michael Margolis (version `1.6.1`) (not used directly, but it's an indirect dependency of `TimeAlarms`)
 
 Additionally, you need to manually add other libraries in Arduino folder. To do this, open that folder (`/Users/<YOUR_USERNAME>/Documents/Arduino/libraries/` on macOS) and copy the libraries:
 - `Grove - Air quality sensor` by Seeed Studio (latest version on `master branch` or commit hash `58e4c0bb5ce1b0c9b8aa1265e9f726025feb34f0` [FROM GITHUB](https://github.com/Seeed-Studio/Grove_Air_quality_Sensor)). You cannot use the one published on ArduinoIDE Library Manager, because it's outdated.
