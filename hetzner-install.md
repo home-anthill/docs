@@ -34,10 +34,10 @@ Name: what you like
 
 From Hetzner Cloud UI create 2 IPs:
 
-- name: ac-gui-floating-ip
+- name: gui-floating-ip
   location: Falkenstein
   protocol: IPV4
-- name: ac-mosquitto-floating-ip
+- name: mosquitto-floating-ip
   location: Falkenstein
   protocol: IPV4
 
@@ -259,13 +259,13 @@ mkdir /root/nginx-conf
 Update DNS records of your domains:
 
 ```
-A @ <ac-gui-floating-ip_IP_ADDRESS>
-A wwww <ac-gui-floating-ip_IP_ADDRESS>
+A @ <gui-floating-ip_IP_ADDRESS>
+A wwww <gui-floating-ip_IP_ADDRESS>
 ```
 
 ```
-A @ <ac-mosquitto-floating-ip_IP_ADDRESS>
-A wwww <ac-mosquitto-floating-ip_IP_ADDRESS>
+A @ <mosquitto-floating-ip_IP_ADDRESS>
+A wwww <mosquitto-floating-ip_IP_ADDRESS>
 ```
 
 
@@ -283,11 +283,11 @@ Create a new private repository to store your secrets and private configurations
 domains:
   # overwrite default http domain to don't use domain name
   # in this way you'll be able to reach this web app and rest services via `gui.publicIp`
-  http: "<ac-gui-floating-ip_IP_ADDRESS>"
+  http: "<gui-floating-ip_IP_ADDRESS>"
   mqtt: "localhost"
 
 mosquitto:
-  publicIp: "<ac-mosquitto-floating-ip_IP_ADDRESS>"
+  publicIp: "<mosquitto-floating-ip_IP_ADDRESS>"
 
 apiServer:
   oauthClientId: "<GITHUB_OAUTH_CLIENT>"
@@ -295,7 +295,7 @@ apiServer:
   singleUserLoginEmail: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>"
 
 gui:
-  publicIp: "<ac-gui-floating-ip_IP_ADDRESS>"
+  publicIp: "<gui-floating-ip_IP_ADDRESS>"
 
 mongodbUrl: "mongodb+srv://<MONGODB_ATLAS_USERNAME>:<MONGODB_ATLAS_PASSWORD>@cluster0.4wies.mongodb.net"
 ```
@@ -311,7 +311,7 @@ helm template -f values.yaml -f ../../private-config/custom-values.yaml . > outp
 
 ```bash
 cd helm/ac
-helm install -f values.yaml -f ../../private-config/custom-values.yaml ac .
+helm install -f values.yaml -f ../../private-config/custom-values.yaml home-anthill .
 ```
 
 5. Check kubernetes services! You should see 2 LoadBalancers with the right Floating IPs assigned.
@@ -333,7 +333,7 @@ domains:
   mqtt: "YOUR_MQTT_DOMAIN"
 
 mosquitto:
-  publicIp: "<ac-mosquitto-floating-ip_IP_ADDRESS>"
+  publicIp: "<mosquitto-floating-ip_IP_ADDRESS>"
   ssl:
     enable: true
     certbot:
@@ -345,7 +345,7 @@ apiServer:
   singleUserLoginEmail: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>"
 
 gui:
-  publicIp: "<ac-gui-floating-ip_IP_ADDRESS>"
+  publicIp: "<gui-floating-ip_IP_ADDRESS>"
   ssl:
     enable: true
     certbot:
@@ -365,7 +365,7 @@ helm template -f values.yaml -f ../../private-config/custom-values.yaml . > outp
 
 ```bash
 cd helm/ac
-helm install -f values.yaml -f ../../private-config/custom-values.yaml  ac .
+helm install -f values.yaml -f ../../private-config/custom-values.yaml  home-anthill .
 ```
 
 5. Check kubernetes services! You should see 2 LoadBalancers with the right Floating IPs assigned.
