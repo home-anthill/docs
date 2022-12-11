@@ -53,7 +53,7 @@ On server-side, I'm using a Kubernetes cluster with a simple microservice archit
 
 ## :building_construction: Local development :building_construction:
 
-To setup this project on your PC to develop and run these microservices, please take a look at [docs/local-development.md](docs/blob/master/local-development.md)
+To setup this project on your PC to develop and run these microservices, please take a look at [local-development.md](local-development.md)
 
 If everything works as expected, you can proceed to the next step and try to use the production configuration using a real remote server and domains.
 
@@ -64,22 +64,22 @@ If everything works as expected, you can proceed to the next step and try to use
 ### Server
 
 First you have to create a MongoDB database, for example on [MongoDB Atlas](https://www.mongodb.com/atlas) using a free account.
-Then, you can check the official tutorial [docs/hetzner-install.md](docs/blob/master/hetzner-install.md) to setup your Kubernetes cluster.
+Then, you can check the official tutorial [hetzner-install.md](hetzner-install.md) to setup your Kubernetes cluster.
 Before continue, you should verify that everything works fine, for example trying to login to the web interface with your GitHub account.
 
 ### Devices and Sensors
 
 Supported devices:
 - devices:
-  **device-ac-beko**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
+  - **device-ac-beko**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
 - sensors:
-    **sensor-airquality-pir**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
-    **sensor-barometer**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
-    **sensor-dht-light**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
+  - **sensor-airquality-pir**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
+  - **sensor-barometer**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
+  - **sensor-dht-light**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
 
 As you can see, devices are not working with `ESP32 S2 DevKit-C (ESP32-S2-SOLO)` because of [this issue](https://github.com/crankyoldgit/IRremoteESP8266/issues/1922)
 
-To configure and flash firmwares, follow this guide [docs/devices-install.md](docs/blob/master/devices-install.md).
+To configure and flash firmwares, follow this guide [devices-install.md](devices-install.md).
 
 <br/>
 <br/>
