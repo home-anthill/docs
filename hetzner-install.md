@@ -288,6 +288,10 @@ domains:
 
 mosquitto:
   publicIp: "<mosquitto-floating-ip_IP_ADDRESS>"
+  auth:
+    enable: true
+    username: "<CHOOSE_MOSQUITTO_USERNAME>"
+    password: "<CHOOSE_MOSQUITTO_PASSWORD>"
 
 apiServer:
   oauthClientId: "<GITHUB_OAUTH_CLIENT>"
@@ -334,6 +338,10 @@ domains:
 
 mosquitto:
   publicIp: "<mosquitto-floating-ip_IP_ADDRESS>"
+  auth:
+    enable: true
+    username: "<CHOOSE_MOSQUITTO_USERNAME>"
+    password: "<CHOOSE_MOSQUITTO_PASSWORD>"
   ssl:
     enable: true
     certbot:

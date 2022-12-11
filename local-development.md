@@ -67,8 +67,10 @@ Run [this script](download-full-project.sh) in the location where you want to st
 
 ```bash
 cd home-anthill
+mosquitto_passwd -b -c password_file mosquser Password1!
 docker pull eclipse-mosquitto
-docker run -it --name mosquitto -p 1883:1883 -p 9001:9001 --rm -v $PWD/mosquitto/mosquitto-no-security.conf:/mosquitto/config/mosquitto.conf -v /mosquitto/data -v /mosquitto/log eclipse-mosquitto
+
+docker run -it --name mosquitto -p 1883:1883 -p 9001:9001 --rm -v $PWD/mosquitto/mosquitto-nossl-auth.conf:/mosquitto/config/mosquitto.conf -v $PWD/mosquitto/password_file:/etc/mosquitto/password_file -v /mosquitto/data -v /mosquitto/log eclipse-mosquitto
 ```
 **Don't close this terminal window!**
 
@@ -126,6 +128,7 @@ make run
 
 ```bash
 cd home-anthill/api-devices
+cp .env_template .env
 make run
 ```
 
@@ -140,6 +143,7 @@ make run
 
 ```bash
 cd home-anthill/producer
+cp .env_template .env
 make run
 ```
 

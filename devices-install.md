@@ -49,6 +49,9 @@ server_path: '/api/register'
 
 mqtt_domain: '<YOUR MQTTS PUBLIC DOMAIN>'
 mqtt_port: 8883
+mqtt_auth: true
+mqtt_username: "<YOUR MOSQUITTO USERNAME>"
+mqtt_password: "<YOUR MOSQUITTO PASSWORRD>"
 ```
 
 4. Run `esp32-configurator` Python script:
@@ -60,12 +63,12 @@ python3 -m src --model=dht-light --source=../secrets.yaml --destination=../senso
 python3 -m src --model=airquality-pir --source=../secrets.yaml --destination=../sensors/sensor-airquality-pir
 python3 -m src --model=barometer --source=../secrets.yaml --destination=../sensors/sensor-barometer
 
-python3 -m src --model=ac --source=../secrets.yaml --destination=../devices/device
+python3 -m src --model=ac --source=../secrets.yaml --destination=../devices/device-ac-beko
 ```
 
 5. Build and flash firmwares
 
-- Open `devices/device/device.ino` with ArduinoIDE and flash the firmware
+- Open `devices/device-ac-beko/device-ac-beko.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-dht-light/sensor-dht-light.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-airquality-pir/sensor-airquality-pir.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-barometer/sensor-barometer.ino` with ArduinoIDE and flash the firmware
