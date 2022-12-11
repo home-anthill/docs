@@ -66,8 +66,9 @@ Run [this script](download-full-project.sh) in the location where you want to st
 1. Mosquitto
 
 ```bash
-cd home-anthill
+cd home-anthill/mosquitto
 mosquitto_passwd -b -c password_file mosquser Password1!
+cd ..
 docker pull eclipse-mosquitto
 
 docker run -it --name mosquitto -p 1883:1883 -p 9001:9001 --rm -v $PWD/mosquitto/mosquitto-nossl-auth.conf:/mosquitto/config/mosquitto.conf -v $PWD/mosquitto/password_file:/etc/mosquitto/password_file -v /mosquitto/data -v /mosquitto/log eclipse-mosquitto
