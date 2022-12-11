@@ -3,10 +3,60 @@
 
 ## 1. Prepare ESP32 boards with wiring and electrical parts
 
-**TODO add a tutorial and some photos**
+In this section, I'll show how to prepare all types of devices and sensors.
+Obviously, you are free to use only some of them.
+
+Suggested hardware:
+- some generic cables (I suggest [this product](https://www.amazon.it/gp/product/B08YRGVYPV/ref=ppx_yo_dt_b_asin_title_o07_s01?ie=UTF8&psc=1))
+- 4 x Mini Breadboards [HERE](https://www.amazon.it/AZDelivery-MB-102-Breadboard-Alimentazione-Arduino/dp/B07VFK5CRP/ref=sr_1_5?keywords=breadboards&qid=1670794035&sr=8-5)
+- 1 x `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)` [HERE](https://www.mouser.it/ProductDetail/Espressif-Systems/ESP32-S3-DevKitC-1-N8?qs=Wj%2FVkw3K%252BMCTHFMHLvA1pQ%3D%3D)
+- 3 x `ESP32 S2 DevKit-C (ESP32-S2-SOLO)` [HERE](https://www.mouser.it/ProductDetail/Espressif-Systems/ESP32-S2-DevKitC-1?qs=sGAEpiMZZMuqBwn8WqcFUipNgoezRlc4yCMrcjU15dajQwJoGbTgng%3D%3D)
+- 1 x `Grove - 4 pin Male Jumper to Grove 4 pin Conversion Cable` (SKU 110990210) [HERE](https://www.seeedstudio.com/Grove-4-pin-Male-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-Pack.html?queryID=2303afdc4903ae3d41e29da30f358b96&objectID=1321&indexName=bazaar_retailer_products)
+- 1 x `Grove - Digital Light Sensor - TSL2561` (SKU 101020030) [HERE](https://www.seeedstudio.com/Grove-Digital-Light-Sensor-TSL2561.html?queryID=4a3675ce800dd579fb0e50d00ef6b601&objectID=1594&indexName=bazaar_retailer_products)
+- 1 x `Grove - Infrared Emitter` (SKU 101020026) [HERE](https://www.seeedstudio.com/Grove-Infrared-Emitter.html?queryID=160934d31f7e88ba03efa75a63d27010&objectID=2248&indexName=bazaar_retailer_products)
+- 1 x `Grove - Air Quality Sensor v1.3 - Arduino Compatible` (SKU 101020078) [HERE](https://www.seeedstudio.com/Grove-Air-Quality-Sensor-v1-3-Arduino-Compatible.html?queryID=b39ed7edc031e50e2d00e646247cba7c&objectID=700&indexName=bazaar_retailer_products)
+- 1 x `Grove - High Precision Barometric Pressure Sensor (DPS310)` (SKU 101020812) [HERE](https://www.seeedstudio.com/Grove-High-Precision-Barometer-Sensor-DPS310-p-4397.html?queryID=550beac2830c58583bcc256e3bf3f245&objectID=4397&indexName=bazaar_retailer_products)
+- 1 x `Mini AM312 PIR sensor` [HERE](https://www.amazon.it/gp/product/B07FGG87JM/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1)
+- 1 x `DHT22 AM2302 sensor` [HERE](https://www.amazon.it/AZDelivery-temperatura-circuito-Raspberry-gratuito/dp/B078SVZB1X/ref=sr_1_1_sspa?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=5C1HXGIU9M4H&keywords=dht22&qid=1670794113&sprefix=dht22%2Caps%2C90&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1&smid=A1X7QLRQH87QA3)
+- 4 x Micro USB cables
+- 4 x USB power adapter
 
 
-## 2. Build and flash firmwares
+Sensor (DHT + Light)
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-dht-light.jpg" alt="sensor dht and light">
+<br/>
+
+Sensor (Barometer)
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-barometer.jpg" alt="sensor barometer">
+<br/>
+
+Sensor (Air quality + PIR)
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-airquality-pir.jpg" alt="sensor airquality and pir">
+<br/>
+
+
+Device (AC Beko)
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac-beko.jpg" alt="sensor air conditioner beko">
+<br/>
+
+
+Connections:
+- all sensors are powered on with 3.3V
+- DHT signal input on pin 4
+- PIR signal input on pin 5
+- IR emitter on pin 4
+- Air quality signal on pin 4
+- Barometric Pressure sensor I2C (SCL on pin 39, SDL on pin 40)
+- Digital light sensor I2C (SCL on pin 39, SDL on pin 40)
+
+You are free to change these inputs modifying firmwares accordingly.
+
+
+## 2. Build and flash firmwares
 
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
