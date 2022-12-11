@@ -176,7 +176,7 @@ At this point, you should be able to login to the app, so the DB has a valid pro
 However, you don't have any other data.
 You can navigate across the webapp to add homes, rooms and so on, but I prefer to show how to insert data manually via APIs using the free [Postman](https://www.postman.com/) desktop app.
 
-### Postman
+### Postman
 
 
 1. click on `cookies` on the bottom bar
@@ -185,7 +185,7 @@ You can navigate across the webapp to add homes, rooms and so on, but I prefer t
 
 3. Download and import in Postman this file `docs/postman-collections/postman_collection.json`
 
-### JWT
+### JWT
 
 
 1. From your browser, login via GitHub at `http://localhost:8082`
