@@ -59,11 +59,11 @@ mqtt_password: "<YOUR MOSQUITTO PASSWORRD>"
 ```bash
 cd esp32-configurator
 
-python3 -m src --model=dht-light --source=../secrets.yaml --destination=../sensors/sensor-dht-light
-python3 -m src --model=airquality-pir --source=../secrets.yaml --destination=../sensors/sensor-airquality-pir
-python3 -m src --model=barometer --source=../secrets.yaml --destination=../sensors/sensor-barometer
+python3 -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../sensors/sensor-dht-light
+python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../sensors/sensor-airquality-pir
+python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../sensors/sensor-barometer
 
-python3 -m src --model=ac --source=../secrets.yaml --destination=../devices/device-ac-beko
+python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../devices/device-ac-beko
 ```
 
 5. Build and flash firmwares
