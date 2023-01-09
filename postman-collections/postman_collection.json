@@ -111,7 +111,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8082/api/profiles/61c11c44ce6401401179513f/tokens",
+							"raw": "localhost:8082/api/profiles/620d710e4e8fe8f3394084bc/tokens",
 							"host": [
 								"localhost"
 							],
@@ -119,7 +119,7 @@
 							"path": [
 								"api",
 								"profiles",
-								"61c11c44ce6401401179513f",
+								"620d710e4e8fe8f3394084bc",
 								"tokens"
 							]
 						}
@@ -133,7 +133,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mac\": \"77:02:33:77:22:55\",\n\t\"manufacturer\": \"beko3\",\n\t\"model\": \"beko3\",\n\t\"apiToken\": \"d8812432-7b52-4e1f-88a3-ce1f70a204c6\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"ac\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
+							"raw": "{\n    \"mac\": \"77:02:33:77:22:55\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"ac-beko\",\n\t\"apiToken\": \"473a4861-632b-4915-b01e-cf1d418966c6\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"ac-beko\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -162,7 +162,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mac\": \"99:99:45:22:12:66\",\n\t\"manufacturer\": \"sensor4\",\n\t\"model\": \"sensor4\",\n\t\"apiToken\": \"d8812432-7b52-4e1f-88a3-ce1f70a204c6\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
+							"raw": "{\n    \"mac\": \"99:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"473a4861-632b-4915-b01e-cf1d418966c6\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -211,7 +211,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"dsdasd\",\n    \"location\": \"fshfsdhjf\",\n    \"rooms\": [{\n        \"name\": \"aasasa\",\n        \"floor\": 1\n    }]\n}",
+							"raw": "{\n    \"name\": \"newhome\",\n    \"location\": \"newlocation\",\n    \"rooms\": [{\n        \"name\": \"newroom\",\n        \"floor\": 1\n    }]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -240,7 +240,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Casa\",\n    \"location\": \"Milano\"\n}",
+							"raw": "{\n    \"name\": \"newhome2\",\n    \"location\": \"newlocation2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -248,7 +248,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d",
+							"raw": "http://localhost:8082/api/homes/63bca1520205ea20dd04a466",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -257,7 +257,7 @@
 							"path": [
 								"api",
 								"homes",
-								"620d71c5b98386d5903d6a4d"
+								"63bca1520205ea20dd04a466"
 							]
 						}
 					},
@@ -269,7 +269,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d",
+							"raw": "http://localhost:8082/api/homes/63bca1520205ea20dd04a466",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -278,7 +278,7 @@
 							"path": [
 								"api",
 								"homes",
-								"620d71c5b98386d5903d6a4d"
+								"63bca1520205ea20dd04a466"
 							]
 						}
 					},
@@ -290,7 +290,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/homes/633a08f1a34617c91f43dd56/rooms",
+							"raw": "http://localhost:8082/api/homes/63bca2900205ea20dd04a46c/rooms",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -299,7 +299,7 @@
 							"path": [
 								"api",
 								"homes",
-								"633a08f1a34617c91f43dd56",
+								"63bca2900205ea20dd04a46c",
 								"rooms"
 							]
 						}
@@ -313,7 +313,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"asasa\",\n    \"floor\": 4\n}",
+							"raw": "{\n    \"name\": \"newroom2\",\n    \"floor\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,7 +321,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/homes/633a08f1a34617c91f43dd56/rooms",
+							"raw": "http://localhost:8082/api/homes/63bca1a60205ea20dd04a46b/rooms",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -330,7 +330,7 @@
 							"path": [
 								"api",
 								"homes",
-								"633a08f1a34617c91f43dd56",
+								"63bca1a60205ea20dd04a46b",
 								"rooms"
 							]
 						}
@@ -344,7 +344,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"yyyyyyy\",\n    \"floor\": 98,\n    \"devices\": [\"63395e2a296289168eb70aed\"]\n}",
+							"raw": "{\n    \"name\": \"updated-room\",\n    \"floor\": 2,\n    \"devices\": [\"63bca0cc0205ea20dd04a464\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -352,7 +352,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/homes/633a08eaa34617c91f43dd54/rooms/633a08eaa34617c91f43dd55",
+							"raw": "http://localhost:8082/api/homes/63bca16b0205ea20dd04a468/rooms/63bca16b0205ea20dd04a469",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -361,9 +361,9 @@
 							"path": [
 								"api",
 								"homes",
-								"633a08eaa34617c91f43dd54",
+								"63bca16b0205ea20dd04a468",
 								"rooms",
-								"633a08eaa34617c91f43dd55"
+								"63bca16b0205ea20dd04a469"
 							]
 						}
 					},
@@ -375,7 +375,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/homes/633a08f1a34617c91f43dd56/rooms/633a08f1a34617c91f43dd57",
+							"raw": "http://localhost:8082/api/homes/63bca2900205ea20dd04a46c/rooms/63bca2970205ea20dd04a46d",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -384,9 +384,9 @@
 							"path": [
 								"api",
 								"homes",
-								"633a08f1a34617c91f43dd56",
+								"63bca2900205ea20dd04a46c",
 								"rooms",
-								"633a08f1a34617c91f43dd57"
+								"63bca2970205ea20dd04a46d"
 							]
 						}
 					},
@@ -422,7 +422,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/devices/63395e2a296289168eb70aed?homeId=611f9c43312e41c09b164a56&roomId=000000000000000000000000",
+							"raw": "http://localhost:8082/api/devices/63bca0cc0205ea20dd04a464?homeId=620d71c5b98386d5903d6a4d&roomId=63bca1a60205ea20dd04a46b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -431,16 +431,16 @@
 							"path": [
 								"api",
 								"devices",
-								"63395e2a296289168eb70aed"
+								"63bca0cc0205ea20dd04a464"
 							],
 							"query": [
 								{
 									"key": "homeId",
-									"value": "611f9c43312e41c09b164a56"
+									"value": "620d71c5b98386d5903d6a4d"
 								},
 								{
 									"key": "roomId",
-									"value": "000000000000000000000000"
+									"value": "63bca1a60205ea20dd04a46b"
 								}
 							]
 						}
@@ -453,7 +453,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/devices/63725b0b59906d8e8ce9069a/values",
+							"raw": "http://localhost:8082/api/devices/63bca0cc0205ea20dd04a464/values",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -462,7 +462,7 @@
 							"path": [
 								"api",
 								"devices",
-								"63725b0b59906d8e8ce9069a",
+								"63bca0cc0205ea20dd04a464",
 								"values"
 							]
 						}
@@ -470,13 +470,13 @@
 					"response": []
 				},
 				{
-					"name": "setDeviceOnOff",
+					"name": "setDeviceValues",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"on\": true\n}",
+							"raw": "{\n    \"on\": true,\n    \"temperature\": 28,\n    \"mode\": 1,\n    \"fanSpeed\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -484,7 +484,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/devices/63395e2a296289168eb70aed/values/onoff",
+							"raw": "http://localhost:8082/api/devices/63bca0cc0205ea20dd04a464/values",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -493,137 +493,8 @@
 							"path": [
 								"api",
 								"devices",
-								"63395e2a296289168eb70aed",
-								"values",
-								"onoff"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "setDeviceTemperature",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"temperature\": 25\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8082/api/devices/63395e2a296289168eb70aed/values/temperature",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"devices",
-								"63395e2a296289168eb70aed",
-								"values",
-								"temperature"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "setDeviceMode",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"mode\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8082/api/devices/63395e2a296289168eb70aed/values/mode",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"devices",
-								"63395e2a296289168eb70aed",
-								"values",
-								"mode"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "setDeviceFanMode",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"fanMode\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8082/api/devices/63395e2a296289168eb70aed/values/fanmode",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"devices",
-								"63395e2a296289168eb70aed",
-								"values",
-								"fanmode"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "setDeviceFanSwing",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"fanSpeed\": 2\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8082/api/devices/63395e2a296289168eb70aed/values/fanspeed",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"devices",
-								"63395e2a296289168eb70aed",
-								"values",
-								"fanspeed"
+								"63bca0cc0205ea20dd04a464",
+								"values"
 							]
 						}
 					},

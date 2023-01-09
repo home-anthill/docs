@@ -1,15 +1,29 @@
 # Local development setup
 
+## 0. Install GNU make
+
+On macOS install it via [Homebrew](https://formulae.brew.sh/formula/make) with `brew install make`
+
+Check if everything works fine running:
+```bash
+make -v
+```
+
 
 ## 1. Install Go
 
 
 1. Install Go from [HERE](https://go.dev/)
-2. Install global go stuff `go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow@latest`
-3. Install [air](https://github.com/cosmtrek/air) to watch changes and auto-rebuild
+2. Install [air](https://github.com/cosmtrek/air) to watch changes and auto-rebuild:
 
 ```bash
 curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+```
+
+Check if everything works fine running:
+```bash
+go version
+air -v
 ```
 
 
@@ -115,6 +129,7 @@ These 2 values are the clientID and secretID of your github oAuth2 application, 
 
 ## 9. Run all microservices
 
+**With MongoDB, RabbitMQ and Mosquitto up and running**, you can start all microservices.
 
 Open every microservice in a terminal tab (or multiple windows)
 
@@ -159,7 +174,9 @@ make run
 
 ```bash
 cd home-anthill/gui
+npm i
 npm run build
+# or, if you prefer the dev server at `http://localhost:4200`, you can use `npm run start`
 ```
 
 7. login to the webapp with your GitHub account
@@ -244,7 +261,7 @@ wifi_ssid: '<YOUR WIFI SSID>'
 wifi_password: '<YOUR WIFI PASSWORD>'
 
 manufacturer: 'ks89'
-api_token: '<PROFILE API TOKEN>' # from your local DB
+api_token: '<PROFILE API TOKEN>' # from your local DB or via `regenApiToken` in Postman
 
 ssl: false
 
@@ -254,4 +271,7 @@ server_path: '/api/register'
 
 mqtt_domain: '192.168.1.7' # your local IP (for example 192.168.1.7)
 mqtt_port: 1883
+mqtt_auth: true
+mqtt_username: "mosquser"
+mqtt_password: "Password1!"
 ```
