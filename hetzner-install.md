@@ -1,17 +1,13 @@
 # Heztner cloud with Kubernetes
 
-Based on https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+Based on https://docs.k3s.io/quick-start
 
 ## Environment
 
 - Ubuntu 22.04 LTS
-- Kubernetes 1.24
-- Flannel 0.19.1
-- MetalLB 0.13.4
-- containerd 1.6.8
-- runc 1.1.4
-- cni-plugins 1.1.1
-
+- Kubernetes v1.25.4+k3s1
+- [Flannel 0.20.2](https://github.com/flannel-io/flannel)
+- [MetalLB 0.13.7](https://metallb.universe.tf/)
 
 ## Server creation
 
@@ -19,7 +15,7 @@ From Hetzner Cloud UI create a server like this:
 
 REGION: Falkenstein
 OS type: Ubuntu 22.04
-Type: Standard - CPX11 - 2 vCPU - 4 GB RAM - 40 GB disk
+Type: Standard - CPX11 - 2 vCPU - 2 GB RAM - 40 GB disk
 Volume: none
 Network: none
 Firewalls: none
@@ -56,8 +52,8 @@ ssh -i ~/.ssh/<private_key_file> root@<HETZNER_SERVER_IP>
 ## Update Ubuntu
 
 ```bash
-sudo apt-get update
-sudo apt-get upgrade
+sudo apt-get update -y
+sudo apt-get upgrade -y
 ```
 
 
@@ -71,171 +67,65 @@ sudo swapoff -a
 # disable swap also when you'll reboot
 cp /etc/fstab /etc/fstab.backup
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+sudo reboot
 ```
 
 
-## Letting iptables see bridged traffic
+## Prepare K3s
 
-Make sure that the br_netfilter module is loaded. This can be done by running lsmod | grep br_netfilter. To load it explicitly call sudo modprobe br_netfilter.
-As a requirement for your Linux Node's iptables to correctly see bridged traffic, you should ensure net.bridge.bridge-nf-call-iptables is set to 1 in your sysctl config.
+As described [HERE](https://docs.k3s.io/installation/configuration#configuration-file), K3s reads a config file on install located at `/etc/rancher/k3s/config.yaml`.
 
 ```bash
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
-overlay
-br_netfilter
-EOF
-
-sudo modprobe overlay
-sudo modprobe br_netfilter
-
-# sysctl params required by setup, params persist across reboots
-cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-iptables  = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward                 = 1
-EOF
-
-# Apply sysctl params without reboot
-sudo sysctl --system
+sudo mkdir -p /etc/rancher/k3s
+sudo mkdir -p /root/.kube
+sudo touch /etc/rancher/k3s/config.yaml
 ```
 
+Add this content to `/etc/rancher/k3s/config.yaml`:
 
-## Check open ports (optional)
+```yaml
+disable:
+  - traefik
+  - servicelb
+write-kubeconfig-mode: "0644"
+write-kubeconfig: "/root/.kube/config"
+cluster-cidr: "10.244.0.0/16"
+```
 
-Check port via telnet
+**Attention, this is very important:**
+`cluster-cidr: "10.244.0.0/16"` is required to prevent error `Error registering network: failed to acquire lease: subnet 10.244.0.0/16 specified in the flannel net config doesnt contain 10.42.0.0/24 PodCIDR...` when starting `kube-flannel-ds` pod.
+
+
+## Install K3s
+
+Install K3s via: 
 
 ```bash
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt install telnet
-
-telnet 127.0.0.1 6443
-# must return "telnet: Unable to connect to remote host: Connection refused"
-
+curl -sfL https://get.k3s.io | sh - 
+# Check for Ready node, takes ~30 seconds 
+k3s kubectl get node 
 ```
 
+Save the content of `/root/.kube/config` to you local machine as `~/.kube/config` file.
+Replace `127.0.0.1` in `~/.kube/config` with the public IPv4 of your Hetzner server.
 
-## Installing containerd (manually)
+Now, you should be able to connect to the cluster from your local machine, for example via `kubectl` or softwares like [k9s](https://k9scli.io/).
 
-Taken from https://github.com/containerd/containerd/blob/main/docs/getting-started.md
+
+## Install Flannel CNI plugin
+
+MetalLB reports some incompatibilities with different CNI plugins, so I chose Flannel, because it seems supported without issues.
 
 ```bash
-
-wget https://github.com/containerd/containerd/releases/download/v1.6.8/containerd-1.6.8-linux-amd64.tar.gz
-tar Cxzvf /usr/local containerd-1.6.8-linux-amd64.tar.gz
-
-wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
-cp containerd.service /etc/systemd/system/
-chmod 664 /etc/systemd/system/containerd.service
-
-wget https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64
-install -m 755 runc.amd64 /usr/local/sbin/runc
-
-wget https://github.com/containernetworking/plugins/releases/download/v1.1.1/cni-plugins-linux-amd64-v1.1.1.tgz
-mkdir -p /opt/cni/bin
-tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.1.1.tgz
-
-# generate default config.toml for containerd
-mkdir -p /etc/containerd
-containerd config default > /etc/containerd/config.toml
-
-# start containerd
-sudo systemctl enable containerd
-sudo systemctl start containerd
-sudo systemctl status containerd
-```
-
-
-## Configure systemd cgroup driver
-
-To use the systemd cgroup driver in `/etc/containerd/config.toml` with runc, set
-
-```
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-    ...
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-        SystemdCgroup = true
-```
-
-If you apply this change, make sure to restart containerd:
-```bash
-sudo systemctl restart containerd
-sudo systemctl status containerd
-```
-
-With containerd up and running, the next step is to install kubeadm, kubelet, and kubectl on each node.
-
-
-## Installing kubeadm, kubelet, and kubectl
-
-```bash
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl
-
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
-sudo apt-mark hold kubelet kubeadm kubectl
-```
-
-The last line with the apt-mark hold command is optional, but highly recommended. This will prevent these packages from being updated until you unhold them.
-
-
-## Initialize kubeadm:
-
-Taken from https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
-
-```bash
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-```
-
-
-## Deploy CNI plugin
-
-MetalLB reports some incompatibilities with different CNI plugins, so I chose flannel, because it seems supported without issues.
-
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.19.1/Documentation/kube-flannel.yml
-```
-
-Patch Flannel deployment to tolerate 'uninitialized' taint:
-
-```bash
-kubectl -n kube-system patch ds kube-flannel-ds --type json -p '[{"op":"add","path":"/spec/template/spec/tolerations/-","value":{"key":"node.cloudprovider.kubernetes.io/uninitialized","value":"true","effect":"NoSchedule"}}]'
-```
-
-
-## Fix taints
-
-To fix error `0/1 nodes are available: 1 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate" `when you'll deploy your app, you have to run this:
-
-```bash
-kubectl taint nodes --all node-role.kubernetes.io/master-
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml
 ```
 
 
 ## Install MetalLB
 
 ```bash
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.4/config/manifests/metallb-native.yaml
-```
-
-And fix taint error for MetalLB if you see error: `0/1 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.`.
-
-```bash
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
 ```
 
 
@@ -254,24 +144,9 @@ mkdir /root/nginx-conf
 ```
 
 
-## Update DNS records
-
-Update DNS records of your domains:
-
-```
-A @ <gui-floating-ip_IP_ADDRESS>
-A wwww <gui-floating-ip_IP_ADDRESS>
-```
-
-```
-A @ <mosquitto-floating-ip_IP_ADDRESS>
-A wwww <mosquitto-floating-ip_IP_ADDRESS>
-```
-
-
 ## Deploy application
 
-## Development without SLL and domain names
+## Development without SLL and domain names (**NOT RECOMMENDED**)
 
 1. Define personal config in a private repository
 
@@ -294,8 +169,8 @@ mosquitto:
     password: "<CHOOSE_MOSQUITTO_PASSWORD>"
 
 apiServer:
-  oauthClientId: "<GITHUB_OAUTH_CLIENT>"
-  oauthSecret: "<GITHUB_OAUTH_SECRET>"
+  oauth2ClientID: "<GITHUB_OAUTH_CLIENT>"
+  oauth2SecretID: "<GITHUB_OAUTH_SECRET>"
   singleUserLoginEmail: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>"
 
 gui:
@@ -307,14 +182,14 @@ mongodbUrl: "mongodb+srv://<MONGODB_ATLAS_USERNAME>:<MONGODB_ATLAS_PASSWORD>@clu
 3. (optional step) If you want to see all manifests processed by Helm without deploying them, you can run:
 
 ```bash
-cd helm/ac
+cd deployer/home-anthill
 helm template -f values.yaml -f ../../private-config/custom-values.yaml . > output-manifests-no-ssl.yaml
 ```
 
 4. Deploy with Helm
 
 ```bash
-cd helm/ac
+cd deployer/home-anthill
 helm install -f values.yaml -f ../../private-config/custom-values.yaml home-anthill .
 ```
 
@@ -324,6 +199,20 @@ helm install -f values.yaml -f ../../private-config/custom-values.yaml home-anth
 
 
 ## Production with SSL and domain names
+
+First, you need to but 2 public web domains, for example [HERE](https://www.godaddy.com/).
+Then, you can update DNS records of your domains:
+
+```
+A @ <gui-floating-ip_IP_ADDRESS>
+A wwww <gui-floating-ip_IP_ADDRESS>
+```
+
+```
+A @ <mosquitto-floating-ip_IP_ADDRESS>
+A wwww <mosquitto-floating-ip_IP_ADDRESS>
+```
+
 
 1. Define personal config in a private repository
 
@@ -348,9 +237,11 @@ mosquitto:
       email: "<YOUR_CERTIFICATE_EMAIL>"
 
 apiServer:
-  oauthClientId: "<GITHUB_OAUTH_CLIENT>"
-  oauthSecret: "<GITHUB_OAUTH_SECRET>"
+  oauth2ClientID: "<GITHUB_OAUTH_CLIENT>"
+  oauth2SecretID: "<GITHUB_OAUTH_SECRET>"
   singleUserLoginEmail: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>"
+  jwtPassword: "<JWT_PASSWORD>"
+  cookieSecret: "<COOKIE_SECRET>"
 
 gui:
   publicIp: "<gui-floating-ip_IP_ADDRESS>"
@@ -365,14 +256,14 @@ mongodbUrl: "mongodb+srv://<MONGODB_ATLAS_USERNAME>:<MONGODB_ATLAS_PASSWORD>@clu
 3. (optional step) If you want to see all manifests processed by Helm without deploying them, you can run:
 
 ```bash
-cd helm/ac
+cd deployer/home-anthill
 helm template -f values.yaml -f ../../private-config/custom-values.yaml . > output-manifests.yaml
 ```
 
 4. Deploy with Helm
 
 ```bash
-cd helm/ac
+cd deployer/home-anthill
 helm install -f values.yaml -f ../../private-config/custom-values.yaml  home-anthill .
 ```
 
@@ -384,12 +275,4 @@ helm install -f values.yaml -f ../../private-config/custom-values.yaml  home-ant
    - gui
    - mosquitto
 
-## Optional stuff
-
-### Add a Metric server (TODO)
-
-```bash
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-```
-
-Not working, so find a tutorial to install it and enable it. Example https://particule.io/en/blog/kubeadm-metrics-server/
+<br/>
