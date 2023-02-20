@@ -1,12 +1,32 @@
 # Local development setup
 
-## 0. Install GNU make
+## 0. Install some dependencies
+
+### Install GNU Make (required)
 
 On macOS install it via [Homebrew](https://formulae.brew.sh/formula/make) with `brew install make`
 
 Check if everything works fine running:
 ```bash
 make -v
+```
+
+### Install `rabbitmqadmin` CLI (optional)
+
+This is **required only to run integration tests of `consumer` service**.
+If you only want to run this project on your local PC **you can skip this step**.
+
+On macOS install it via [Homebrew](https://formulae.brew.sh/formula/rabbitmq) with `brew install rabbitmq`
+
+Check if everything works fine running:
+```bash
+/usr/local/sbin/rabbitmqadmin --version
+```
+
+You don't need to start RabbitMQ server, because we will use it as a Docker container.
+Please check that RabbitMQ server is not running:
+```bash
+brew services info --all
 ```
 
 
@@ -62,13 +82,13 @@ pip3 --version
 ```
 
 
-## 5. Install and run Docker Desktop
+## 5. Install and run Docker Desktop
 
 
 Install Docker Desktop from [HERE](https://www.docker.com/products/docker-desktop/)
 
 
-## 6. Download repos
+## 6. Download repos
 
 
 Run [this script](download-full-project.sh) in the location where you want to store `home-anthill` project.
@@ -93,10 +113,10 @@ docker run -it --name mosquitto -p 1883:1883 -p 9001:9001 --rm -v $PWD/mosquitto
 
 ```bash
 docker pull rabbitmq:management
-docker run -d --name rabbitmq --hostname my-rabbit -p 8080:15672 -p 5672:5672 rabbitmq:management
+docker run -d --name rabbitmq --hostname my-rabbit -p 15672:15672 -p 15671:15671 -p 5672:5672 rabbitmq:management
 ```
 
-If you want you can access to the UI at `http://locahost:8080` and login with:
+If you want you can access to the UI at `http://locahost:15672` and login with:
 ```
 user: guest
 password: guest
@@ -137,6 +157,7 @@ Open every microservice in a terminal tab (or multiple windows)
 
 ```bash
 cd home-anthill/api-server
+cp .env_template .env
 make run
 ```
 
@@ -152,6 +173,7 @@ make run
 
 ```bash
 cd home-anthill/register
+cp .env_template .env
 make run
 ```
 
@@ -167,6 +189,7 @@ make run
 
 ```bash
 cd home-anthill/consumer
+cp .env_template .env
 make run
 ```
 
