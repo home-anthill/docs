@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "5acdea6e-6381-43c4-9ff9-c3624138a18b",
-		"name": "air-conditioner",
+		"name": "home-anthill",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "1096693"
 	},
@@ -162,7 +162,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mac\": \"99:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"473a4861-632b-4915-b01e-cf1d418966c6\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
+							"raw": "{\n    \"mac\": \"44:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"473a4861-632b-4915-b01e-cf1d418966c6\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
