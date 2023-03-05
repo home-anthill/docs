@@ -344,7 +344,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"updated-room\",\n    \"floor\": 2,\n    \"devices\": [\"63bca0cc0205ea20dd04a464\"]\n}",
+							"raw": "{\n    \"name\": \"updated-room\",\n    \"floor\": 0\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -352,7 +352,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/homes/63bca16b0205ea20dd04a468/rooms/63bca16b0205ea20dd04a469",
+							"raw": "http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d/rooms/6380095a5f985b4cfe71a1ad",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -361,9 +361,9 @@
 							"path": [
 								"api",
 								"homes",
-								"63bca16b0205ea20dd04a468",
+								"620d71c5b98386d5903d6a4d",
 								"rooms",
-								"63bca16b0205ea20dd04a469"
+								"6380095a5f985b4cfe71a1ad"
 							]
 						}
 					},
@@ -413,6 +413,36 @@
 					"response": []
 				},
 				{
+					"name": "assignDeviceToHomeRoom",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"homeId\": \"63f8030d58ace5c82d43bdf2\",\n    \"roomId\": \"638009625f985b4cfe71a1ae\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/devices/63963ce72f67b44c7aed6fb9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"devices",
+								"63963ce72f67b44c7aed6fb9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "deleteDevice",
 					"request": {
 						"method": "DELETE",
@@ -422,7 +452,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/devices/63bca0cc0205ea20dd04a464?homeId=620d71c5b98386d5903d6a4d&roomId=63bca1a60205ea20dd04a46b",
+							"raw": "http://localhost:8082/api/devices/63f54b3d03333be186aa6159",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -431,17 +461,7 @@
 							"path": [
 								"api",
 								"devices",
-								"63bca0cc0205ea20dd04a464"
-							],
-							"query": [
-								{
-									"key": "homeId",
-									"value": "620d71c5b98386d5903d6a4d"
-								},
-								{
-									"key": "roomId",
-									"value": "63bca1a60205ea20dd04a46b"
-								}
+								"63f54b3d03333be186aa6159"
 							]
 						}
 					},
