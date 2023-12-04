@@ -61,6 +61,9 @@ If everything works as expected, you can proceed to the next step and try to use
 
 ## :earth_africa: Production installation and deploy :earth_africa:
 
+**Before continuing, you should setup and test your local environment following the section above.**
+
+
 ### Server
 
 First you have to create a MongoDB database, for example on [MongoDB Atlas](https://www.mongodb.com/atlas) using a free account.

@@ -111,6 +111,7 @@ docker run -it --name mosquitto -p 1883:1883 -p 9001:9001 --rm -v $PWD/mosquitto
 
 2. RabbitMQ
 
+Create a new terminal window and run:
 ```bash
 docker pull rabbitmq:management
 docker run -d --name rabbitmq --hostname my-rabbit -p 15672:15672 -p 15671:15671 -p 5672:5672 rabbitmq:management
@@ -129,12 +130,12 @@ docker run -d --name mongodb -v ~/mongodb:/data/db -p 27017:27017 mongo:6
 ```
 
 
-## 8. Create GitHub oAuth2 application
+## 8. Create GitHub oAuth2 application and update api-server .env file
 
 
 ```bash
-cd home-anthill
-cp api-server/.env_template api-server/.env
+cd home-anthill/api-server
+cp .env_template .env
 ```
 
 You have to update `OAUTH2_CLIENTID` and `OAUTH2_SECRETID` properties in `.env` file.
@@ -157,7 +158,6 @@ Open every microservice in a terminal tab (or multiple windows)
 
 ```bash
 cd home-anthill/api-server
-cp .env_template .env
 make run
 ```
 

@@ -63,19 +63,19 @@ You are free to change these inputs modifying firmwares accordingly.
 Then try to build and flash an an official example to see if everything is ok!
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
-- `ArduinoJson` by Benoit Blanchon (version `6.19.4`)
+- `ArduinoJson` by Benoit Blanchon (version `6.21.3`)
 - `HttpClient` by Adrian McEwen (version `2.2.0`)
 - `PubSubClient` by Nick O'Leary (version `2.8`)
 - `TimeAlarms` by Michael Margolis (version `1.5`)
-- `Arduino Unified Sensor` by Adafruit (version `1.1.6`)
-- `DHT sensor library` by Adafruit (version `1.4.4`)
-- `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.8.4`)
+- `Arduino Unified Sensor` by Adafruit (version `1.1.14`)
+- `DHT sensor library` by Adafruit (version `1.4.6`)
+- `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.8.6`)
 - `Time` by Michael Margolis (version `1.6.1`) (not used directly, but it's an indirect dependency of `TimeAlarms`)
+- `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.0`)
 
 Additionally, you need to manually add other libraries in Arduino folder. To do this, open that folder (`/Users/<YOUR_USERNAME>/Documents/Arduino/libraries/` on macOS) and copy the libraries:
 - `Grove - Air quality sensor` by Seeed Studio (latest version on `master branch` or commit hash `58e4c0bb5ce1b0c9b8aa1265e9f726025feb34f0` [FROM GITHUB](https://github.com/Seeed-Studio/Grove_Air_quality_Sensor)). You cannot use the one published on ArduinoIDE Library Manager, because it's outdated.
 - `Grove - Digital Light Sensor` by Seeed Studio (latest version on `master branch` or commit hash `69f7175ed1349276364994d1d45041c6e90a129b` [FROM GITHUB](https://github.com/Seeed-Studio/Grove_Digital_Light_Sensor)). You cannot use the one published on ArduinoIDE Library Manager, because it's outdated.
-- `Infineon - DPS310 Pressure Sensor` by Infineon (latest version on `master branch` or commit hash `ed02f803fc780cbcab54ed8b35dd3d718f2ebbda` [FROM GITHUB](https://github.com/Infineon/DPS310-Pressure-Sensor)).
 
 
 3. Create a new file `private-config/secrets.yaml` file with this content

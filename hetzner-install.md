@@ -2,26 +2,38 @@
 
 Based on https://docs.k3s.io/quick-start
 
+
+## Create an SSH key
+
+`ssh-keygen -t ed25519` then choose a name like `hetzner_id_ed25519` and insert a secure password.
+You'll get two files: `hetzner_id_ed25519` and `hetzner_id_ed25519.pub`.
+Move them in `~/.ssh`.
+
+
 ## Environment
 
 - Ubuntu 22.04 LTS
-- Kubernetes v1.25.4+k3s1
-- [Flannel 0.20.2](https://github.com/flannel-io/flannel)
-- [MetalLB 0.13.7](https://metallb.universe.tf/)
+- Kubernetes v1.27.7+k3s2
+- [Flannel 0.23.0](https://github.com/flannel-io/flannel)
+- [MetalLB 0.13.12](https://metallb.universe.tf/)
+
 
 ## Server creation
 
 From Hetzner Cloud UI create a server like this:
 
-REGION: Falkenstein
-OS type: Ubuntu 22.04
-Type: Standard - CPX11 - 2 vCPU - 2 GB RAM - 40 GB disk
-Volume: none
-Network: none
-Firewalls: none
-Additional features: none
-SSH Keys: Create a SSH key-pair and paste the public one or enable an existing one
-Name: what you like
+- Location: Falkenstein
+- Image: Ubuntu 22.04
+- Type: Shared vCPU - x86 (Intel/AMD) - CPX11 - 2 vCPU - 2 GB RAM - 40 GB disk
+- Networking: Public IPv4 (optionally, also Public IPv6)
+- SSH Keys: Add your SSH Public key created before
+- Volume: none
+- Firewalls: none
+- Backups: None
+- Placement groups: None
+- Labels: None
+- Cloud config: none
+- Name: what you like
 
 
 ## Create Floating IPs
@@ -45,8 +57,9 @@ From "Assigned to" column you need to choose the server created above.
 Login to your server with
 
 ```bash
-ssh -i ~/.ssh/<private_key_file> root@<HETZNER_SERVER_IP>
+ssh -i ~/.ssh/<private_key_file> root@<HETZNER_SERVER_PUBLIC_IP>
 ```
+Insert the password used when you created your SSH key.
 
 
 ## Update Ubuntu
@@ -109,8 +122,9 @@ k3s kubectl get node
 
 Save the content of `/root/.kube/config` to you local machine as `~/.kube/config` file.
 Replace `127.0.0.1` in `~/.kube/config` with the public IPv4 of your Hetzner server.
+Change permission with `chmod 600 ~/.kube/config`.
 
-Now, you should be able to connect to the cluster from your local machine, for example via `kubectl` or softwares like [k9s](https://k9scli.io/).
+Now, you should be able to connect to the cluster from your local machine, for example via `kubectl` or a software like [k9s](https://k9scli.io/).
 
 
 ## Install Flannel CNI plugin
@@ -118,14 +132,14 @@ Now, you should be able to connect to the cluster from your local machine, for e
 MetalLB reports some incompatibilities with different CNI plugins, so I chose Flannel, because it seems supported without issues.
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.23.0/Documentation/kube-flannel.yml
 ```
 
 
 ## Install MetalLB
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.12/config/manifests/metallb-native.yaml
 ```
 
 
@@ -142,6 +156,44 @@ mkdir /root/lets-encrypt-certs
 mkdir /root/lets-encrypt-certs-mqtt
 mkdir /root/nginx-conf
 ```
+
+
+## Apply firewall rules to Hetzner Cloud
+
+Choose "Firewall" from the sidebar of your Hetzner project and configure these rules:
+```yaml
+Inbound:
+  - Name: SSH
+    Sources: Any IPv4, Any IPv6
+    Protocol: TCP
+    Port: 22
+  - Name: ICMP
+    Sources: Any IPv4, Any IPv6
+    Protocol: ICMP
+  - Name: HTTP
+    Sources: Any IPv4, Any IPv6
+    Protocol: TCP
+    Port: 80
+  - Name: HTTPS
+    Sources: Any IPv4, Any IPv6
+    Protocol: TCP
+    Port: 443
+  - Name: MQTT
+    Sources: Any IPv4, Any IPv6
+    Protocol: TCP
+    Port: 1883
+  - Name: MQTTS
+    Sources: Any IPv4, Any IPv6
+    Protocol: TCP
+    Port: 8883
+  - Name: KUBE
+    Sources: Any IPv4, Any IPv6
+    Protocol: TCP
+    Port: 6443
+Outbound: # leave empty to allow all outgoing traffic
+```
+
+Then apply this configuration to your server.
 
 
 ## Deploy application
@@ -198,7 +250,7 @@ helm install -f values.yaml -f ../../private-config/custom-values.yaml home-anth
 
 
 
-## Production with SSL and domain names
+### Production with SSL and domain names
 
 First, you need to but 2 public web domains, for example [HERE](https://www.godaddy.com/).
 Then, you can update DNS records of your domains:
@@ -212,6 +264,14 @@ A wwww <gui-floating-ip_IP_ADDRESS>
 A @ <mosquitto-floating-ip_IP_ADDRESS>
 A wwww <mosquitto-floating-ip_IP_ADDRESS>
 ```
+
+Wait some time and then check if domains and IPs are matching with:
+```bash
+dig <YOUR_DOMAIN>
+dig <YOUR_MQTT_DOMAIN>
+```
+
+**Warning: please, don't procedeed until your domain shows the right IP in `dig` command output**
 
 
 1. Define personal config in a private repository
@@ -267,7 +327,7 @@ cd deployer/home-anthill
 helm install -f values.yaml -f ../../private-config/custom-values.yaml  home-anthill .
 ```
 
-5. Check kubernetes services! You should see 2 LoadBalancers with the right Floating IPs assigned.
+5. Check kubernetes services! You should see 2 LoadBalancers with the right Floating IPs assigned as External-IPs.
    After some time, you'll be able to navigate to the website via HTTPS and to the Mosquitto server via MQTTS connection.
    ESP32 device should already be working using secure connections.
    If you have problems with certificates, you should check if certbot is started getting SSL certificates from Let's Encrypt.
