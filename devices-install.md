@@ -109,8 +109,13 @@ mqtt_password: "<YOUR MOSQUITTO PASSWORRD>"
 ```bash
 cd esp32-configurator
 
-pip3 install -r requirements.txt
+# install dependencies
+poetry install
 
+# spawn poetry shell
+poetry shell
+
+# inside the poetry shell sun these commands
 python3 -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../sensors/sensor-dht-light
 python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../sensors/sensor-airquality-pir
 python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../sensors/sensor-barometer
