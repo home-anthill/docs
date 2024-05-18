@@ -13,7 +13,7 @@ There are 2 types of devices. I chose this categorization:
 - `devices`: ESP32 devices to control something, like Air Conditioners.
 - `sensors`: ESP32 devices to read physical phenomenons like temperature, humidity, air quality.
 
-At the moment, the only supported `device` is the one to control `Beko air conditioner (Remote type: RG52A9/BGEF)`,
+At the moment, the only supported `device` are the one to control either `Beko air conditioner (Remote type: RG52A9/BGEF)` or `LG air conditioner (Remote type: AKB74955603)`,
 but you can modify the firmware changing the protocol to control you specific model, if supported by [`crankyoldgit/IRremoteESP8266`](https://github.com/crankyoldgit/IRremoteESP8266).
 
 `Sensors` can read temperature, humidity, light (lux), air quality, motion, air pressure.
@@ -75,6 +75,7 @@ Before continue, you should verify that everything works fine, for example tryin
 Supported devices:
 - devices:
   - **device-ac-beko**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
+  - **device-ac-lg**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
 - sensors:
   - **sensor-airquality-pir**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
   - **sensor-barometer**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
@@ -100,7 +101,7 @@ To configure and flash firmwares, follow this guide [devices-install.md](devices
 
 The MIT License (MIT)
 
-Copyright (c) 2021-2023 Stefano Cappa (Ks89)
+Copyright (c) 2021-2024 Stefano Cappa (Ks89)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

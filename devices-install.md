@@ -38,9 +38,9 @@ Sensor (Air quality + PIR)
 <br/>
 
 
-Device (AC Beko)
+Device (AC Beko or LG)
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac-beko.jpg" alt="sensor air conditioner beko">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac.jpg" alt="sensor air conditioner">
 <br/>
 
 
@@ -63,11 +63,11 @@ You are free to change these inputs modifying firmwares accordingly.
 Then try to build and flash an an official example to see if everything is ok!
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
-- `ArduinoJson` by Benoit Blanchon (version `6.21.3`)
+- `ArduinoJson` by Benoit Blanchon (version `7.0.4`)
 - `HttpClient` by Adrian McEwen (version `2.2.0`)
 - `PubSubClient` by Nick O'Leary (version `2.8`)
 - `TimeAlarms` by Michael Margolis (version `1.5`)
-- `Arduino Unified Sensor` by Adafruit (version `1.1.14`)
+- `Adafruit Unified Sensor` by Adafruit (version `1.1.14`)
 - `DHT sensor library` by Adafruit (version `1.4.6`)
 - `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.8.6`)
 - `Time` by Michael Margolis (version `1.6.1`) (not used directly, but it's an indirect dependency of `TimeAlarms`)
@@ -116,11 +116,13 @@ python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --
 python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../sensors/sensor-barometer
 
 python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../devices/device-ac-beko
+python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../devices/device-ac-lg
 ```
 
 5. Build and flash firmwares
 
 - Open `devices/device-ac-beko/device-ac-beko.ino` with ArduinoIDE and flash the firmware
+- Open `devices/device-ac-lg/device-ac-lg.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-dht-light/sensor-dht-light.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-airquality-pir/sensor-airquality-pir.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-barometer/sensor-barometer.ino` with ArduinoIDE and flash the firmware
