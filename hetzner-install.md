@@ -12,10 +12,10 @@ Move them in `~/.ssh`.
 
 ## Environment
 
-- Ubuntu 22.04 LTS
-- Kubernetes v1.27.7+k3s2
-- [Flannel 0.23.0](https://github.com/flannel-io/flannel)
-- [MetalLB 0.13.12](https://metallb.universe.tf/)
+- Ubuntu 24.04 LTS
+- Kubernetes v1.29.4+k3s1
+- [Flannel 0.25.1](https://github.com/flannel-io/flannel)
+- [MetalLB 0.14.5](https://metallb.universe.tf/)
 
 
 ## Server creation
@@ -23,7 +23,7 @@ Move them in `~/.ssh`.
 From Hetzner Cloud UI create a server like this:
 
 - Location: Falkenstein
-- Image: Ubuntu 22.04
+- Image: Ubuntu 24.04
 - Type: Shared vCPU - x86 (Intel/AMD) - CPX11 - 2 vCPU - 2 GB RAM - 40 GB disk
 - Networking: Public IPv4 (optionally, also Public IPv6)
 - SSH Keys: Add your SSH Public key created before
@@ -132,14 +132,14 @@ Now, you should be able to connect to the cluster from your local machine, for e
 MetalLB reports some incompatibilities with different CNI plugins, so I chose Flannel, because it seems supported without issues.
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.23.0/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.25.1/Documentation/kube-flannel.yml
 ```
 
 
 ## Install MetalLB
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.12/config/manifests/metallb-native.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
 ```
 
 
@@ -198,7 +198,7 @@ Then apply this configuration to your server.
 
 ## Deploy application
 
-## Development without SLL and domain names (**NOT RECOMMENDED**)
+## Development WITHOUT SLL and domain names (**NOT RECOMMENDED**)
 
 1. Define personal config in a private repository
 

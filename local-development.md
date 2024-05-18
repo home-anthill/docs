@@ -70,7 +70,7 @@ npm -v
 ```
 
 
-## 4. Install Python 3.10 (or greater)
+## 4. Install Python 3.10 (or greater) and Poetry
 
 
 Install Python 3 from [HERE](https://www.python.org/downloads/)
@@ -80,6 +80,7 @@ Check if everything works fine running:
 python3 --version
 pip3 --version
 ```
+then [install Poetry](https://python-poetry.org/docs/#installation).
 
 
 ## 5. Install and run Docker Desktop
