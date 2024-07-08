@@ -70,10 +70,10 @@ npm -v
 ```
 
 
-## 4. Install Python 3.10 (or greater) and Poetry
+## 4. Install Python and Poetry
 
 
-Install Python 3 from [HERE](https://www.python.org/downloads/)
+Install Python 3.10 (or greater) from [HERE](https://www.python.org/downloads/)
 
 Check if everything works fine running:
 ```bash
@@ -106,7 +106,7 @@ mosquitto_passwd -b -c password_file mosquser Password1!
 cd ..
 docker pull eclipse-mosquitto
 
-docker run -it --name mosquitto -p 1883:1883 -p 9001:9001 --rm -v $PWD/mosquitto/mosquitto-nossl-auth.conf:/mosquitto/config/mosquitto.conf -v $PWD/mosquitto/password_file:/etc/mosquitto/password_file -v $PWD/mosquitto/data:/mosquitto/data -v $PWD/mosquitto/log:/mosquitto/log eclipse-mosquitto
+docker run -it --name mosquitto -p 1883:1883 -p 9001:9001 --rm -v $PWD/mosquitto/mosquitto-local-dev.conf:/mosquitto/config/mosquitto.conf -v $PWD/mosquitto/password_file:/etc/mosquitto/password_file -v $PWD/mosquitto/data:/mosquitto/data -v $PWD/mosquitto/log:/mosquitto/log eclipse-mosquitto
 ```
 **Don't close this terminal window!**
 
@@ -219,12 +219,14 @@ You can navigate across the webapp to add homes, rooms and so on, but I prefer t
 
 ### Postman
 
+1. On Google Chrome install `postman-interceptor` extension
+2. Enable the extension to Sync cookies as below
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/postman-interceptor-sync-cookies.png" alt="Sync Cookies postman-interceptor">
 
-1. click on `cookies` on the bottom bar
-2. enable the "Cookies interceptor" on Domains = `localhost`
+3. On Postman click on `cookies` on the bottom bar and enable the "Cookies interceptor" on Domains = `localhost`
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/postman-cookies-interceptor.png" alt="Postman cookies interceptor">
 
-3. Download and import in Postman this file `docs/postman-collections/postman_collection.json`
+4. Download and import in Postman this file `docs/postman-collections/postman_collection.json`
 
 ### JWT
 

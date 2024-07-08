@@ -20,7 +20,6 @@ git clone https://github.com/home-anthill/deployer.git
 # create a folder where you can put your custom configuration
 mkdir private-config
 # use the Helm Chart `values.yaml` file as a starting point to simplify the configuration
-cp deployer/ac/values.yaml private-config/custom-values-no-ssl.yaml
 cp deployer/ac/values.yaml private-config/custom-values.yaml
 # use the `secrets-template` template as a starting point to simplify the configuration 
 cp devices/secrets-template private-config/secrets-local.yaml
