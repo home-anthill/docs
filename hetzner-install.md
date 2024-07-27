@@ -14,11 +14,10 @@ Move them in `~/.ssh`.
 
 - Ubuntu 24.04 LTS
 - Kubernetes v1.29.6+k3s1
-- [Flannel 0.25.4](https://github.com/flannel-io/flannel)
-- [MetalLB 0.14.5](https://metallb.universe.tf/)
+- [Flannel 0.25.5](https://github.com/flannel-io/flannel)
+- [MetalLB 0.14.18](https://metallb.universe.tf/)
 - [ingress-nginx 1.10.1](https://kubernetes.github.io/ingress-nginx/)
 - [cert-manager 1.15.1](https://cert-manager.io/)
-- [cert-manager-csi-driver 0.9.0](https://cert-manager.io/docs/usage/csi-driver/installation/)
 
 
 ## Server creation
@@ -135,18 +134,18 @@ Now, you should be able to connect to the cluster from your local machine, for e
 MetalLB reports some incompatibilities with different CNI plugins, so I chose Flannel, because it seems supported without issues.
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.25.4/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.25.5/Documentation/kube-flannel.yml
 ```
 
 
 ## Install MetalLB
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
 ```
 
 
-## Install cert-manager and csi-driver
+## Install cert-manager
 
 ```bash
 helm repo add jetstack https://charts.jetstack.io --force-update
@@ -158,11 +157,7 @@ helm install \
   --version v1.15.1 \
   --set crds.enabled=true
 
-# install csi-driver
-helm upgrade cert-manager-csi-driver jetstack/cert-manager-csi-driver \
-  --install \
-  --namespace cert-manager \
-  --wait
+helm repo update
 ```
 
 
