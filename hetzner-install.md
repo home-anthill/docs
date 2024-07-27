@@ -240,6 +240,7 @@ helm install http-ingress-nginx ingress-nginx \
   --set controller.ingressClassResource.name=http-nginx \
   --set controller.ingressClassResource.enabled=true \
   --set controller.ingressClassResource.default=false \
+  --set controller.allowSnippetAnnotations=true \
   --set controller.ingressClassResource.controllerValue="k8s.io/http-ingress-nginx"
 
 # mqtt ingress controller (with custom config to expose TCP traffic as explained here: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md)
@@ -253,6 +254,7 @@ helm install mqtt-ingress-nginx ingress-nginx \
   --set controller.ingressClassResource.name=mqtt-nginx \
   --set controller.ingressClassResource.enabled=true \
   --set controller.ingressClassResource.default=false \
+  --set controller.allowSnippetAnnotations=true \
   --set controller.ingressClassResource.controllerValue="k8s.io/mqtt-ingress-nginx"
 ```
 
