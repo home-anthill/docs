@@ -241,7 +241,11 @@ helm install http-ingress-nginx ingress-nginx \
   --set controller.ingressClassResource.enabled=true \
   --set controller.ingressClassResource.default=false \
   --set controller.allowSnippetAnnotations=true \
-  --set controller.ingressClassResource.controllerValue="k8s.io/http-ingress-nginx"
+  --set controller.ingressClassResource.controllerValue="k8s.io/http-ingress-nginx" \
+  --set controller.config.hsts=true \
+  --set controller.config.hsts-include-subdomains=true \
+  --set controller.config.hsts-max-age=31536000 \
+  --set controller.config.hsts-preload=true
 
 # mqtt ingress controller (with custom config to expose TCP traffic as explained here: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md)
 helm install mqtt-ingress-nginx ingress-nginx \
