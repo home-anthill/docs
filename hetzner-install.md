@@ -17,7 +17,9 @@ Move them in `~/.ssh`.
 - [Flannel 0.25.5](https://github.com/flannel-io/flannel)
 - [MetalLB 0.14.18](https://metallb.universe.tf/)
 - [ingress-nginx 1.10.1](https://kubernetes.github.io/ingress-nginx/)
-- [cert-manager 1.15.1](https://cert-manager.io/)
+- [cert-manager 1.15.3](https://cert-manager.io/)
+- [rabbitmq/cluster-operator 2.9.0](https://github.com/rabbitmq/cluster-operator)
+- [rabbitmq/messaging-topology-operator 1.14.2](https://github.com/rabbitmq/messaging-topology-operator)
 
 
 ## Server creation
@@ -141,7 +143,7 @@ kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.25.5/Do
 ## Install MetalLB
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.18/config/manifests/metallb-native.yaml
 ```
 
 
@@ -150,15 +152,18 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/confi
 ```bash
 helm repo add jetstack https://charts.jetstack.io --force-update
 
+helm repo update
+
 helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.15.1 \
+  --version v1.15.3 \
   --set crds.enabled=true
-
-helm repo update
 ```
+
+and wait some time, until the install command terminates.
+
 
 
 ## Apply firewall rules to Hetzner Cloud
@@ -197,6 +202,18 @@ Outbound: # leave empty to allow all outgoing traffic
 ```
 
 Then apply this configuration to your server.
+
+
+## Install RabbitMQ
+
+Install RabbitMQ operators:
+
+```bash
+
+kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
+kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/releases/latest/download/messaging-topology-operator-with-certmanager.yaml
+
+```
 
 
 ## Deploy application
