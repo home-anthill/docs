@@ -127,8 +127,12 @@ password: guest
 
 3. MongoDB
 
+**ATTENTIION**: To be able to use **MongoDB transactions** we need a cluster. To deploy it with 2 replicas on your local machine,
+I suggest to use Docker Compose with the `.yml` available in `sharded-mongodb-docker`.
+
 ```bash
-docker run -d --name mongodb -v ~/mongodb:/data/db -p 27017:27017 mongo:6
+cd home-anthill/sharded-mongodb-docker
+docker compose up --build -d
 ```
 
 
