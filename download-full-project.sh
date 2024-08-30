@@ -15,6 +15,7 @@ git clone https://github.com/home-anthill/mosquitto.git
 git clone https://github.com/home-anthill/devices.git
 git clone https://github.com/home-anthill/sensors.git
 git clone https://github.com/home-anthill/deployer.git
+git clone https://github.com/home-anthill/sharded-mongodb-docker.git
 
 # always from the `home-anthill` folder created above:
 # create a folder where you can put your custom configuration
