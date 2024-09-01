@@ -60,7 +60,7 @@ You are free to change these inputs modifying firmwares accordingly.
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
 Then try to build and flash one of the official examples to see if everything is ok!
-I'm using Board Manager `esp32` by Espressif (version `2.0.17`).
+I'm using Board Manager `esp32` by Espressif (version `3.0.4` for sensors and `2.0.17` for devices).
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
 - `ArduinoJson` by Benoit Blanchon (version `7.1.0`)
