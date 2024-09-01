@@ -175,7 +175,7 @@ cp .env_template .env
 make run
 ```
 
-3. sensor register
+3. register
 
 ```bash
 cd home-anthill/register
