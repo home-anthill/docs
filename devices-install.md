@@ -59,10 +59,11 @@ You are free to change these inputs modifying firmwares accordingly.
 
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
-Then try to build and flash an an official example to see if everything is ok!
+Then try to build and flash one of the official examples to see if everything is ok!
+I'm using Board Manager `esp32` by Espressif (version `2.0.17`).
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
-- `ArduinoJson` by Benoit Blanchon (version `7.0.4`)
+- `ArduinoJson` by Benoit Blanchon (version `7.1.0`)
 - `HttpClient` by Adrian McEwen (version `2.2.0`)
 - `PubSubClient` by Nick O'Leary (version `2.8`)
 - `TimeAlarms` by Michael Margolis (version `1.5`)
