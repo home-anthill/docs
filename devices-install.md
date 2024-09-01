@@ -37,7 +37,6 @@ Sensor (Air quality + PIR)
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-airquality-pir.jpg" alt="sensor airquality and pir">
 <br/>
 
-
 Device (AC Beko or LG)
 <br/>
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac.jpg" alt="sensor air conditioner">
@@ -119,6 +118,7 @@ poetry shell
 python3 -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../sensors/sensor-dht-light
 python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../sensors/sensor-airquality-pir
 python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../sensors/sensor-barometer
+python3 -m src --model=power-outage --source=../private-config/secrets.yaml --destination=../sensors/sensor-power-outage
 
 python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../devices/device-ac-beko
 python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../devices/device-ac-lg
@@ -131,3 +131,4 @@ python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destinati
 - Open `sensors/sensor-dht-light/sensor-dht-light.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-airquality-pir/sensor-airquality-pir.ino` with ArduinoIDE and flash the firmware
 - Open `sensors/sensor-barometer/sensor-barometer.ino` with ArduinoIDE and flash the firmware
+- Open `sensors/sensor-power-outage/sensor-power-outage.ino` with ArduinoIDE and flash the firmware
