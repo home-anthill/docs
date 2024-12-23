@@ -75,8 +75,8 @@ I'm using Board Manager `esp32` by Espressif (version `3.1.0` for sensors and `2
 - `Grove - Air quality sensor` by Seeed Studio (version `1.2.0`)
 
 Additionally, you need to manually add other libraries in Arduino folder. To do this, open that folder (`/Users/<YOUR_USERNAME>/Documents/Arduino/libraries/` on macOS) and copy the libraries:
+- `Grove - Air quality sensor` by Seeed Studio (latest version on `master branch` or commit hash `58e4c0bb5ce1b0c9b8aa1265e9f726025feb34f0` [FROM GITHUB](https://github.com/Seeed-Studio/Grove_Air_quality_Sensor)). You cannot use the one published on ArduinoIDE Library Manager, because it's outdated.
 - `Grove - Digital Light Sensor` by Seeed Studio (latest version on `master branch` or commit hash `69f7175ed1349276364994d1d45041c6e90a129b` [FROM GITHUB](https://github.com/Seeed-Studio/Grove_Digital_Light_Sensor)). You cannot use the one published on ArduinoIDE Library Manager, because it's outdated.
-
 
 3. Create a new file `private-config/secrets.yaml` file with this content
 
