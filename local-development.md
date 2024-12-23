@@ -135,6 +135,13 @@ cd home-anthill/sharded-mongodb-docker
 docker compose up --build -d
 ```
 
+4. Redis
+
+Install redis with persistence
+```bash
+docker run --name redis -p 6379:6379 -d redis redis-server --save 60 1 --loglevel warning
+```
+
 
 ## 8. Create GitHub oAuth2 application and update api-server .env file
 
@@ -156,7 +163,7 @@ These 2 values are the clientID and secretID of your github oAuth2 application, 
 
 ## 9. Run all microservices
 
-**With MongoDB, RabbitMQ and Mosquitto up and running**, you can start all microservices.
+**With MongoDB, RabbitMQ, Mosquitto and Redis up and running**, you can start all microservices.
 
 Open every microservice in a terminal tab (or multiple windows)
 
@@ -199,7 +206,30 @@ cp .env_template .env
 make run
 ```
 
-6. gui
+6. online-receiver
+
+```bash
+cd home-anthill/online-receiver
+cp .env_template .env
+make run
+```
+
+7. online
+
+```bash
+cd home-anthill/online
+make run
+```
+
+8. online-alarm
+
+```bash
+cd home-anthill/online-alarm
+cp .env_template .env
+make run
+```
+
+9. gui
 
 ```bash
 cd home-anthill/gui
@@ -208,7 +238,7 @@ npm run build
 # or, if you prefer the dev server at `http://localhost:4200`, you can use `npm run start`
 ```
 
-7. login to the webapp with your GitHub account
+10. login to the webapp with your GitHub account
 
 If everything is up and running, **you should be able to access at `http://localhost:8082`** from your favourite browser.
 From `http://localhost:8082` **login with the GitHub account used to create the oAuth2 application**.

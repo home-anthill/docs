@@ -60,7 +60,7 @@ You are free to change these inputs modifying firmwares accordingly.
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
 Then try to build and flash one of the official examples to see if everything is ok!
-I'm using Board Manager `esp32` by Espressif (version `3.0.4` for sensors and `2.0.17` for devices).
+I'm using Board Manager `esp32` by Espressif (version `3.1.0` for sensors and `2.0.17` for devices).
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
 - `ArduinoJson` by Benoit Blanchon (version `7.1.0`)
@@ -72,9 +72,9 @@ I'm using Board Manager `esp32` by Espressif (version `3.0.4` for sensors and `2
 - `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.8.6`)
 - `Time` by Michael Margolis (version `1.6.1`) (not used directly, but it's an indirect dependency of `TimeAlarms`)
 - `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.0`)
+- `Grove - Air quality sensor` by Seeed Studio (version `1.2.0`)
 
 Additionally, you need to manually add other libraries in Arduino folder. To do this, open that folder (`/Users/<YOUR_USERNAME>/Documents/Arduino/libraries/` on macOS) and copy the libraries:
-- `Grove - Air quality sensor` by Seeed Studio (latest version on `master branch` or commit hash `58e4c0bb5ce1b0c9b8aa1265e9f726025feb34f0` [FROM GITHUB](https://github.com/Seeed-Studio/Grove_Air_quality_Sensor)). You cannot use the one published on ArduinoIDE Library Manager, because it's outdated.
 - `Grove - Digital Light Sensor` by Seeed Studio (latest version on `master branch` or commit hash `69f7175ed1349276364994d1d45041c6e90a129b` [FROM GITHUB](https://github.com/Seeed-Studio/Grove_Digital_Light_Sensor)). You cannot use the one published on ArduinoIDE Library Manager, because it's outdated.
 
 
