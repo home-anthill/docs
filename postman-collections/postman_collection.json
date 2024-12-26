@@ -133,7 +133,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mac\": \"77:02:33:77:22:55\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"ac-beko\",\n\t\"apiToken\": \"473a4861-632b-4915-b01e-cf1d418966c6\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"ac-beko\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
+							"raw": "{\n    \"mac\": \"77:02:33:77:22:55\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"ac-beko\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"ac-beko\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -162,7 +162,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mac\": \"44:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"473a4861-632b-4915-b01e-cf1d418966c6\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
+							"raw": "{\n    \"mac\": \"44:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -473,7 +473,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/devices/63bca0cc0205ea20dd04a464/values",
+							"raw": "http://localhost:8082/api/devices/639640a82f67b44c7aed6fbc/values",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -482,7 +482,7 @@
 							"path": [
 								"api",
 								"devices",
-								"63bca0cc0205ea20dd04a464",
+								"639640a82f67b44c7aed6fbc",
 								"values"
 							]
 						}
@@ -515,6 +515,55 @@
 								"devices",
 								"63bca0cc0205ea20dd04a464",
 								"values"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "online - get_by_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/online/676c62a738394e4a9d0bcfa7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"online",
+								"676c62a738394e4a9d0bcfa7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "online-fcmtoken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fef\",\n    \"fcmToken\": \"dTknleBlRLqEoWBMjiIr80:APA91bEs_Tf8dkrZ_eb872Ok--Up34Luqp1S4WZwzTGr6X1ag4PO4ksHwFFifNqTb1lhATzNcaVqDZ01kP35a0caOa6Akw4oCzYh0ElqL8msgjtZw2phLEk\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/api/fcmtoken",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"fcmtoken"
 							]
 						}
 					},
