@@ -11,7 +11,8 @@ Check if everything works fine running:
 make -v
 ```
 
-### Install `rabbitmqadmin` CLI (optional)
+
+### Install `rabbitmqadmin` CLI (optional)
 
 This is **required only to run integration tests of `consumer` service**.
 If you only want to run this project on your local PC **you can skip this step**.
