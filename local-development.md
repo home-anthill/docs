@@ -20,7 +20,7 @@ On macOS install it via [Homebrew](https://formulae.brew.sh/formula/rabbitmq) wi
 
 Check if everything works fine running:
 ```bash
-/usr/local/sbin/rabbitmqadmin --version
+rabbitmqadmin --version
 ```
 
 You don't need to start RabbitMQ server, because we will use it as a Docker container.
