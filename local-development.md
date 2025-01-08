@@ -20,7 +20,7 @@ On macOS install it via [Homebrew](https://formulae.brew.sh/formula/rabbitmq) wi
 
 Check if everything works fine running:
 ```bash
-/usr/local/sbin/rabbitmqadmin --version
+rabbitmqadmin --version
 ```
 
 You don't need to start RabbitMQ server, because we will use it as a Docker container.
@@ -33,7 +33,7 @@ brew services info --all
 ## 1. Install Go
 
 
-1. Install Go from [HERE](https://go.dev/)
+1. Install Go with `brew install go`
 2. Install [air](https://github.com/cosmtrek/air) to watch changes and auto-rebuild:
 
 ```bash
