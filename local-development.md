@@ -34,7 +34,7 @@ brew services info --all
 ## 1. Install Go
 
 
-1. Install Go from [HERE](https://go.dev/)
+1. Install Go with `brew install go`
 2. Install [air](https://github.com/cosmtrek/air) to watch changes and auto-rebuild:
 
 ```bash
