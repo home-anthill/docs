@@ -128,7 +128,7 @@ Save the content of `/root/.kube/config` to you local machine as `~/.kube/config
 Replace `127.0.0.1` in `~/.kube/config` with the public IPv4 of your Hetzner server.
 Change permission with `chmod 600 ~/.kube/config`.
 
-Now, you should be able to connect to the cluster from your local machine, for example via `kubectl` or a software like [k9s](https://k9scli.io/).
+Now, you should be able to connect to the cluster from your local machine, for example via `kubectl get pods -n home-anthill` or a software like [k9s](https://k9scli.io/) via `k9s -n all`.
 
 
 ## Install Flannel CNI plugin
