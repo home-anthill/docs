@@ -96,7 +96,7 @@ pip3 --version
 then [install Poetry](https://python-poetry.org/docs/#installation).
 
 
-## 5. Install Android Studio and adb (only for app development)
+## 5. Install Android Studio and adb (only for Android app development)
 
 
 On macOS install `adb` via [Homebrew](https://formulae.brew.sh/formula/android-platform-tools) with `brew install android-platform-tools`
@@ -420,3 +420,32 @@ mqtt_auth: true
 mqtt_username: "mosquser"
 mqtt_password: "Password1!"
 ```
+
+
+## 13. Run the Android app on a virtual device (still under development)
+
+
+1. import the `app` repository in Android Studio
+2. if you followed previous steps, you should already have the property files:
+   - release.properties: used for Release variant
+   - staging.properties: used for Staging variant
+   - secrets.properties: used for Debug variant(default)
+3. copy the `google-services.json` (obtained from Firebase Cloud Messaging platform in one of the previous steps) into `./app` folder
+4. create a virtual local device (for instance Pixel 6A API 35)
+   <br/>
+   <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/android/device-manager.png" alt="device manager">
+   <br/>
+5. start the virtual device
+   <br/>
+   <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/android/virtual-device.png" alt="virtual device">
+   <br/>
+6. build the app with Debug variant (default) on the virtual device
+7. run `api-server` and check if it's connected to the mongodb docker container started via `sharded-mongodb-docker` repository
+8. run `online` and check if it's connected to the redis docker container
+9. to let the virtual device reach your local server via `http://localhost.8082` run on a terminal:
+   
+   ```bash
+   adb reverse tcp:8082 tcp:8082
+   ```
+   
+10. on the virtual device, use the app to login. You should be redirected to GitHub and back to the app with a valid FCMToken
