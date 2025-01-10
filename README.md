@@ -46,7 +46,19 @@ On server-side, I'm using a Kubernetes cluster with a simple microservice archit
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/3-register-sensors.png" alt="Sequence diagram register sensors">
 <br/>
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/4-notification-sensors.png" alt="Sequence diagram notification sensors">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/4-sensors.png" alt="Sequence diagram sensors">
+<br/>
+
+### Notification sequence diagrams
+
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/5-notification-app_1.png" alt="Sequence diagram notification arduino via MQTT">
+<br/>
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/5-notification-app_2.png" alt="Sequence diagram registration android app to server with FCM">
+<br/>
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/diagrams/5-notification-app_3.png" alt="Sequence diagram android notification via FCM">
 <br/>
 
 <br/>
