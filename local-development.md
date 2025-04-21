@@ -26,15 +26,22 @@ If you only want to run this project on your local PC **you can skip this step**
 
 On macOS install it via [Homebrew](https://formulae.brew.sh/formula/rabbitmq) with `brew install rabbitmq`
 
-Check if everything works fine running:
-```bash
-rabbitmqadmin --version
-```
-
 You don't need to start RabbitMQ server, because we will use a Docker container.
 Please check that RabbitMQ server is not running:
 ```bash
 brew services info --all
+```
+
+Check if everything works fine running:
+```bash
+rabbitmqadmin --version
+# print the location of rabbitmqadmin executable
+which rabbitmqadmin
+```
+
+To be able to run `api-consumer` tests, you must create a link to `rabbitmqadmin` in this way:
+```bash
+sudo ln -s /opt/homebrew/sbin/rabbitmqadmin /usr/local/sbin/rabbitmqadmin
 ```
 
 
