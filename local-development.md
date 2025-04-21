@@ -100,7 +100,12 @@ Check if everything works fine running:
 python3 --version
 pip3 --version
 ```
-then [install Poetry](https://python-poetry.org/docs/#installation).
+then [install Poetry](https://python-poetry.org/docs/#installation)
+
+Add the optional poetry shell plugin:
+```bash
+poetry self add poetry-plugin-shell
+```
 
 
 ## 5. Install Android Studio and adb (only for Android app development)
