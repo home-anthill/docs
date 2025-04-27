@@ -44,74 +44,6 @@
 					"response": []
 				},
 				{
-					"name": "getLoginURL",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8082/api/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getLoginURL APP",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8082/api/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "getProfile",
 					"request": {
 						"method": "GET",
@@ -155,64 +87,6 @@
 								"profiles",
 								"620d710e4e8fe8f3394084bc",
 								"tokens"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "registerDevice",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"mac\": \"77:02:33:77:22:55\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"ac-beko\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"ac-beko\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8082/api/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "registerSensor",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"mac\": \"44:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8082/api/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"register"
 							]
 						}
 					},
@@ -282,7 +156,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/homes/63bca1520205ea20dd04a466",
+							"raw": "http://localhost:8082/api/homes/678993d270ec1dedf6fc809a",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -291,7 +165,7 @@
 							"path": [
 								"api",
 								"homes",
-								"63bca1520205ea20dd04a466"
+								"678993d270ec1dedf6fc809a"
 							]
 						}
 					},
@@ -613,6 +487,133 @@
 						"type": "string"
 					}
 				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "admission",
+			"item": [
+				{
+					"name": "getKeepAlive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8099/admission/keepalive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"admission",
+								"keepalive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registerDevice",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mac\": \"77:02:33:77:22:55\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"ac-beko\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"ac-beko\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8099/admission/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"admission",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registerSensor",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mac\": \"44:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8099/admission/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"admission",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
 			},
 			"event": [
 				{
