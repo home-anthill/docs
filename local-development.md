@@ -424,7 +424,7 @@ ssl: false
 
 server_domain: '192.168.1.7' # your local IP (for example 192.168.1.7)
 server_port: '8082'
-server_path: '/api/register'
+server_path: '/admission/register'
 
 mqtt_domain: '192.168.1.7' # your local IP (for example 192.168.1.7)
 mqtt_port: 1883

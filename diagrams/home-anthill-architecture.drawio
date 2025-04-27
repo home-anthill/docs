@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" version="26.2.15">
   <diagram id="2_OiLXTHmMd70EdczL32" name="Pagina-1">
-    <mxGraphModel dx="1832" dy="1962" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1749" dy="1896" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -201,7 +201,7 @@
             <mxPoint x="65.00000000000011" y="180.00000000000023" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="meH7f4SVVSHUAiI4KCve-85" value="HTTPS&lt;br style=&quot;font-size: 9px;&quot;&gt;/api/register" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#000000;" parent="meH7f4SVVSHUAiI4KCve-84" vertex="1" connectable="0">
+        <mxCell id="meH7f4SVVSHUAiI4KCve-85" value="HTTPS&lt;br style=&quot;font-size: 9px;&quot;&gt;/admission/register" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#000000;" parent="meH7f4SVVSHUAiI4KCve-84" vertex="1" connectable="0">
           <mxGeometry x="-0.1286" y="1" relative="1" as="geometry">
             <mxPoint x="6" y="-3" as="offset" />
           </mxGeometry>
@@ -390,7 +390,7 @@
         <mxCell id="Hcw29AwPkGS2vUysVvsq-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;strokeWidth=2;endArrow=none;endFill=0;" parent="1" source="Hcw29AwPkGS2vUysVvsq-12" target="Hcw29AwPkGS2vUysVvsq-23" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Hcw29AwPkGS2vUysVvsq-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#6F0000;exitX=0.194;exitY=0.993;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" target="Hcw29AwPkGS2vUysVvsq-12" edge="1" source="meH7f4SVVSHUAiI4KCve-29">
+        <mxCell id="Hcw29AwPkGS2vUysVvsq-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#6F0000;exitX=0.194;exitY=0.993;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="meH7f4SVVSHUAiI4KCve-29" target="Hcw29AwPkGS2vUysVvsq-12" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="410" y="190" as="sourcePoint" />
             <Array as="points">
@@ -416,7 +416,7 @@
             <mxPoint x="1" y="10" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-13" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;/*&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=7;" vertex="1" connectable="0" parent="meH7f4SVVSHUAiI4KCve-22">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-13" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;/*&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=7;" parent="meH7f4SVVSHUAiI4KCve-22" vertex="1" connectable="0">
           <mxGeometry x="0.4849" y="1" relative="1" as="geometry">
             <mxPoint x="11" y="8" as="offset" />
           </mxGeometry>
@@ -461,25 +461,25 @@
         <mxCell id="meH7f4SVVSHUAiI4KCve-4" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;device&lt;br style=&quot;&quot;&gt;(ESP32)&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;fontSize=10;fontColor=#000000;opacity=20;" parent="1" vertex="1">
           <mxGeometry x="-20.09999999999998" y="274.548950844659" width="59.99999999999994" height="28.631652483170324" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-2" value="" style="group" vertex="1" connectable="0" parent="1">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-2" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="236.09" y="-5.999999999999993" width="122.81" height="81" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-3" value="" style="group" vertex="1" connectable="0" parent="TkZ62ECU_XZZeoti70Wa-2">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-3" value="" style="group" parent="TkZ62ECU_XZZeoti70Wa-2" vertex="1" connectable="0">
           <mxGeometry x="1" width="122.81" height="66.5" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-4" value="" style="group" vertex="1" connectable="0" parent="TkZ62ECU_XZZeoti70Wa-3">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-4" value="" style="group" parent="TkZ62ECU_XZZeoti70Wa-3" vertex="1" connectable="0">
           <mxGeometry width="122.81" height="65.5" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-5" value="admission-nginx" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="TkZ62ECU_XZZeoti70Wa-4">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-5" value="admission-nginx" style="rounded=0;whiteSpace=wrap;html=1;" parent="TkZ62ECU_XZZeoti70Wa-4" vertex="1">
           <mxGeometry y="5.5" width="106.93853856759307" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-6" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png;" vertex="1" parent="TkZ62ECU_XZZeoti70Wa-4">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-6" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png;" parent="TkZ62ECU_XZZeoti70Wa-4" vertex="1">
           <mxGeometry x="97.13583919889703" width="25.674160801102968" height="24.934502576010452" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-8" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/512px-Nginx_logo.svg.png;" vertex="1" parent="TkZ62ECU_XZZeoti70Wa-4">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-8" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/512px-Nginx_logo.svg.png;" parent="TkZ62ECU_XZZeoti70Wa-4" vertex="1">
           <mxGeometry x="4" y="47.73000000000002" width="68.74" height="14.5" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;strokeWidth=2;fillColor=#d80073;strokeColor=#A50040;" edge="1" parent="1" source="meH7f4SVVSHUAiI4KCve-8" target="TkZ62ECU_XZZeoti70Wa-5">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;strokeWidth=2;fillColor=#d80073;strokeColor=#A50040;" parent="1" source="meH7f4SVVSHUAiI4KCve-8" target="TkZ62ECU_XZZeoti70Wa-5" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="130" y="175" as="sourcePoint" />
             <mxPoint x="249" y="175" as="targetPoint" />
@@ -489,30 +489,30 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-16" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;/admission&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=7;" vertex="1" connectable="0" parent="TkZ62ECU_XZZeoti70Wa-14">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-16" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;/admission&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=7;" parent="TkZ62ECU_XZZeoti70Wa-14" vertex="1" connectable="0">
           <mxGeometry x="0.4849" y="1" relative="1" as="geometry">
             <mxPoint x="27" y="12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-18" value="" style="group" vertex="1" connectable="0" parent="1">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-18" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="396" y="-5.999999999999993" width="137.81" height="66" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-19" value="admission" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="TkZ62ECU_XZZeoti70Wa-18">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-19" value="admission" style="rounded=0;whiteSpace=wrap;html=1;" parent="TkZ62ECU_XZZeoti70Wa-18" vertex="1">
           <mxGeometry y="6" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-20" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png;" vertex="1" parent="TkZ62ECU_XZZeoti70Wa-18">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-20" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png;" parent="TkZ62ECU_XZZeoti70Wa-18" vertex="1">
           <mxGeometry x="109" width="28.81" height="27.98" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-21" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://seeklogo.com/images/G/go-logo-046185B647-seeklogo.com.png;" vertex="1" parent="TkZ62ECU_XZZeoti70Wa-18">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-21" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://seeklogo.com/images/G/go-logo-046185B647-seeklogo.com.png;" parent="TkZ62ECU_XZZeoti70Wa-18" vertex="1">
           <mxGeometry x="95.28999999999996" y="36" width="22.1" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#d80073;strokeColor=#A50040;strokeWidth=2;" edge="1" parent="1">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#d80073;strokeColor=#A50040;strokeWidth=2;" parent="1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="344.03" y="29.229999999999997" as="sourcePoint" />
             <mxPoint x="395.03" y="29.229999999999997" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="TkZ62ECU_XZZeoti70Wa-24" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;HTTPS&lt;br&gt;/admission&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TkZ62ECU_XZZeoti70Wa-23">
+        <mxCell id="TkZ62ECU_XZZeoti70Wa-24" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;HTTPS&lt;br&gt;/admission&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="TkZ62ECU_XZZeoti70Wa-23" vertex="1" connectable="0">
           <mxGeometry x="-0.0064" y="2" relative="1" as="geometry">
             <mxPoint y="20" as="offset" />
           </mxGeometry>

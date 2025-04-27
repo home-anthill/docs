@@ -92,7 +92,7 @@ ssl: true
 
 server_domain: '<YOUR HTTPS PUBLIC DOMAIN>'
 server_port: '443'
-server_path: '/api/register'
+server_path: '/admission/register'
 
 mqtt_domain: '<YOUR MQTTS PUBLIC DOMAIN>'
 mqtt_port: 8883
