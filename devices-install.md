@@ -60,10 +60,10 @@ You are free to change these inputs modifying firmwares accordingly.
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
 Then try to build and flash one of the official examples to see if everything is ok!
-I'm using Board Manager `esp32` by Espressif (version `3.1.0` for sensors and `2.0.17` for devices).
+I'm using Board Manager `esp32` by Espressif (version `3.2.0` for sensors and `2.0.17` for devices).
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
-- `ArduinoJson` by Benoit Blanchon (version `7.3.0`)
+- `ArduinoJson` by Benoit Blanchon (version `7.4.1`)
 - `HttpClient` by Adrian McEwen (version `2.2.0`)
 - `PubSubClient` by Nick O'Leary (version `2.8`)
 - `TimeAlarms` by Michael Margolis (version `1.5`)
@@ -71,7 +71,7 @@ I'm using Board Manager `esp32` by Espressif (version `3.1.0` for sensors and `2
 - `DHT sensor library` by Adafruit (version `1.4.6`)
 - `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.8.6`)
 - `Time` by Michael Margolis (version `1.6.1`) (not used directly, but it's an indirect dependency of `TimeAlarms`)
-- `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.0`)
+- `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.1`)
 - `Grove - Air quality sensor` by Seeed Studio (version `1.0.2`)
 - `Grove - Digital Light Sensor` by Seeed Studio (version `2.0.0`)
 
