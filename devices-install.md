@@ -120,6 +120,9 @@ python3 -m src --model=power-outage --source=../private-config/secrets.yaml --de
 
 python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../devices/device-ac-beko
 python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../devices/device-ac-lg
+
+# close poetry shell
+exit
 ```
 
 5. Build and flash firmwares
