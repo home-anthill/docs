@@ -19,29 +19,24 @@ cmake --version
 ```
 
 
-### Install `rabbitmqadmin` CLI (optional)
+### Install `rabbitmqadmin v2` CLI (optional)
 
 This is **required only to run integration tests of `consumer` service**.
 If you only want to run this project on your local PC **you can skip this step**.
 
-On macOS install it via [Homebrew](https://formulae.brew.sh/formula/rabbitmq) with `brew install rabbitmq`
+On macOS install [rabbitmqadmin-ng](https://github.com/rabbitmq/rabbitmqadmin-ng) with `cargo install rabbitmqadmin`
 
-You don't need to start RabbitMQ server, because we will use a Docker container.
-Please check that RabbitMQ server is not running:
+You don't need to start RabbitMQ server locally, because we will use a Docker container.
+Please check that local RabbitMQ server is not running:
 ```bash
 brew services info --all
 ```
 
 Check if everything works fine running:
 ```bash
-rabbitmqadmin --version
+rabbitmqadmin --help
 # print the location of rabbitmqadmin executable
 which rabbitmqadmin
-```
-
-To be able to run `api-consumer` tests, you must create a link to `rabbitmqadmin` in this way:
-```bash
-sudo ln -s /opt/homebrew/sbin/rabbitmqadmin /usr/local/sbin/rabbitmqadmin
 ```
 
 
