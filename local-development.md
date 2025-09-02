@@ -19,30 +19,10 @@ cmake --version
 ```
 
 
-### Install `rabbitmqadmin v2` CLI (optional)
-
-This is **required only to run integration tests of `consumer` service**.
-If you only want to run this project on your local PC **you can skip this step**.
-
-On macOS install [rabbitmqadmin-ng](https://github.com/rabbitmq/rabbitmqadmin-ng) with `cargo install rabbitmqadmin`
-
-You don't need to start RabbitMQ server locally, because we will use a Docker container.
-Please check that local RabbitMQ server is not running:
-```bash
-brew services info --all
-```
-
-Check if everything works fine running:
-```bash
-rabbitmqadmin --help
-# print the location of rabbitmqadmin executable
-which rabbitmqadmin
-```
-
-
 ### Install `mosquitto_passwd` CLI (optional)
 
 On macOS install it via [Homebrew](https://formulae.brew.sh/formula/mosquitto) with `brew install mosquitto`
+
 
 
 ## 1. Install Go
@@ -65,7 +45,7 @@ air -v
 ## 2. Install Rust
 
 
-Install Rust from [HERE](https://www.rust-lang.org/)
+Install Rust from [HERE](https://www.rust-lang.org/) with `rustup` script
 
 Check if everything works fine running:
 ```bash
@@ -114,19 +94,41 @@ adb --version
 ```
 
 
-## 5. Install and run Docker Desktop
+### 6. Install `rabbitmqadmin v2` CLI (OPTIONAL)
+
+
+This is **required only to run integration tests of `consumer` service**.
+If you only want to run this project on your local PC **you can skip this step**.
+
+On macOS install [rabbitmqadmin-ng](https://github.com/rabbitmq/rabbitmqadmin-ng) with `cargo install rabbitmqadmin`
+
+You don't need to start RabbitMQ server locally, because we will use a Docker container.
+Please check that local RabbitMQ server is not running:
+```bash
+brew services info --all
+```
+
+Check if everything works fine running:
+```bash
+rabbitmqadmin --help
+# print the location of rabbitmqadmin executable
+which rabbitmqadmin
+```
+
+
+## 7. Install and run Docker Desktop
 
 
 Install Docker Desktop from [HERE](https://www.docker.com/products/docker-desktop/)
 
 
-## 6. Download repos
+## 8. Download repos
 
 
 Run [this script](download-full-project.sh) in the location where you want to store `home-anthill` project.
 
 
-## 7. Deploy local docker containers
+## 9. Deploy local docker containers
 
 
 1. Mosquitto
@@ -173,7 +175,7 @@ docker run --name redis -p 6379:6379 -d redis redis-server --save 60 1 --logleve
 ```
 
 
-## 8. Create 2 GitHub oAuth2 applications and update api-server .env file
+## 10. Create 2 GitHub oAuth2 applications and update api-server .env file
 
 
 1. GitHub oAuth2 app for website login
@@ -212,7 +214,7 @@ These 2 values are the clientID and secretID of your github oAuth2 application, 
 - save the oAuth2 app
 
 
-## 9. Create a Firebase Cloud Messaging app
+## 11. Create a Firebase Cloud Messaging app
 
 
 Create a new project at [Firebase console](https://console.firebase.google.com/) following these steps
@@ -225,7 +227,7 @@ Create a new project at [Firebase console](https://console.firebase.google.com/)
    on 'Generate a new private key' button to download the `serviceAccountKey.json` (this will be required to run `online-alarm` below).
 
 
-## 10. Run all microservices
+## 12. Run all microservices
 
 **With MongoDB, RabbitMQ, Mosquitto and Redis up and running**, you can start all microservices.
 
@@ -332,7 +334,7 @@ From `http://localhost:8082` **login with the GitHub account used to create the 
 If you'll login successfully you'll be redirected to the main app page.
 
 
-## 11. Fill database with some data
+## 13. Fill database with some data
 
 
 At this point, you should be able to login to the app, so the DB has a valid profile inside.
@@ -386,7 +388,7 @@ localhost:8082/api/profiles/<YOUR PROFILE MONGODB OBJECTID>/tokens
 **The response of `regenApiToken` contains the re-generated `apiToken`**. This token changes every time you call the API and the previous value won't be valid anymore.
 
 
-## 12. Prepare devices and flash firmwares
+## 14. Prepare devices and flash firmwares
 
 
 Starts from this guide [HERE](devices-install.md)
@@ -429,7 +431,7 @@ mqtt_password: "Password1!"
 ```
 
 
-## 13. Run the Android app on a virtual device (still under development)
+## 15. Run the Android app on a virtual device (still under development)
 
 
 1. import the `app` repository in Android Studio
