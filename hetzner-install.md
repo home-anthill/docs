@@ -10,19 +10,19 @@ You'll get two files: `hetzner_id_ed25519` and `hetzner_id_ed25519.pub`.
 Move them in `~/.ssh`.
 
 
-## Environment
+## Server creation
+
+### Environment
 
 - Ubuntu 24.04 LTS
-- Kubernetes v1.29.6+k3s1
-- [Flannel 0.25.5](https://github.com/flannel-io/flannel)
-- [MetalLB 0.14.18](https://metallb.universe.tf/)
-- [ingress-nginx 1.10.1](https://kubernetes.github.io/ingress-nginx/)
-- [cert-manager 1.15.3](https://cert-manager.io/)
-- [rabbitmq/cluster-operator 2.9.0](https://github.com/rabbitmq/cluster-operator)
-- [rabbitmq/messaging-topology-operator 1.14.2](https://github.com/rabbitmq/messaging-topology-operator)
+- Kubernetes v1.33.4+k3s1
+- [Flannel 0.27.3](https://github.com/flannel-io/flannel)
+- [MetalLB 0.15.2](https://metallb.universe.tf/)
+- [ingress-nginx 1.13.2](https://kubernetes.github.io/ingress-nginx/)
+- [cert-manager 1.18.2](https://cert-manager.io/docs/installation/)
+- [rabbitmq/cluster-operator 2.16.1](https://github.com/rabbitmq/cluster-operator)
+- [rabbitmq/messaging-topology-operator 1.17.4](https://github.com/rabbitmq/messaging-topology-operator)
 
-
-## Server creation
 
 From Hetzner Cloud UI create a server like this:
 
@@ -136,14 +136,14 @@ Now, you should be able to connect to the cluster from your local machine, for e
 MetalLB reports some incompatibilities with different CNI plugins, so I chose Flannel, because it seems supported without issues.
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.25.5/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.27.3/Documentation/kube-flannel.yml
 ```
 
 
 ## Install MetalLB
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.18/config/manifests/metallb-native.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
 ```
 
 
@@ -158,7 +158,7 @@ helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.15.3 \
+  --version v1.18.2 \
   --set crds.enabled=true
 ```
 
@@ -244,7 +244,7 @@ dig <YOUR_MQTT_DOMAIN>
 
 1. Deploy ingress-controllers
 
-Run the 2 commands below replacing loadBalancerIPs with floating IPs.
+Run the 2 commands below **replacing loadBalancerIPs with floating IPs**.
 
 ```bash
 # webapp ingress controller
@@ -262,7 +262,8 @@ helm install http-ingress-nginx ingress-nginx \
   --set controller.config.hsts=true \
   --set controller.config.hsts-include-subdomains=true \
   --set controller.config.hsts-max-age=31536000 \
-  --set controller.config.hsts-preload=true
+  --set controller.config.hsts-preload=true \
+  --set controller.config.annotations-risk-level=Critical
 
 # mqtt ingress controller (with custom config to expose TCP traffic as explained here: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md)
 helm install mqtt-ingress-nginx ingress-nginx \
@@ -311,6 +312,8 @@ mosquitto:
 apiServer:
   oauth2ClientID: "<GITHUB_OAUTH_CLIENT>"
   oauth2SecretID: "<GITHUB_OAUTH_SECRET>"
+  oauth2AppClientID: "<GITHUB_OAUTH_APP_CLIENT>"
+  oauth2AppSecretID: "<GITHUB_OAUTH_APP_SECRET>"
   singleUserLoginEmail: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>"
   jwtPassword: "<JWT_PASSWORD>"
   cookieSecret: "<COOKIE_SECRET>"
