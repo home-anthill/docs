@@ -198,7 +198,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/homes/63bca2900205ea20dd04a46c/rooms",
+							"raw": "http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d/rooms",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -207,7 +207,7 @@
 							"path": [
 								"api",
 								"homes",
-								"63bca2900205ea20dd04a46c",
+								"620d71c5b98386d5903d6a4d",
 								"rooms"
 							]
 						}
@@ -381,7 +381,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/devices/639640a82f67b44c7aed6fbc/values",
+							"raw": "http://localhost:8082/api/devices/68d11944b0bbb76d15b8eea0/values",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -390,7 +390,7 @@
 							"path": [
 								"api",
 								"devices",
-								"639640a82f67b44c7aed6fbc",
+								"68d11944b0bbb76d15b8eea0",
 								"values"
 							]
 						}
@@ -398,13 +398,13 @@
 					"response": []
 				},
 				{
-					"name": "setDeviceValues",
+					"name": "setDeviceValues - airConditioner",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"on\": true,\n    \"temperature\": 28,\n    \"mode\": 1,\n    \"fanSpeed\": 1\n}",
+							"raw": "[\n    {\n        \"featureUuid\": \"4bcd185f-3f71-499b-b5ad-e97930df10b6\",\n        \"type\": \"controller\",\n        \"name\": \"on\",\n        \"value\": 1\n    },\n    {\n        \"featureUuid\": \"27e9a662-173b-4bad-b547-e51e31a80b13\",\n        \"type\": \"controller\",\n        \"name\": \"setpoint\",\n        \"value\": 27\n    },\n    {\n        \"featureUuid\": \"a546d61d-ef44-4eda-91d9-501939cd5ed3\",\n        \"type\": \"controller\",\n        \"name\": \"mode\",\n        \"value\": 1\n    },\n    {\n        \"featureUuid\": \"62a19b24-b058-4f3c-9b76-b54fa65fefd3\",\n        \"type\": \"controller\",\n        \"name\": \"fanSpeed\",\n        \"value\": 1\n    }\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -412,7 +412,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/devices/63bca0cc0205ea20dd04a464/values",
+							"raw": "http://localhost:8082/api/devices/68e642991003381ea049958a/values",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -421,7 +421,38 @@
 							"path": [
 								"api",
 								"devices",
-								"63bca0cc0205ea20dd04a464",
+								"68e642991003381ea049958a",
+								"values"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setDeviceValues - thermostat Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"featureUuid\": \"0d0ba2f6-0be9-404c-85d0-0b2eaf854fd9\",\n        \"type\": \"controller\",\n        \"name\": \"setpoint\",\n        \"value\": 22.40\n    },\n    {\n        \"featureUuid\": \"85bfb4c4-400c-42a6-9279-f3d3819387d4\",\n        \"type\": \"controller\",\n        \"name\": \"tolerance\",\n        \"value\": 2.0\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/devices/68d08f5ebda80c29413fc5c1/values",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"devices",
+								"68d08f5ebda80c29413fc5c1",
 								"values"
 							]
 						}
@@ -510,7 +541,7 @@
 			]
 		},
 		{
-			"name": "admission",
+			"name": "admission (secondary nginx entrypoint)",
 			"item": [
 				{
 					"name": "getKeepAlive",
@@ -548,7 +579,7 @@
 					"response": []
 				},
 				{
-					"name": "registerDevice",
+					"name": "registerDevice (AC)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -557,7 +588,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mac\": \"77:02:33:77:22:55\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"ac-beko\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"ac-beko\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
+							"raw": "{\n    \"mac\": \"CC:02:55:99:99:99\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"ac-lg\",\n\t\"apiToken\": \"4d6c95d9-4ff2-4952-821f-5714e50c1dec\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"on\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"controller\",\n            \"name\": \"setpoint\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"controller\",\n            \"name\": \"mode\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"controller\",\n            \"name\": \"fanSpeed\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -589,7 +620,71 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mac\": \"44:99:45:22:12:66\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"2ee7e6d0-c216-4548-bd78-fa3b04bb5fed\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
+							"raw": "{\n    \"mac\": \"C6:99:77:22:12:AA\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"example\",\n\t\"apiToken\": \"4d6c95d9-4ff2-4952-821f-5714e50c1dec\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"humidity\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"%\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"light\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"lux\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"motion\",\n            \"enable\": true,\n            \"order\": 4,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airquality\",\n            \"enable\": true,\n            \"order\": 5,\n            \"unit\": \"-\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"airpressure\",\n            \"enable\": true,\n            \"order\": 6,\n            \"unit\": \"hPa\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8099/admission/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"admission",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registerSensor PowerOutage",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mac\": \"FF:99:77:22:12:AA\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"poweroutage\",\n\t\"apiToken\": \"4d6c95d9-4ff2-4952-821f-5714e50c1dec\",\n    \"features\": [\n        {\n            \"type\": \"sensor\",\n            \"name\": \"poweroutage\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"-\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8099/admission/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"admission",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registerHybrid",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mac\": \"90:90:33:77:22:FA\",\n\t\"manufacturer\": \"ks89\",\n\t\"model\": \"thermostat\",\n\t\"apiToken\": \"4d6c95d9-4ff2-4952-821f-5714e50c1dec\",\n    \"features\": [\n        {\n            \"type\": \"controller\",\n            \"name\": \"setpoint\",\n            \"enable\": true,\n            \"order\": 1,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"controller\",\n            \"name\": \"tolerance\",\n            \"enable\": true,\n            \"order\": 2,\n            \"unit\": \"°C\"\n        },\n        {\n            \"type\": \"sensor\",\n            \"name\": \"temperature\",\n            \"enable\": true,\n            \"order\": 3,\n            \"unit\": \"°C\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -635,6 +730,83 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "online (secondary nginx entrypoint)",
+			"item": [
+				{
+					"name": "online - get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8089/online/563efa03-9aeb-4a8d-906b-f4944a5c673f/features/6ba7ed96-a041-44a5-8b90-98e66eacfeee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"online",
+								"563efa03-9aeb-4a8d-906b-f4944a5c673f",
+								"features",
+								"6ba7ed96-a041-44a5-8b90-98e66eacfeee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "online - post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"apiToken\": \"4d6c95d9-4ff2-4952-821f-5714e50c1dec\",\n    \"fcmToken\": \"456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8089/fcmtoken",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"fcmtoken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "online - delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8089/online/563efa03-9aeb-4a8d-906b-f4944a5c673f/features/6ba7ed96-a041-44a5-8b90-98e66eacfeee",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"online",
+								"563efa03-9aeb-4a8d-906b-f4944a5c673f",
+								"features",
+								"6ba7ed96-a041-44a5-8b90-98e66eacfeee"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -642,6 +814,7 @@
 			"listen": "prerequest",
 			"script": {
 				"type": "text/javascript",
+				"requests": {},
 				"exec": [
 					""
 				]
@@ -651,6 +824,7 @@
 			"listen": "test",
 			"script": {
 				"type": "text/javascript",
+				"requests": {},
 				"exec": [
 					""
 				]

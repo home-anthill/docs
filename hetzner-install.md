@@ -348,3 +348,13 @@ helm install -f values.yaml -f ../../private-config/custom-values.yaml  home-ant
    After some time, you'll be able to navigate to the website via HTTPS and to the Mosquitto server via MQTTS connection.
    ESP32 device should already be working using secure connections.
 <br/>
+
+
+## Useful things
+
+If you want to force renew Let's Encrypt certificates in `cert-amager`, you can install `cmctl` via `brew install cmctl` on your local machine and run this:
+
+```bash
+cmctl renew webapp-tls -n home-anthill
+cmctl renew mqtt-tls -n home-anthill
+```
