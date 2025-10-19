@@ -1,9 +1,9 @@
-# Devices install guide
+# Firmwares install guide
 
 
 ## 1. Prepare ESP32 boards with wiring and electrical parts
 
-In this section, I'll show how to prepare all types of devices and sensors.
+In this section, I'll show how to prepare all types of firmwares.
 Obviously, you are free to use only some of them.
 
 Suggested hardware:
@@ -22,24 +22,24 @@ Suggested hardware:
 - 4 x USB power adapter
 
 
-Sensor (DHT + Light)
+DHT + Light
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-dht-light.jpg" alt="sensor dht and light">
-<br/>
-
-Sensor (Barometer)
-<br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-barometer.jpg" alt="sensor barometer">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-dht-light.jpg" alt="dht and light">
 <br/>
 
-Sensor (Air quality + PIR)
+Barometer
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-airquality-pir.jpg" alt="sensor airquality and pir">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-barometer.jpg" alt="barometer">
 <br/>
 
-Device (AC Beko or LG)
+Air quality + PIR
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac.jpg" alt="sensor air conditioner">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-airquality-pir.jpg" alt="airquality and pir">
+<br/>
+
+Air Conditioner Beko or LG
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac.jpg" alt="air conditioner">
 <br/>
 
 
@@ -60,7 +60,7 @@ You are free to change these inputs modifying firmwares accordingly.
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
 Then try to build and flash one of the official examples to see if everything is ok!
-I'm using Board Manager `esp32` by Espressif (version `3.2.0` for sensors and `2.0.17` for devices).
+I'm using Board Manager `esp32` by Espressif (version `3.2.0` for all firmwares except for `ac-beko` and `ac-lg` where I'm using `2.0.17`).
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
 - `ArduinoJson` by Benoit Blanchon (version `7.4.2`)
@@ -113,13 +113,13 @@ poetry install
 poetry shell
 
 # inside the poetry shell sun these commands
-python3 -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../sensors/sensor-dht-light
-python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../sensors/sensor-airquality-pir
-python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../sensors/sensor-barometer
-python3 -m src --model=power-outage --source=../private-config/secrets.yaml --destination=../sensors/sensor-power-outage
+python3 -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../firmwares/dht-light
+python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../firmwares/airquality-pir
+python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../firmwares/barometer
+python3 -m src --model=power-outage --source=../private-config/secrets.yaml --destination=../firmwares/power-outage
 
-python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../devices/device-ac-beko
-python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../devices/device-ac-lg
+python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../firmwares/ac-beko
+python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../firmwares/ac-lg
 
 # close poetry shell
 exit
@@ -127,9 +127,9 @@ exit
 
 5. Build and flash firmwares
 
-- Open `devices/device-ac-beko/device-ac-beko.ino` with ArduinoIDE and flash the firmware
-- Open `devices/device-ac-lg/device-ac-lg.ino` with ArduinoIDE and flash the firmware
-- Open `sensors/sensor-dht-light/sensor-dht-light.ino` with ArduinoIDE and flash the firmware
-- Open `sensors/sensor-airquality-pir/sensor-airquality-pir.ino` with ArduinoIDE and flash the firmware
-- Open `sensors/sensor-barometer/sensor-barometer.ino` with ArduinoIDE and flash the firmware
-- Open `sensors/sensor-power-outage/sensor-power-outage.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/ac-beko/ac-beko.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/ac-lg/ac-lg.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/dht-light/dht-light.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/airquality-pir/airquality-pir.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/barometer/barometer.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/power-outage/power-outage.ino` with ArduinoIDE and flash the firmware

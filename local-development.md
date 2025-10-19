@@ -388,10 +388,10 @@ localhost:8082/api/profiles/<YOUR PROFILE MONGODB OBJECTID>/tokens
 **The response of `regenApiToken` contains the re-generated `apiToken`**. This token changes every time you call the API and the previous value won't be valid anymore.
 
 
-## 14. Prepare devices and flash firmwares
+## 14. Prepare firmwares
 
 
-Starts from this guide [HERE](devices-install.md)
+Starts from this guide [HERE](firmwares-install.md)
 
 To work locally, you need to change remote URLs with your local ip address.
 First check the IP address of your pc (based on your OS):
