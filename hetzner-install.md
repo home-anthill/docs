@@ -15,13 +15,12 @@ Move them in `~/.ssh`.
 ### Environment
 
 - Ubuntu 24.04 LTS
-- Kubernetes v1.33.4+k3s1
-- [Flannel 0.27.3](https://github.com/flannel-io/flannel)
-- [MetalLB 0.15.2](https://metallb.universe.tf/)
-- [ingress-nginx 1.13.2](https://kubernetes.github.io/ingress-nginx/)
+- Kubernetes v1.35.0+k3s1
+- [Flannel 0.27.4](https://github.com/flannel-io/flannel)
+- [MetalLB 0.15.3](https://metallb.universe.tf/)
 - [cert-manager 1.18.2](https://cert-manager.io/docs/installation/)
-- [rabbitmq/cluster-operator 2.16.1](https://github.com/rabbitmq/cluster-operator)
-- [rabbitmq/messaging-topology-operator 1.17.4](https://github.com/rabbitmq/messaging-topology-operator)
+- [rabbitmq/cluster-operator 2.18.0](https://github.com/rabbitmq/cluster-operator)
+- [rabbitmq/messaging-topology-operator 1.18.2](https://github.com/rabbitmq/messaging-topology-operator)
 
 
 From Hetzner Cloud UI create a server like this:
@@ -54,116 +53,6 @@ From Hetzner Cloud UI create 2 IPs:
   protocol: IPV4
 
 From "Assigned to" column you need to choose the server created above.
-
-
-## SSH access
-
-Login to your server with
-
-```bash
-ssh -i ~/.ssh/<private_key_file> root@<HETZNER_SERVER_PUBLIC_IP>
-```
-Insert the password used when you created your SSH key.
-
-
-## Update Ubuntu
-
-```bash
-sudo apt-get update -y
-sudo apt-get upgrade -y
-```
-
-
-## Disable Linux swap for Kubernetes
-
-Check with `htop` if swap is disabled. If not, run:
-
-```bash
-# disable swap right now
-sudo swapoff -a
-# disable swap also when you'll reboot
-cp /etc/fstab /etc/fstab.backup
-sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-
-sudo reboot
-```
-
-
-## Prepare K3s
-
-As described [HERE](https://docs.k3s.io/installation/configuration#configuration-file), K3s reads a config file on install located at `/etc/rancher/k3s/config.yaml`.
-
-```bash
-sudo mkdir -p /etc/rancher/k3s
-sudo mkdir -p /root/.kube
-sudo touch /etc/rancher/k3s/config.yaml
-```
-
-Add this content to `/etc/rancher/k3s/config.yaml`:
-
-```yaml
-disable:
-  - traefik
-  - servicelb
-write-kubeconfig-mode: "0644"
-write-kubeconfig: "/root/.kube/config"
-cluster-cidr: "10.244.0.0/16"
-```
-
-**Attention, this is very important:**
-`cluster-cidr: "10.244.0.0/16"` is required to prevent error `Error registering network: failed to acquire lease: subnet 10.244.0.0/16 specified in the flannel net config doesnt contain 10.42.0.0/24 PodCIDR...` when starting `kube-flannel-ds` pod.
-
-
-## Install K3s
-
-Install K3s via: 
-
-```bash
-curl -sfL https://get.k3s.io | sh - 
-# Check for Ready node, takes ~30 seconds 
-k3s kubectl get node 
-```
-
-Save the content of `/root/.kube/config` to you local machine as `~/.kube/config` file.
-Replace `127.0.0.1` in `~/.kube/config` with the public IPv4 of your Hetzner server.
-Change permission with `chmod 600 ~/.kube/config`.
-
-Now, you should be able to connect to the cluster from your local machine, for example via `kubectl get pods -n home-anthill` or a software like [k9s](https://k9scli.io/) via `k9s -n all`.
-
-
-## Install Flannel CNI plugin
-
-MetalLB reports some incompatibilities with different CNI plugins, so I chose Flannel, because it seems supported without issues.
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.27.3/Documentation/kube-flannel.yml
-```
-
-
-## Install MetalLB
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
-```
-
-
-## Install cert-manager
-
-```bash
-helm repo add jetstack https://charts.jetstack.io --force-update
-
-helm repo update
-
-helm install \
-  cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.18.2 \
-  --set crds.enabled=true
-```
-
-and wait some time, until the install command terminates.
-
 
 
 ## Apply firewall rules to Hetzner Cloud
@@ -202,6 +91,117 @@ Outbound: # leave empty to allow all outgoing traffic
 ```
 
 Then apply this configuration to your server.
+
+
+## SSH access
+
+Login to your server with
+
+```bash
+ssh -i ~/.ssh/<private_key_file> root@<HETZNER_SERVER_PUBLIC_IP>
+```
+Insert the password used when you created your SSH key.
+
+
+## Update Ubuntu
+
+```bash
+sudo apt-get update -y
+sudo apt-get upgrade -y
+```
+
+
+## Disable Linux swap for Kubernetes
+
+Check with `htop` if swap is disabled. If not, run:
+
+```bash
+# disable swap right now
+# and disable swap also when you'll reboot
+sudo swapoff -a
+cp /etc/fstab /etc/fstab.backup
+sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+sudo reboot
+```
+
+
+## Prepare K3s
+
+As described [HERE](https://docs.k3s.io/installation/configuration#configuration-file), K3s reads a config file on install located at `/etc/rancher/k3s/config.yaml`.
+
+```bash
+sudo mkdir -p /etc/rancher/k3s
+sudo mkdir -p /root/.kube
+sudo touch /etc/rancher/k3s/config.yaml
+```
+
+Add this content to `/etc/rancher/k3s/config.yaml`:
+
+```yaml
+disable:
+  - traefik
+  - servicelb
+write-kubeconfig-mode: "0644"
+write-kubeconfig: "/root/.kube/config"
+cluster-cidr: "10.244.0.0/16"
+```
+
+**Attention, this is very important:**
+`cluster-cidr: "10.244.0.0/16"` is required to prevent error `Error registering network: failed to acquire lease: subnet 10.244.0.0/16 specified in the flannel net config doesnt contain 10.42.0.0/24 PodCIDR...` when starting `kube-flannel-ds` pod.
+
+
+## Install K3s
+
+Install K3s via: 
+
+```bash
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.35.0+k3s1" sh -
+# Check for Ready node, takes ~30 seconds 
+k3s kubectl get node
+```
+
+Save the content of `/root/.kube/config` to you local machine as `~/.kube/config` file.
+Replace `127.0.0.1` in `~/.kube/config` with the public IPv4 of your Hetzner server.
+Change permission with `chmod 600 ~/.kube/config`.
+
+Now, you should be able to connect to the cluster from your local machine via `kubectl` or a software like [k9s](https://k9scli.io/) via `k9s -n all`.
+
+
+## Install Flannel CNI plugin
+
+MetalLB reports some incompatibilities with different CNI plugins, so I chose Flannel, because it seems supported without issues.
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.27.4/Documentation/kube-flannel.yml
+```
+
+
+## Install MetalLB
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.3/config/manifests/metallb-native.yaml
+```
+
+
+## Install cert-manager
+
+From yout local machine run:
+
+```bash
+helm repo add jetstack https://charts.jetstack.io --force-update
+
+helm repo update
+
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.18.2 \
+  --set crds.enabled=true
+```
+
+and wait some time, until the install command terminates.
 
 
 ## Install RabbitMQ
@@ -262,7 +262,6 @@ helm install http-ingress-nginx ingress-nginx \
   --set controller.config.hsts=true \
   --set controller.config.hsts-include-subdomains=true \
   --set controller.config.hsts-max-age=31536000 \
-  --set controller.config.hsts-preload=true \
   --set controller.config.annotations-risk-level=Critical
 
 # mqtt ingress controller (with custom config to expose TCP traffic as explained here: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md)
@@ -352,7 +351,7 @@ helm install -f values.yaml -f ../../private-config/custom-values.yaml  home-ant
 
 ## Useful things
 
-If you want to force renew Let's Encrypt certificates in `cert-amager`, you can install `cmctl` via `brew install cmctl` on your local machine and run this:
+If you want to force renew Let's Encrypt certificates in `cert-manager`, you can install `cmctl` via `brew install cmctl` on your local machine and run this:
 
 ```bash
 cmctl renew webapp-tls -n home-anthill

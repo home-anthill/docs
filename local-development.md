@@ -68,7 +68,7 @@ npm -v
 ## 4. Install Python and Poetry
 
 
-Install Python 3.13 (or greater) from [HERE](https://www.python.org/downloads/)
+Install Python 3.12 (or greater) from [HERE](https://www.python.org/downloads/)
 
 Check if everything works fine running:
 ```bash
