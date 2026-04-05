@@ -60,8 +60,8 @@ You are free to change these inputs modifying firmwares accordingly.
 
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
-Then try to build and flash one of the official examples to see if everything is ok!
-I'm using Board Manager `esp32` by Espressif (version `3.2.0` for all firmwares except for `ac-beko` and `ac-lg` where I'm using `2.0.17`).
+Then try to build and flash one of the official examples to verify that everything works correctly.
+I'm using Board Manager `esp32` by Espressif (version `3.3.6` for all firmwares).
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
 - `ArduinoJson` by Benoit Blanchon (version `7.4.2`)
@@ -70,11 +70,12 @@ I'm using Board Manager `esp32` by Espressif (version `3.2.0` for all firmwares 
 - `TimeAlarms` by Michael Margolis (version `1.5`)
 - `Adafruit Unified Sensor` by Adafruit (version `1.1.15`)
 - `DHT sensor library` by Adafruit (version `1.4.6`)
-- `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.8.6`)
+- `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.9.0`)
 - `Time` by Michael Margolis (version `1.6.1`) (not used directly, but it's an indirect dependency of `TimeAlarms`)
 - `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.2`)
 - `Grove - Air quality sensor` by Seeed Studio (version `1.0.2`)
 - `Grove - Digital Light Sensor` by Seeed Studio (version `2.0.0`)
+- **TODO add libraries for thermostat** <-----------------------------------
 
 3. Create a new file `private-config/secrets.yaml` file with this content
 
@@ -99,7 +100,7 @@ mqtt_domain: '<YOUR MQTTS PUBLIC DOMAIN>'
 mqtt_port: 8883
 mqtt_auth: true
 mqtt_username: "<YOUR MOSQUITTO USERNAME>"
-mqtt_password: "<YOUR MOSQUITTO PASSWORRD>"
+mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
 ```
 
 4. Run `esp32-configurator` Python script:
@@ -113,11 +114,13 @@ poetry install
 # spawn poetry shell
 poetry shell
 
-# inside the poetry shell sun these commands
+# inside the poetry shell run these commands
 python3 -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../firmwares/dht-light
 python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../firmwares/airquality-pir
 python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../firmwares/barometer
 python3 -m src --model=power-outage --source=../private-config/secrets.yaml --destination=../firmwares/power-outage
+
+python3 -m src --model=thermostat --source=../private-config/secrets.yaml --destination=../firmwares/thermostat
 
 python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../firmwares/ac-beko
 python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../firmwares/ac-lg
@@ -134,3 +137,4 @@ exit
 - Open `firmwares/airquality-pir/airquality-pir.ino` with ArduinoIDE and flash the firmware
 - Open `firmwares/barometer/barometer.ino` with ArduinoIDE and flash the firmware
 - Open `firmwares/power-outage/power-outage.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/thermostat/thermostat.ino` with ArduinoIDE and flash the firmware

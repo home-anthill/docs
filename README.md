@@ -10,14 +10,14 @@ Home Anthill
 home-anthill is a project to control your home remotely with ESP32 microcontrollers.
 
 There are 3 types of firmwares. I chose this categorization:
-- `controllers`: ESP32 to control something, like Air Conditioners.
-- `sensors`: ESP32 to read physical phenomenons like temperature, humidity, air quality.
-- `hybrid`: ESP32 to both control something and read physical phenomenons like temperature, humidity, air quality.
+- `controllers`: ESP32 to control something, like air conditioners.
+- `sensors`: ESP32 to read physical phenomena like temperature, humidity, and air quality.
+- `hybrid`: ESP32 to both control something and read physical phenomena like temperature, humidity, and air quality.
 
-At the moment, the only supported `controllers` are the one to control either `Beko air conditioner (Remote type: RG52A9/BGEF)` or `LG air conditioner (Remote type: AKB74955603)`,
-but you can modify the firmware changing the protocol to control you specific model, if supported by [`crankyoldgit/IRremoteESP8266`](https://github.com/crankyoldgit/IRremoteESP8266).
+At the moment, the only supported `controllers` are those to control either `Beko air conditioner (Remote type: RG52A9/BGEF)` or `LG air conditioner (Remote type: AKB74955603)`,
+but you can modify the firmware by changing the protocol to control your specific model, if supported by [`crankyoldgit/IRremoteESP8266`](https://github.com/crankyoldgit/IRremoteESP8266).
 
-`Sensors` can read temperature, humidity, light (lux), air quality, motion, air pressure.
+`Sensors` can read temperature, humidity, light (lux), air quality, motion, and air pressure.
 Feel free to extend this project to match your requirements.
 
 **Please check the `Firmwares compatibility` section below to verify the compatibility with ESP32**.
@@ -66,7 +66,7 @@ On server-side, I'm using a Kubernetes cluster with a simple microservice archit
 
 ## :building_construction: Local development :building_construction:
 
-To setup this project on your PC to develop and run these microservices, please take a look at [local-development.md](local-development.md)
+To set up this project on your PC to develop and run these microservices, please take a look at [local-development.md](local-development.md).
 
 If everything works as expected, you can proceed to the next step and try to use the production configuration using a real remote server and domains.
 
@@ -74,14 +74,14 @@ If everything works as expected, you can proceed to the next step and try to use
 
 ## :earth_africa: Production installation and deploy :earth_africa:
 
-**Before continuing, you should setup and test your local environment following the section above.**
+**Before continuing, you should set up and test your local environment following the section above.**
 
 
 ### Server
 
 First you have to create a MongoDB database, for example on [MongoDB Atlas](https://www.mongodb.com/atlas) using a free account.
-Then, you can check the official tutorial [hetzner-install.md](hetzner-install.md) to setup your Kubernetes cluster.
-Before continue, you should verify that everything works fine, for example trying to login to the web interface with your GitHub account.
+Then, you can check the official tutorial [hetzner-install.md](hetzner-install.md) to set up your Kubernetes cluster.
+Before continuing, you should verify that everything works correctly, for example by trying to log in to the web interface with your GitHub account.
 
 ### Firmwares compatibility
 
@@ -90,14 +90,14 @@ Supported firmwares:
   - **ac-beko**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
   - **ac-lg**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
 - sensors:
-  - **airquality-pir**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1`
+  - **airquality-pir**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
   - **barometer**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
   - **dht-light**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
   - **power-outage**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
 - hybrid:
   - **thermostat**: `ESP32 DevKit-C (ESP32-WROOM-32)`, `ESP32 S2 DevKit-C (ESP32-S2-SOLO)`, `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)`
 
-As you can see, air conditioner controllers are not working with `ESP32 S2 DevKit-C (ESP32-S2-SOLO)` because of [this issue](https://github.com/crankyoldgit/IRremoteESP8266/issues/1922)
+As you can see, air conditioner controllers do not work with `ESP32 S2 DevKit-C (ESP32-S2-SOLO)` because of [this issue](https://github.com/crankyoldgit/IRremoteESP8266/issues/1922).
 
 To configure and flash firmwares, follow this guide [firmwares-install.md](firmwares-install.md).
 

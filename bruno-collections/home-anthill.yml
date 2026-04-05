@@ -1,0 +1,639 @@
+opencollection: 1.0.0
+info:
+  name: home-anthill
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ''
+      port: ''
+      auth:
+        username: ''
+        password: ''
+      bypassProxy: ''
+items:
+  - info:
+      name: admission (secondary nginx entrypoint)
+      type: folder
+      seq: 2
+    items:
+      - info:
+          name: getKeepAlive
+          type: http
+          seq: 1
+        http:
+          method: GET
+          url: http://localhost:8099/admission/keepalive
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: registerDevice (AC)
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: http://localhost:8099/admission/register
+          body:
+            type: json
+            data: |-
+              {
+                "mac": "CC:02:55:99:99:99",
+                "manufacturer": "ks89",
+                "model": "ac-lg",
+                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                  "features": [
+                      {
+                          "type": "controller",
+                          "name": "on",
+                          "enable": true,
+                          "order": 1,
+                          "unit": "-"
+                      },
+                      {
+                          "type": "controller",
+                          "name": "setpoint",
+                          "enable": true,
+                          "order": 2,
+                          "unit": "°C"
+                      },
+                      {
+                          "type": "controller",
+                          "name": "mode",
+                          "enable": true,
+                          "order": 3,
+                          "unit": "-"
+                      },
+                      {
+                          "type": "controller",
+                          "name": "fanSpeed",
+                          "enable": true,
+                          "order": 4,
+                          "unit": "-"
+                      }
+                  ]
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: registerHybrid
+          type: http
+          seq: 5
+        http:
+          method: POST
+          url: http://localhost:8099/admission/register
+          body:
+            type: json
+            data: |-
+              {
+                "mac": "90:90:33:77:22:FA",
+                "manufacturer": "ks89",
+                "model": "thermostat",
+                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                  "features": [
+                      {
+                          "type": "controller",
+                          "name": "setpoint",
+                          "enable": true,
+                          "order": 1,
+                          "unit": "°C"
+                      },
+                      {
+                          "type": "controller",
+                          "name": "tolerance",
+                          "enable": true,
+                          "order": 2,
+                          "unit": "°C"
+                      },
+                      {
+                          "type": "sensor",
+                          "name": "temperature",
+                          "enable": true,
+                          "order": 3,
+                          "unit": "°C"
+                      }
+                  ]
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: registerSensor online
+          type: http
+          seq: 4
+        http:
+          method: POST
+          url: http://localhost:8099/admission/register
+          body:
+            type: json
+            data: |-
+              {
+                "mac": "FF:99:77:22:12:AA",
+                "manufacturer": "ks89",
+                "model": "poweroutage",
+                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                  "features": [
+                      {
+                          "type": "sensor",
+                          "name": "online",
+                          "enable": true,
+                          "order": 1,
+                          "unit": "-"
+                      }
+                  ]
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: registerSensor
+          type: http
+          seq: 3
+        http:
+          method: POST
+          url: http://localhost:8099/admission/register
+          body:
+            type: json
+            data: |-
+              {
+                  "mac": "C6:99:77:22:12:AA",
+                "manufacturer": "ks89",
+                "model": "example",
+                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                  "features": [
+                      {
+                          "type": "sensor",
+                          "name": "temperature",
+                          "enable": true,
+                          "order": 1,
+                          "unit": "°C"
+                      },
+                      {
+                          "type": "sensor",
+                          "name": "humidity",
+                          "enable": true,
+                          "order": 2,
+                          "unit": "%"
+                      },
+                      {
+                          "type": "sensor",
+                          "name": "light",
+                          "enable": true,
+                          "order": 3,
+                          "unit": "lux"
+                      },
+                      {
+                          "type": "sensor",
+                          "name": "motion",
+                          "enable": true,
+                          "order": 4,
+                          "unit": "-"
+                      },
+                      {
+                          "type": "sensor",
+                          "name": "airquality",
+                          "enable": true,
+                          "order": 5,
+                          "unit": "-"
+                      },
+                      {
+                          "type": "sensor",
+                          "name": "airpressure",
+                          "enable": true,
+                          "order": 6,
+                          "unit": "hPa"
+                      }
+                  ]
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: api-server
+      type: folder
+      seq: 1
+    request:
+      auth:
+        type: bearer
+        token: '{{authToken}}'
+    items:
+      - info:
+          name: assignDeviceToHomeRoom
+          type: http
+          seq: 13
+        http:
+          method: PUT
+          url: http://localhost:8082/api/devices/63963ce72f67b44c7aed6fb9
+          body:
+            type: json
+            data: |-
+              {
+                  "homeId": "63f8030d58ace5c82d43bdf2",
+                  "roomId": "638009625f985b4cfe71a1ae"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: deleteDevice
+          type: http
+          seq: 14
+        http:
+          method: DELETE
+          url: http://localhost:8082/api/devices/63f54b3d03333be186aa6159
+          body:
+            type: text
+            data: ''
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: deleteHome
+          type: http
+          seq: 7
+        http:
+          method: DELETE
+          url: http://localhost:8082/api/homes/63bca1520205ea20dd04a466
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: deleteRoom
+          type: http
+          seq: 11
+        http:
+          method: DELETE
+          url: http://localhost:8082/api/homes/63bca2900205ea20dd04a46c/rooms/63bca2970205ea20dd04a46d
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: getDeviceValues
+          type: http
+          seq: 15
+        http:
+          method: GET
+          url: http://localhost:8082/api/devices/68ec2e657c3ae0cbcae5626b/values
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: getDevices
+          type: http
+          seq: 12
+        http:
+          method: GET
+          url: http://localhost:8082/api/devices
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: getHomes
+          type: http
+          seq: 4
+        http:
+          method: GET
+          url: http://localhost:8082/api/homes
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: getKeepAlive
+          type: http
+          seq: 1
+        http:
+          method: GET
+          url: http://localhost:8082/api/keepalive
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: getProfile
+          type: http
+          seq: 2
+        http:
+          method: GET
+          url: http://localhost:8082/api/profile
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: getRooms
+          type: http
+          seq: 8
+        http:
+          method: GET
+          url: http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d/rooms
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: newHome
+          type: http
+          seq: 5
+        http:
+          method: POST
+          url: http://localhost:8082/api/homes
+          body:
+            type: json
+            data: |-
+              {
+                  "name": "newhome",
+                  "location": "newlocation",
+                  "rooms": [{
+                      "name": "newroom",
+                      "floor": 1
+                  }]
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: newRoom
+          type: http
+          seq: 9
+        http:
+          method: POST
+          url: http://localhost:8082/api/homes/63bca1a60205ea20dd04a46b/rooms
+          body:
+            type: json
+            data: |-
+              {
+                  "name": "newroom2",
+                  "floor": 2
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: online - get_by_id
+          type: http
+          seq: 18
+        http:
+          method: GET
+          url: http://localhost:8082/api/online/68ed0fd57c3ae0cbcae56274
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: online-fcmtoken
+          type: http
+          seq: 19
+        http:
+          method: POST
+          url: localhost:8082/api/fcmtoken
+          body:
+            type: json
+            data: |-
+              {
+                  "fcmToken": "dTknleBlRLqEoWBMjiIr80:APA91bEs_Tf8dkrZ_eb872Ok--Up34Luqp1S4WZwzTGr6X1ag4PO4ksHwFFifNqTb1lhATzNcaVqDZ01kP35a0caOa6Akw4oCzYh0ElqL8msgjtZw2phLEk"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: regenApiToken
+          type: http
+          seq: 3
+        http:
+          method: POST
+          url: localhost:8082/api/profiles/620d710e4e8fe8f3394084bc/tokens
+          body:
+            type: json
+            data: '{}'
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: setDeviceValues - airConditioner
+          type: http
+          seq: 16
+        http:
+          method: POST
+          url: http://localhost:8082/api/devices/68e642991003381ea049958a/values
+          body:
+            type: json
+            data: |-
+              [
+                  {
+                      "featureUuid": "4bcd185f-3f71-499b-b5ad-e97930df10b6",
+                      "type": "controller",
+                      "name": "on",
+                      "value": 1
+                  },
+                  {
+                      "featureUuid": "27e9a662-173b-4bad-b547-e51e31a80b13",
+                      "type": "controller",
+                      "name": "setpoint",
+                      "value": 27
+                  },
+                  {
+                      "featureUuid": "a546d61d-ef44-4eda-91d9-501939cd5ed3",
+                      "type": "controller",
+                      "name": "mode",
+                      "value": 1
+                  },
+                  {
+                      "featureUuid": "62a19b24-b058-4f3c-9b76-b54fa65fefd3",
+                      "type": "controller",
+                      "name": "fanSpeed",
+                      "value": 1
+                  }
+              ]
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: setDeviceValues - thermostat Copy
+          type: http
+          seq: 17
+        http:
+          method: POST
+          url: http://localhost:8082/api/devices/68d08f5ebda80c29413fc5c1/values
+          body:
+            type: json
+            data: |-
+              [
+                  {
+                      "featureUuid": "0d0ba2f6-0be9-404c-85d0-0b2eaf854fd9",
+                      "type": "controller",
+                      "name": "setpoint",
+                      "value": 22.40
+                  },
+                  {
+                      "featureUuid": "85bfb4c4-400c-42a6-9279-f3d3819387d4",
+                      "type": "controller",
+                      "name": "tolerance",
+                      "value": 2.0
+                  }
+              ]
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: updateHome
+          type: http
+          seq: 6
+        http:
+          method: PUT
+          url: http://localhost:8082/api/homes/678993d270ec1dedf6fc809a
+          body:
+            type: json
+            data: |-
+              {
+                  "name": "newhome2",
+                  "location": "newlocation2"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: updateRoom
+          type: http
+          seq: 10
+        http:
+          method: PUT
+          url: http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d/rooms/6380095a5f985b4cfe71a1ad
+          body:
+            type: json
+            data: |-
+              {
+                  "name": "updated-room",
+                  "floor": 0
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: online (secondary nginx entrypoint)
+      type: folder
+      seq: 3
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: online - delete
+          type: http
+          seq: 3
+        http:
+          method: DELETE
+          url: http://localhost:8089/online/563efa03-9aeb-4a8d-906b-f4944a5c673f/features/6ba7ed96-a041-44a5-8b90-98e66eacfeee
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: online - get
+          type: http
+          seq: 1
+        http:
+          method: GET
+          url: http://localhost:8089/online/b7b6aaa7-8a58-4af9-913d-4d6ed20df7f2/features/82a10800-3960-45ba-a7a2-14fdeb2e845f
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: online - post
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: http://localhost:8089/fcmtoken
+          body:
+            type: json
+            data: |-
+              {
+                  "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                  "fcmToken": "456"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+request:
+  variables:
+    - name: authToken
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjA1NzIwNywibmFtZSI6IlN0ZWZhbm8gQ2FwcGEiLCJleHAiOjE3Nzg3MDU2ODJ9.Ceh3PxUHyA48azHKGLwkuEdXCt42SYxftk74eP4NWa0
+bundled: true
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
+    exportedAt: '2026-04-03T00:40:29.909Z'
+    exportedUsing: Bruno
