@@ -111,22 +111,16 @@ cd esp32-configurator
 # install dependencies
 poetry install
 
-# spawn poetry shell
-poetry shell
+# run these commands
+poetry run python -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../firmwares/dht-light
+poetry run python -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../firmwares/airquality-pir
+poetry run python -m src --model=barometer --source=../private-config/secrets.yaml --destination=../firmwares/barometer
+poetry run python -m src --model=power-outage --source=../private-config/secrets.yaml --destination=../firmwares/power-outage
 
-# inside the poetry shell run these commands
-python3 -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../firmwares/dht-light
-python3 -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../firmwares/airquality-pir
-python3 -m src --model=barometer --source=../private-config/secrets.yaml --destination=../firmwares/barometer
-python3 -m src --model=power-outage --source=../private-config/secrets.yaml --destination=../firmwares/power-outage
+poetry run python -m src --model=thermostat --source=../private-config/secrets.yaml --destination=../firmwares/thermostat
 
-python3 -m src --model=thermostat --source=../private-config/secrets.yaml --destination=../firmwares/thermostat
-
-python3 -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../firmwares/ac-beko
-python3 -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../firmwares/ac-lg
-
-# close poetry shell
-exit
+poetry run python -m src --model=ac-beko --source=../private-config/secrets.yaml --destination=../firmwares/ac-beko
+poetry run python -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../firmwares/ac-lg
 ```
 
 5. Build and flash firmwares
