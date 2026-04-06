@@ -19,6 +19,9 @@ Suggested hardware:
 - 1 x `Mini AM312 PIR sensor` [HERE](https://www.amazon.it/gp/product/B07FGG87JM/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1)
 - 1 x `DHT22 AM2302 sensor` [HERE](https://www.amazon.it/AZDelivery-temperatura-circuito-Raspberry-gratuito/dp/B078SVZB1X/ref=sr_1_1_sspa?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=5C1HXGIU9M4H&keywords=dht22&qid=1670794113&sprefix=dht22%2Caps%2C90&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1&smid=A1X7QLRQH87QA3)
 - 1 x `Grove - High Precision Barometric Pressure Sensor (DPS310)` [HERE](https://it.farnell.com/en-IT/seeed-studio/101020812/pressure-sensor-board-arduino/dp/4007743?CMP=e-email-sys-orderack-GLB)
+- 1 x  `Adafruit MCP9600 I2C Thermocouple Amplifier - K, J, T, N, S, E, B and R Type T` [HERE](https://www.adafruit.com/product/4101?srsltid=AfmBOop2GS--fyHQFLK_w9Hz3XF21xN-o0HnBQf9MVE9l1vp0C1ncZiX)
+- 1 x `Display OLED I2C 0,91” 128×32 pixel` [HERE](https://futuranet.it/prodotto/display-oled-i2c-091-128x32-pixel/?srsltid=AfmBOopjRC6Q5s2GWDbei20VWqEDNmeBWH89Jfnmz4c2NbtdR3P-GtGZ)
+- 1 x `Thermocouple K-Type`
 - 4 x Micro USB cables
 - 4 x USB power adapter
 
@@ -43,6 +46,10 @@ Air Conditioner Beko or LG
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac.jpg" alt="air conditioner">
 <br/>
 
+Thermostat
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-thermostat.jpg" alt="thermostat">
+<br/>
 
 Connections:
 - all sensors are powered on with 3.3V
@@ -61,7 +68,7 @@ You are free to change these inputs modifying firmwares accordingly.
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
 Then try to build and flash one of the official examples to verify that everything works correctly.
-I'm using Board Manager `esp32` by Espressif (version `3.3.6` for all firmwares).
+I'm using Board Manager `esp32` by Espressif (version `3.3.7` for all firmwares).
 
 2. From Arduino IDE install these libraries from `Library Manager` tab:
 - `ArduinoJson` by Benoit Blanchon (version `7.4.2`)
@@ -75,7 +82,10 @@ I'm using Board Manager `esp32` by Espressif (version `3.3.6` for all firmwares)
 - `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.2`)
 - `Grove - Air quality sensor` by Seeed Studio (version `1.0.2`)
 - `Grove - Digital Light Sensor` by Seeed Studio (version `2.0.0`)
-- **TODO add libraries for thermostat** <-----------------------------------
+- `Adafruit GFX Library` by Adafruit (version `1.12.5`)
+- `Adafruit SSD1306` by Adafruit (version `2.5.16`)
+- `Adafruit BusIO` by Adafruit (version `1.17.4`)
+- `Adafruit MCP9600 Library` by Adafruit (version `2.0.4`)
 
 3. Create a new file `private-config/secrets.yaml` file with this content
 
