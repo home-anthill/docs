@@ -59,6 +59,8 @@ Connections:
 - Air quality signal on pin 4
 - Barometric Pressure sensor I2C (SCL on pin 39, SDL on pin 40)
 - Digital light sensor I2C (SCL on pin 39, SDL on pin 40)
+- Thermocouple amplifier I2C (SCL on pin 39, SDL on pin 40)
+- Display OLED I2C (SCL on pin 39, SDL on pin 40)
 
 You are free to change these inputs modifying firmwares accordingly.
 
