@@ -290,8 +290,8 @@ These 2 values are the clientID and secretID of your github oAuth2 application, 
 - create an [oAuth2 app on Github](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app)
 - go to the configuration page of your oAuth2 app and copy the Client ID (**this is the OAUTH2_CLIENTID value**)
 - generate a new client secret and copy it to the `.env` file (**this is the OAUTH2_SECRETID value**)
-- fill the `Homepage URL` input field: `http://localhost:8082`
-- fill the `Authorization callback URL` input field: `http://localhost:8082/api/callback`
+- fill the `Homepage URL` input field: `http://localhost:4200`
+- fill the `Authorization callback URL` input field: `http://localhost:4200/api/callback`
 - save the oAuth2 app
 
 
@@ -420,9 +420,8 @@ make run
 ```bash
 cd home-anthill/gui
 npm i
-# build command will copy the public folder into api-server to be exposed via `http://localhost:8082`
-npm run build
-# or, if you prefer the dev server at `http://localhost:4200`, you can use `npm start`
+# run dev server on port 4200 at `http://localhost:4200` with local proxy
+npm start
 ```
 
 11. app
@@ -438,8 +437,8 @@ cp google-services.json_template app/google-services.json
 
 12. login to the webapp with your GitHub account
 
-If everything is up and running, **you should be able to access `http://localhost:8082`** from your favourite browser.
-From `http://localhost:8082`, **log in with the GitHub account used to create the OAuth2 application**.
+If everything is up and running, **you should be able to access `http://localhost:4200`** from your favourite browser.
+From `http://localhost:4200`, **log in with the GitHub account used to create the OAuth2 application**.
 If you log in successfully, you will be redirected to the main app page.
 
 
@@ -460,7 +459,7 @@ You can navigate through the web app to add homes, rooms, and so on, but I prefe
 
 ### JWT
 
-1. From your browser, login via GitHub at `http://localhost:8082`
+1. From your browser, login via GitHub at `http://localhost:4200`
 2. Open the "Developer tools" and copy JWT `token` value (standard format `xxxx.xxxx.xxxx`) from "Local Storage" (in Chrome, you can find "Local Storage" under the "Application" tab).
 3. In Bruno, open the collection's **Environments** (top-right), create or edit an environment and set `authToken` to the JWT value you copied.
 
@@ -484,7 +483,7 @@ You can navigate through the web app to add homes, rooms, and so on, but I prefe
 For example, **to get the `apiToken` (required in the next steps) you have to call `regenApiToken` changing the fake profile id from the path param with your profile id**
 You can get your profile id from the response of step 4 (above) and update the path in this way:
 ```
-localhost:8082/api/profiles/<YOUR PROFILE MONGODB OBJECTID>/tokens
+localhost:4200/api/profiles/<YOUR PROFILE MONGODB OBJECTID>/tokens
 ```
 **The response of `regenApiToken` contains the re-generated `apiToken`**. This token changes every time you call the API and the previous value won't be valid anymore.
 
