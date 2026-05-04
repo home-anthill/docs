@@ -1,8 +1,8 @@
-# Local development setup
+# Local development setup (macOS)
 
 ## 0. Install prerequisites
 
-### Install GNU Make and cmake (both required)
+### Install GNU Make and CMake (both required)
 
 On macOS install these with:
 ```bash
@@ -12,16 +12,16 @@ brew install make
 brew install cmake
 ```
 
-Check if everything works correctly by running:
+Check that everything works correctly by running:
 ```bash
 make -v
 cmake --version
 ```
 
 
-### Install `mosquitto_passwd` CLI (optional)
+### Install `mosquitto_passwd` CLI
 
-On macOS install it via [Homebrew](https://formulae.brew.sh/formula/mosquitto) with `brew install mosquitto`
+On macOS, install it via [Homebrew](https://formulae.brew.sh/formula/mosquitto) with `brew install mosquitto`.
 
 
 
@@ -29,13 +29,13 @@ On macOS install it via [Homebrew](https://formulae.brew.sh/formula/mosquitto) w
 
 
 1. On macOS install it via [Homebrew](https://formulae.brew.sh/formula/go) with `brew install go`
-2. Install [air](https://github.com/cosmtrek/air) to watch changes and auto-rebuild:
+2. Install [air](https://github.com/cosmtrek/air) to watch for changes and automatically rebuild:
 
 ```bash
 curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 ```
 
-Check if everything works correctly by running:
+Check that everything works correctly by running:
 ```bash
 go version
 air -v
@@ -45,20 +45,20 @@ air -v
 ## 2. Install Rust
 
 
-Install Rust from [HERE](https://www.rust-lang.org/) with `rustup` script
+Install Rust from [here](https://www.rust-lang.org/) with the `rustup` script.
 
-Check if everything works correctly by running:
+Check that everything works correctly by running:
 ```bash
 cargo --version
 ```
 
 
-## 3. Install NodeJS
+## 3. Install Node.js
 
 
-Install NodeJS LTS from [HERE](https://nodejs.org/)
+Install Node.js LTS from [here](https://nodejs.org/).
 
-Check if everything works correctly by running:
+Check that everything works correctly by running:
 ```bash
 node -v
 npm -v
@@ -68,14 +68,14 @@ npm -v
 ## 4. Install Python and Poetry
 
 
-Install Python 3.12 (or greater) from [HERE](https://www.python.org/downloads/)
+Install Python 3.12 or later from [HERE](https://www.python.org/downloads/).
 
-Check if everything works correctly by running:
+Check that everything works correctly by running:
 ```bash
 python3 --version
 pip3 --version
 ```
-then [install Poetry](https://python-poetry.org/docs/#installation)
+Then [install Poetry](https://python-poetry.org/docs/#installation).
 
 Add the optional poetry shell plugin:
 ```bash
@@ -86,29 +86,31 @@ poetry self add poetry-plugin-shell
 ## 5. Install Android Studio and adb (only for Android app development)
 
 
-On macOS install `adb` via [Homebrew](https://formulae.brew.sh/formula/android-platform-tools) with `brew install android-platform-tools`
+Install Android Studio from [here](https://developer.android.com/studio).
 
-Check if everything works correctly by running:
+Also install `adb` via [Homebrew](https://formulae.brew.sh/formula/android-platform-tools) with `brew install android-platform-tools`.
+
+Check that everything works correctly by running:
 ```bash
 adb --version
 ```
 
 
-## 6. Install `rabbitmqadmin v2` CLI (OPTIONAL)
+## 6. Install `rabbitmqadmin v2` CLI (optional)
 
 
-This is **required only to run integration tests of `consumer` service**.
-If you only want to run this project on your local PC **you can skip this step**.
+This is **required only to run integration tests for some services, such as `consumer`**.
+If you only want to run this project locally, **you can skip this step**.
 
-On macOS install [rabbitmqadmin-ng](https://github.com/rabbitmq/rabbitmqadmin-ng) with `cargo install rabbitmqadmin`
+On macOS, install [rabbitmqadmin-ng](https://github.com/rabbitmq/rabbitmqadmin-ng) with `cargo install rabbitmqadmin`.
 
-You don't need to start RabbitMQ server locally, because we will use a Docker container.
-Please check that local RabbitMQ server is not running:
+You do not need to start a local RabbitMQ server, because we will use a Docker container.
+Make sure the local RabbitMQ server is not running:
 ```bash
 brew services info --all
 ```
 
-Check if everything works correctly by running:
+Check that everything works correctly by running:
 ```bash
 rabbitmqadmin --help
 # print the location of rabbitmqadmin executable
@@ -121,7 +123,7 @@ which rabbitmqadmin
 
 Install Docker Desktop from [HERE](https://www.docker.com/).
 
-Then check if you can run these commands:
+Then check that you can run these commands:
 
 ```bash
 docker --version
@@ -132,7 +134,8 @@ docker compose version
 ## 8. Download repos
 
 
-Run [this script](download-full-project.sh) in the location where you want to store `home-anthill` project.
+Run [this script](download-full-project.sh) in the location where you want to store the `home-anthill` project.
+I suggest using a main `home-anthill` folder for all of your Git repositories.
 
 
 ## 9. Deploy local docker containers
@@ -144,26 +147,27 @@ Run [this script](download-full-project.sh) in the location where you want to st
 cd home-anthill/mosquitto
 mkdir -p data
 mkdir -p log
+chmod 0700 mosquitto-local-acl.conf
 
-# build home-anthill mosquitto
-docker build -t ks89/mosquitto .
+# Build home-anthill Mosquitto
+docker build -t ks89/mosquitto:local .
 
 docker run -it --name mosquitto \
     -p 1883:1883 \
     -p 9001:9001 \
     --rm \
     -v ./mosquitto-local-dev.conf:/mosquitto/config/mosquitto.conf:ro \
+    -v ./mosquitto-local-acl.conf:/mosquitto/acl/acl_file:ro \
     -v ./data:/mosquitto/data \
     -v ./log:/mosquitto/log \
-    -e MOSQUITTO_USERNAME=mosquser \
-    -e MOSQUITTO_PASSWORD=Password1! \
-    ks89/mosquitto
+    -e MOSQUITTO_USERS='device_pubsub:DevicePassword1!,producer_sub:ProducerPassword1!,online_receiver_sub:OnlineReceiverPassword1!,api_devices_pub:ApiDevicesPassword1!' \
+    ks89/mosquitto:local
 ```
-**Don't close this terminal window!**
+**Do not close this terminal window.**
 
 2. RabbitMQ
 
-Create a new terminal window and run:
+Open a new terminal window and run:
 ```bash
 cd home-anthill
 
@@ -206,8 +210,8 @@ cat << 'EOF' > rabbitmq-local/definitions.json
       "user": "produceruser",
       "vhost": "/",
       "configure": "^ks89$",
-      "write": "^ks89$",
-      "read": ""
+      "write": "^(amq\\.default|ks89)$",
+      "read": "^ks89$"
     },
     {
       "user": "consumeruser",
@@ -249,18 +253,18 @@ cd home-anthill/sharded-mongodb-compose
 docker compose up --build -d
 ```
 
-If you want, you can also restore a previous home-anthill Mongodb BSON backup :
+You can also restore a previous home-anthill MongoDB BSON backup:
 
 ```bash
-# restore
+# Restore
 mongorestore --uri="mongodb://localhost:27017" --nsInclude='*.*' ./backup-folder-with-prelude_json
-# backup
+# Backup
 mongodump --uri="mongodb://localhost:27017" --out ./backup-folder-with-prelude_json
 ```
 
 4. Redis
 
-Install Redis with persistence
+Install Redis with persistence:
 ```bash
 docker run --name redis -p 6379:6379 -d redis redis-server \
   --save 60 1 \
@@ -275,69 +279,65 @@ docker run --name redis -p 6379:6379 -d redis redis-server \
 ```
 
 
-## 10. Create 2 GitHub oAuth2 applications and update api-server .env file
+## 10. Create two GitHub OAuth2 applications and update the `api-server` `.env` file
 
 
-1. GitHub oAuth2 app for website login
+1. GitHub OAuth2 app for website login
 
 ```bash
 cd home-anthill/api-server
 cp .env_template .env
 ```
 
-You have to update `OAUTH2_CLIENTID` and `OAUTH2_SECRETID` properties in `.env` file.
-These 2 values are the clientID and secretID of your github oAuth2 application, so you need to follow these steps:
-- create an [oAuth2 app on Github](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app)
-- go to the configuration page of your oAuth2 app and copy the Client ID (**this is the OAUTH2_CLIENTID value**)
-- generate a new client secret and copy it to the `.env` file (**this is the OAUTH2_SECRETID value**)
+Update the `OAUTH2_CLIENTID` and `OAUTH2_SECRETID` properties in the `api-server` `.env` file.
+These two values are the client ID and client secret of your GitHub OAuth2 application, so follow these steps:
+- create an [OAuth2 app on GitHub](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) (suggested name: `home-anthill-web-dev`)
+- go to the configuration page of your OAuth2 app and copy the `Client ID` value (`OAUTH2_CLIENTID`)
+- click `Generate a new client secret` and copy the code to the `.env` file (`OAUTH2_SECRETID`)
+- fill the `Application name` input field: `home-anthill-web-dev`
 - fill the `Homepage URL` input field: `http://localhost:4200`
-- fill the `Authorization callback URL` input field: `http://localhost:4200/api/callback`
-- save the oAuth2 app
+- fill the `Authorization callback URL` input field: `http://localhost:4200/api/oauth/callback`
+- save the OAuth2 app
 
 
-2. GitHub oAuth2 app for Android login
+2. GitHub OAuth2 app for Android login
 
-```bash
-cd home-anthill/app
-cp secrets.defaults.properties secrets.properties
-cp secrets.defaults.properties staging.properties
-cp secrets.defaults.properties release.properties
-```
-
-You have to update `OAUTH2_APP_CLIENTID` and `OAUTH2_APP_SECRETID` properties in `.env` file.
-These 2 values are the clientID and secretID of your github oAuth2 application, so you need to follow these steps:
-- create an [oAuth2 app on Github](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app)
-- go to the configuration page of your oAuth2 app and copy the Client ID (**this is the OAUTH2_APP_CLIENTID value**)
-- generate a new client secret and copy it to the `.env` file (**this is the OAUTH2_APP_SECRETID value**)
-- fill the `Homepage URL` input field: `http://localhost:8082`
-- fill the `Authorization callback URL` input field: `http://localhost:8082/api/app_callback`
-- save the oAuth2 app
+Update the `OAUTH2_APP_CLIENTID` and `OAUTH2_APP_SECRETID` properties in the `api-server` `.env` file.
+These two values are the client ID and client secret of your GitHub OAuth2 application, so follow these steps:
+- create an [OAuth2 app on GitHub](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) (suggested name: `home-anthill-app-dev`)
+- go to the configuration page of your OAuth2 app and copy the `Client ID` value (`OAUTH2_APP_CLIENTID`)
+- click `Generate a new client secret` and copy the code to the `.env` file (`OAUTH2_APP_SECRETID`)
+- fill the `Application name` input field: `home-anthill-app-dev`
+- fill the `Homepage URL` input field: `http://localhost:4200`
+- fill the `Authorization callback URL` input field: `http://localhost:4200/api/oauth/app/callback`
+- save the OAuth2 app
 
 
 ## 11. Create a Firebase Cloud Messaging app
 
 
-Create a new project at [Firebase console](https://console.firebase.google.com/) following these steps
+Create a new project in the [Firebase console](https://console.firebase.google.com/) by following these steps:
 1. ignore Google Analytics step
 2. add an Android app to your new project
 3. insert `eu.homeanthill` as package name, because it must match the name of the Android app
-4. download the `google-services.json` file from 'Project Settings' -> 'General' (tab). This file will be required to build the Android app below and receive Push Notifications.
+4. download the `google-services.json` file from `Project Settings` -> `General`. This file is required to build the Android app below and receive push notifications.
 5. create the app
-6. go to your 'Project Settings' -> 'Service account' (tab), select 'SDK Firebase Admin' and click
-   on 'Generate a new private key' button to download the `serviceAccountKey.json` (this will be required to run `online-alarm` below to send Push Notifications).
+6. go to `Project Settings` -> `Service account`, select `SDK Firebase Admin`, and click
+   the `Generate a new private key` button to download `serviceAccountKey.json` (this is required to run `online-alarm` below and send push notifications).
 
 
 ## 12. Run all microservices
 
 **With MongoDB, RabbitMQ, Mosquitto and Redis up and running**, you can start all microservices.
 
-Open every microservice in a terminal tab (or multiple windows)
+Open each microservice in a terminal tab or separate window.
 
 1. api-server
 
 ```bash
 cd home-anthill/api-server
 cp .env_template .env
+# `.env` must contain valid client IDs and client secrets
 make deps
 make run
 ```
@@ -409,7 +409,7 @@ make run
 ```bash
 cd home-anthill/online-alarm
 cp .env_template .env
-# you should replace the template file with the one obtained above
+# replace the template file with the one obtained above
 cp serviceAccountKey.json_template serviceAccountKey.json
 make deps
 make run
@@ -420,7 +420,7 @@ make run
 ```bash
 cd home-anthill/gui
 npm i
-# run dev server on port 4200 at `http://localhost:4200` with local proxy
+# run the dev server on port 4200 at `http://localhost:4200` with the local proxy
 npm start
 ```
 
@@ -431,40 +431,52 @@ cd home-anthill/app
 cp secrets.defaults.properties secrets.properties
 cp secrets.defaults.properties staging.properties
 cp secrets.defaults.properties release.properties
-# you should replace the template file with the one obtained above
+# replace the template file with the one obtained above
 cp google-services.json_template app/google-services.json
 ```
 
 12. login to the webapp with your GitHub account
 
-If everything is up and running, **you should be able to access `http://localhost:4200`** from your favourite browser.
+If everything is running, **you should be able to access `http://localhost:4200`** from your browser.
 From `http://localhost:4200`, **log in with the GitHub account used to create the OAuth2 application**.
-If you log in successfully, you will be redirected to the main app page.
+If the login succeeds, you will be redirected to the main app page.
 
 
-## 13. Fill database with some data
+## 13. Fill MongoDB with some data
 
 
-At this point, you should be able to log in to the app, so the DB has a valid profile inside.
-However, you don't have any other data yet.
-You can navigate through the web app to add homes, rooms, and so on, but I prefer to show how to insert data manually via APIs using the free [Bruno](https://www.usebruno.com/) desktop app.
+At this point, you should be able to log in to the app, so the database already contains a valid profile.
+However, you do not have any other data yet.
+
+
+### Log in to create a Profile and get a valid JWT
+
+1. From your browser, log in via GitHub at `http://localhost:4200`
+2. Open the browser developer tools and copy the JWT `token` value (standard format `xxxx.xxxx.xxxx`) from `Local Storage` (in Chrome, you can find `Local Storage` under the `Application` tab).
+3. From the `Cookies` section, copy the cookie called `oauth_session`.
+
+
+### Fill MongoDB with useful data
+
+If you logged in and copied the JWT `token` and `oauth_session` cookie, I suggest using this script to fill MongoDB with sample data and expose all `home-anthill` capabilities.
+
+ATTENTION: this script regenerates the profile API token. If you followed this guide in order, that is not a problem, because the API token is still unknown at this point.
+
+```bash
+./fill-local-db.sh "<JWT_VALUE>" "<COOKIE_VALUE>"
+```
 
 
 ### Bruno
 
-1. Install [Bruno](https://www.usebruno.com/) desktop app.
+1. Install the [Bruno](https://www.usebruno.com/) desktop app.
 2. Open Bruno and click **Open Collection**, then select the `docs/bruno-collections` folder from this repository.
-3. The collection includes requests for `api-server`, `admission`, and `online` endpoints.
+3. The collection includes requests for endpoints such as `api-server`, `admission`, and `online`.
+4. In Bruno, open the collection's **Environments** (top-right), create or edit an environment, and set `authToken` to the **JWT token** you copied.
+5. In Bruno, **create a new cookie** called `oauth_session`, with path `/` and the value copied from the browser.
+6. Select the `getProfile` request (because it requires JWT authentication) from the collection and click **Send**. The response should be something like this:
 
-
-### JWT
-
-1. From your browser, login via GitHub at `http://localhost:4200`
-2. Open the "Developer tools" and copy JWT `token` value (standard format `xxxx.xxxx.xxxx`) from "Local Storage" (in Chrome, you can find "Local Storage" under the "Application" tab).
-3. In Bruno, open the collection's **Environments** (top-right), create or edit an environment and set `authToken` to the JWT value you copied.
-
-4. Select the `getProfile` request (because it requires JWT authentication) from the collection and click **Send**. The response should be something like this:
-```
+```json
 {
     "profile": {
         "id": "<YOUR PROFILE MONGODB OBJECTID>",
@@ -479,16 +491,33 @@ You can navigate through the web app to add homes, rooms, and so on, but I prefe
 }
 ```
 
-5. You can try all other requests, but be sure to update **path** and **query parameters** with your object ids (taken from your local DB).
-For example, **to get the `apiToken` (required in the next steps) you have to call `regenApiToken` changing the fake profile id from the path param with your profile id**
+7. You can try the other requests too, but be sure to update **path** and **query parameters** with your object IDs (taken from your local database).
+For example, to get the `apiToken` required in the next steps, call `regenApiToken` and replace the fake profile id in the path parameter with your profile id.
 You can get your profile id from the response of step 4 (above) and update the path in this way:
 ```
 localhost:4200/api/profiles/<YOUR PROFILE MONGODB OBJECTID>/tokens
 ```
-**The response of `regenApiToken` contains the re-generated `apiToken`**. This token changes every time you call the API and the previous value won't be valid anymore.
+**The response of `regenApiToken` contains the regenerated `apiToken`.** This token changes every time you call the API, and the previous value is no longer valid.
 
 
-## 14. Prepare firmwares
+## 14. Check MQTT services local communication (optional)
+
+With all services and Docker containers up and running, and existing devices in MongoDB, you can check MQTT communication with this Python script:
+
+```bash
+cd mqtt-communication-checker
+
+# install dependencies
+poetry install
+
+# run this
+poetry run mqtt-communication-checker
+```
+
+This script sends a value or command for every supported feature and verifies that MongoDB collections stored those values correctly.
+
+
+## 15. Prepare firmwares
 
 
 Start from this guide [HERE](firmwares-install.md).
@@ -504,9 +533,9 @@ ifconfig
 ipconfig /a
 ```
 
-You'll get something like `192.168.?.?` or `10.x.x.x`, for example `192.168.1.7`.
+You will get something like `192.168.?.?` or `10.x.x.x`, for example `192.168.1.7`.
 
-In this way, you can create a new file called `private-config/secrets-local.yaml` with this content:
+You can then create a new file called `home-anthill/private-config/secrets-local.yaml` with this content:
 
 ```yaml
 # development configuration used locally
@@ -519,19 +548,19 @@ api_token: '<PROFILE API TOKEN>' # from your local DB or via `regenApiToken` in 
 
 ssl: false
 
-server_domain: '192.168.1.7' # your local IP (for example 192.168.1.7)
-server_port: '8082'
+server_domain: '192.168.1.7' # your local IP discovered above
+server_port: '4200'          # if you don't want to start `gui` you can also use '8082' without differences
 server_path: '/admission/register'
 
-mqtt_domain: '192.168.1.7' # your local IP (for example 192.168.1.7)
+mqtt_domain: '192.168.1.7' # your local IP discovered above
 mqtt_port: 1883
 mqtt_auth: true
-mqtt_username: "mosquser"
-mqtt_password: "Password1!"
+mqtt_username: "device_pubsub"
+mqtt_password: "DevicePassword1!"
 ```
 
 
-## 15. Run the Android app on a virtual device (still under development)
+## 16. Run the Android app on a virtual device (still under development)
 
 
 1. Import the `app` repository in Android Studio.
@@ -540,21 +569,19 @@ mqtt_password: "Password1!"
    - staging.properties: used for Staging variant
    - secrets.properties: used for Debug variant (default)
 3. Copy the `google-services.json` (obtained from the Firebase Cloud Messaging platform in one of the previous steps) into the `./app` folder.
-4. Create a virtual local device (for instance Pixel 6A API 35).
+4. Create a virtual local device (for instance Pixel 9a API 37).
    <br/>
    <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/android/device-manager.png" alt="device manager">
    <br/>
-5. Start the virtual device.
+5. Run all `home-anthill` services and docker containers
+6. To let the virtual device reach your local server via `http://localhost:4200`, run:
+  
+   ```bash
+   adb reverse tcp:4200 tcp:4200
+   ```
+7. Start the virtual device.
    <br/>
    <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/android/virtual-device.png" alt="virtual device">
    <br/>
-6. Build the app with the Debug variant (default) on the virtual device.
-7. Run `api-server` and check if it's connected to the MongoDB Docker container started via `sharded-mongodb-compose` repository.
-8. Run `online` and check if it's connected to the Redis Docker container.
-9. To let the virtual device reach your local server via `http://localhost:8082`, run in a terminal:
-   
-   ```bash
-   adb reverse tcp:8082 tcp:8082
-   ```
-   
-10. On the virtual device, use the app to log in. You should be redirected to GitHub and back to the app with a valid FCMToken.
+8. Build the app with the Debug variant (default) on the virtual device.
+9. On the virtual device, use the app to log in via GitHub. You should be redirected to GitHub and back to the app with a valid FCMToken.

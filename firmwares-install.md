@@ -3,8 +3,8 @@
 
 ## 1. Prepare ESP32 boards with wiring and electrical parts
 
-In this section, I'll show how to prepare all types of firmwares.
-Obviously, you are free to use only some of them.
+This section shows how to prepare all firmware variants.
+You can use only the ones you need.
 
 Suggested hardware:
 - some generic cables (I suggest [this product](https://www.amazon.it/gp/product/B08YRGVYPV/ref=ppx_yo_dt_b_asin_title_o07_s01?ie=UTF8&psc=1))
@@ -52,7 +52,7 @@ Thermostat
 <br/>
 
 Connections:
-- all sensors are powered on with 3.3V
+- all sensors are powered with 3.3V
 - DHT signal input on pin 4
 - PIR signal input on pin 5
 - IR emitter on pin 4
@@ -62,17 +62,17 @@ Connections:
 - Thermocouple amplifier I2C (SCL on pin 39, SDL on pin 40)
 - Display OLED I2C (SCL on pin 39, SDL on pin 40)
 
-You are free to change these inputs modifying firmwares accordingly.
+You can change these inputs as needed and adjust the firmware accordingly.
 
 
 ## 2. Build and flash firmwares
 
 
-1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmwares. You need the `esp32` board in `Board Manager` as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
-Then try to build and flash one of the official examples to verify that everything works correctly.
-I'm using Board Manager `esp32` by Espressif (version `3.3.7` for all firmwares).
+1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmware. You need the `esp32` board in `Board Manager`, as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
+Then build and flash one of the official examples to verify that everything works correctly.
+I use the `esp32` board package from Espressif, version `3.3.7`, for all firmwares.
 
-2. From Arduino IDE install these libraries from `Library Manager` tab:
+2. In Arduino IDE, install these libraries from the `Library Manager` tab:
 - `ArduinoJson` by Benoit Blanchon (version `7.4.2`)
 - `HttpClient` by Adrian McEwen (version `2.2.0`)
 - `PubSubClient` by Nick O'Leary (version `2.8`)
@@ -84,12 +84,14 @@ I'm using Board Manager `esp32` by Espressif (version `3.3.7` for all firmwares)
 - `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.2`)
 - `Grove - Air quality sensor` by Seeed Studio (version `1.0.2`)
 - `Grove - Digital Light Sensor` by Seeed Studio (version `2.0.0`)
-- `Adafruit GFX Library` by Adafruit (version `1.12.5`)
+- `Adafruit GFX Library` by Adafruit (version `1.12.6`)
 - `Adafruit SSD1306` by Adafruit (version `2.5.16`)
 - `Adafruit BusIO` by Adafruit (version `1.17.4`)
 - `Adafruit MCP9600 Library` by Adafruit (version `2.0.4`)
 
-3. Create a new file `private-config/secrets.yaml` file with this content
+3. Create a new `private-config/secrets.yaml` file.
+
+For production:
 
 ```yaml
 wifi_ssid: '<YOUR WIFI SSID>'
@@ -99,7 +101,7 @@ manufacturer: 'ks89'
 api_token: '<PROFILE API TOKEN>' # from your local DB
 
 # enable both HTTPS and MQTTS
-# you should change PORTS accordingly
+# adjust the ports accordingly
 # https port: 443
 # mqtts port: 8883
 ssl: true
@@ -115,7 +117,32 @@ mqtt_username: "<YOUR MOSQUITTO USERNAME>"
 mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
 ```
 
-4. Run `esp32-configurator` Python script:
+For local development:
+
+```yaml
+# development configuration used locally
+
+wifi_ssid: '<YOUR WIFI SSID>'
+wifi_password: '<YOUR WIFI PASSWORD>'
+
+manufacturer: 'ks89'
+api_token: '<PROFILE API TOKEN>' # from your local DB or via `regenApiToken` in Bruno
+
+ssl: false
+
+server_domain: '192.168.1.7' # your local IP discovered above
+server_port: '4200'          # if you do not want to start `gui`, you can also use `8082`
+server_path: '/admission/register'
+
+mqtt_domain: '192.168.1.7' # your local IP discovered above
+mqtt_port: 1883
+mqtt_auth: true
+mqtt_username: "<YOUR MOSQUITTO USERNAME>"
+mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
+```
+
+
+4. Run the `esp32-configurator` Python script:
 
 ```bash
 cd esp32-configurator
@@ -135,12 +162,12 @@ poetry run python -m src --model=ac-beko --source=../private-config/secrets.yaml
 poetry run python -m src --model=ac-lg --source=../private-config/secrets.yaml --destination=../firmwares/ac-lg
 ```
 
-5. Build and flash firmwares
+5. Build and flash the firmwares
 
-- Open `firmwares/ac-beko/ac-beko.ino` with ArduinoIDE and flash the firmware
-- Open `firmwares/ac-lg/ac-lg.ino` with ArduinoIDE and flash the firmware
-- Open `firmwares/dht-light/dht-light.ino` with ArduinoIDE and flash the firmware
-- Open `firmwares/airquality-pir/airquality-pir.ino` with ArduinoIDE and flash the firmware
-- Open `firmwares/barometer/barometer.ino` with ArduinoIDE and flash the firmware
-- Open `firmwares/power-outage/power-outage.ino` with ArduinoIDE and flash the firmware
-- Open `firmwares/thermostat/thermostat.ino` with ArduinoIDE and flash the firmware
+- Open `firmwares/ac-beko/ac-beko.ino` in Arduino IDE and flash the firmware.
+- Open `firmwares/ac-lg/ac-lg.ino` in Arduino IDE and flash the firmware.
+- Open `firmwares/dht-light/dht-light.ino` in Arduino IDE and flash the firmware.
+- Open `firmwares/airquality-pir/airquality-pir.ino` in Arduino IDE and flash the firmware.
+- Open `firmwares/barometer/barometer.ino` in Arduino IDE and flash the firmware.
+- Open `firmwares/power-outage/power-outage.ino` in Arduino IDE and flash the firmware.
+- Open `firmwares/thermostat/thermostat.ino` in Arduino IDE and flash the firmware.

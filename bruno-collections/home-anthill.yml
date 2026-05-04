@@ -41,10 +41,10 @@ items:
             type: json
             data: |-
               {
-                "mac": "CC:02:55:99:99:99",
+                "mac": "AA:02:55:99:99:FF",
                 "manufacturer": "ks89",
                 "model": "ac-lg",
-                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                "apiToken": "473a4861-632b-4915-b01e-cf1d418966c6",
                   "features": [
                       {
                           "type": "controller",
@@ -96,29 +96,29 @@ items:
                 "manufacturer": "ks89",
                 "model": "thermostat",
                 "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
-                  "features": [
-                      {
-                          "type": "controller",
-                          "name": "setpoint",
-                          "enable": true,
-                          "order": 1,
-                          "unit": "°C"
-                      },
-                      {
-                          "type": "controller",
-                          "name": "tolerance",
-                          "enable": true,
-                          "order": 2,
-                          "unit": "°C"
-                      },
-                      {
-                          "type": "sensor",
-                          "name": "temperature",
-                          "enable": true,
-                          "order": 3,
-                          "unit": "°C"
-                      }
-                  ]
+                "features": [
+                    {
+                        "type": "controller",
+                        "name": "setpoint",
+                        "enable": true,
+                        "order": 1,
+                        "unit": "°C"
+                    },
+                    {
+                        "type": "controller",
+                        "name": "tolerance",
+                        "enable": true,
+                        "order": 2,
+                        "unit": "°C"
+                    },
+                    {
+                        "type": "sensor",
+                        "name": "temperature",
+                        "enable": true,
+                        "order": 3,
+                        "unit": "°C"
+                    }
+                ]
               }
         settings:
           encodeUrl: true
@@ -138,17 +138,17 @@ items:
               {
                 "mac": "FF:99:77:22:12:AA",
                 "manufacturer": "ks89",
-                "model": "poweroutage",
+                "model": "power-outage",
                 "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
-                  "features": [
-                      {
-                          "type": "sensor",
-                          "name": "online",
-                          "enable": true,
-                          "order": 1,
-                          "unit": "-"
-                      }
-                  ]
+                "features": [
+                    {
+                        "type": "sensor",
+                        "name": "online",
+                        "enable": true,
+                        "order": 1,
+                        "unit": "-"
+                    }
+                ]
               }
         settings:
           encodeUrl: true
@@ -166,54 +166,54 @@ items:
             type: json
             data: |-
               {
-                  "mac": "C6:99:77:22:12:AA",
+                "mac": "C6:99:77:22:12:AA",
                 "manufacturer": "ks89",
                 "model": "example",
                 "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
-                  "features": [
-                      {
-                          "type": "sensor",
-                          "name": "temperature",
-                          "enable": true,
-                          "order": 1,
-                          "unit": "°C"
-                      },
-                      {
-                          "type": "sensor",
-                          "name": "humidity",
-                          "enable": true,
-                          "order": 2,
-                          "unit": "%"
-                      },
-                      {
-                          "type": "sensor",
-                          "name": "light",
-                          "enable": true,
-                          "order": 3,
-                          "unit": "lux"
-                      },
-                      {
-                          "type": "sensor",
-                          "name": "motion",
-                          "enable": true,
-                          "order": 4,
-                          "unit": "-"
-                      },
-                      {
-                          "type": "sensor",
-                          "name": "airquality",
-                          "enable": true,
-                          "order": 5,
-                          "unit": "-"
-                      },
-                      {
-                          "type": "sensor",
-                          "name": "airpressure",
-                          "enable": true,
-                          "order": 6,
-                          "unit": "hPa"
-                      }
-                  ]
+                "features": [
+                    {
+                        "type": "sensor",
+                        "name": "temperature",
+                        "enable": true,
+                        "order": 1,
+                        "unit": "°C"
+                    },
+                    {
+                        "type": "sensor",
+                        "name": "humidity",
+                        "enable": true,
+                        "order": 2,
+                        "unit": "%"
+                    },
+                    {
+                        "type": "sensor",
+                        "name": "light",
+                        "enable": true,
+                        "order": 3,
+                        "unit": "lux"
+                    },
+                    {
+                        "type": "sensor",
+                        "name": "motion",
+                        "enable": true,
+                        "order": 4,
+                        "unit": "-"
+                    },
+                    {
+                        "type": "sensor",
+                        "name": "airquality",
+                        "enable": true,
+                        "order": 5,
+                        "unit": "-"
+                    },
+                    {
+                        "type": "sensor",
+                        "name": "airpressure",
+                        "enable": true,
+                        "order": 6,
+                        "unit": "hPa"
+                    }
+                ]
               }
         settings:
           encodeUrl: true
@@ -229,26 +229,6 @@ items:
         type: bearer
         token: '{{authToken}}'
     items:
-      - info:
-          name: assignDeviceToHomeRoom
-          type: http
-          seq: 13
-        http:
-          method: PUT
-          url: http://localhost:8082/api/devices/63963ce72f67b44c7aed6fb9
-          body:
-            type: json
-            data: |-
-              {
-                  "homeId": "63f8030d58ace5c82d43bdf2",
-                  "roomId": "638009625f985b4cfe71a1ae"
-              }
-          auth: inherit
-        settings:
-          encodeUrl: true
-          timeout: 0
-          followRedirects: true
-          maxRedirects: 5
       - info:
           name: deleteDevice
           type: http
@@ -271,7 +251,7 @@ items:
           seq: 7
         http:
           method: DELETE
-          url: http://localhost:8082/api/homes/63bca1520205ea20dd04a466
+          url: http://localhost:8082/api/homes/69f90d266cc5b7f55866acf0
           auth: inherit
         settings:
           encodeUrl: true
@@ -284,7 +264,7 @@ items:
           seq: 11
         http:
           method: DELETE
-          url: http://localhost:8082/api/homes/63bca2900205ea20dd04a46c/rooms/63bca2970205ea20dd04a46d
+          url: http://localhost:8082/api/homes/69f8f2cc6cc5b7f55866ace6/rooms/69f90d476cc5b7f55866acf2
           auth: inherit
         settings:
           encodeUrl: true
@@ -297,7 +277,7 @@ items:
           seq: 15
         http:
           method: GET
-          url: http://localhost:8082/api/devices/68ec2e657c3ae0cbcae5626b/values
+          url: http://localhost:8082/api/devices/69f8f2ccafc4665ee5cb5d72/values
           auth: inherit
         settings:
           encodeUrl: true
@@ -361,7 +341,7 @@ items:
           seq: 8
         http:
           method: GET
-          url: http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d/rooms
+          url: http://localhost:8082/api/homes/69f8f2cc6cc5b7f55866ace6/rooms
           auth: inherit
         settings:
           encodeUrl: true
@@ -398,7 +378,7 @@ items:
           seq: 9
         http:
           method: POST
-          url: http://localhost:8082/api/homes/63bca1a60205ea20dd04a46b/rooms
+          url: http://localhost:8082/api/homes/69f8f2cc6cc5b7f55866ace6/rooms
           body:
             type: json
             data: |-
@@ -418,7 +398,7 @@ items:
           seq: 18
         http:
           method: GET
-          url: http://localhost:8082/api/online/68ed0fd57c3ae0cbcae56274
+          url: http://localhost:8082/api/online/69f8f2ccafc4665ee5cb5d75
           auth: inherit
         settings:
           encodeUrl: true
@@ -431,12 +411,12 @@ items:
           seq: 19
         http:
           method: POST
-          url: localhost:8082/api/fcmtoken
+          url: http://localhost:8082/api/fcmtoken
           body:
             type: json
             data: |-
               {
-                  "fcmToken": "dTknleBlRLqEoWBMjiIr80:APA91bEs_Tf8dkrZ_eb872Ok--Up34Luqp1S4WZwzTGr6X1ag4PO4ksHwFFifNqTb1lhATzNcaVqDZ01kP35a0caOa6Akw4oCzYh0ElqL8msgjtZw2phLEk"
+                  "fcmToken": "456"
               }
           auth: inherit
         settings:
@@ -466,31 +446,31 @@ items:
           seq: 16
         http:
           method: POST
-          url: http://localhost:8082/api/devices/68e642991003381ea049958a/values
+          url: http://localhost:8082/api/devices/69f8f2ccafc4665ee5cb5d76/values
           body:
             type: json
             data: |-
               [
                   {
-                      "featureUuid": "4bcd185f-3f71-499b-b5ad-e97930df10b6",
+                      "featureUuid": "8f6a73bd-8863-4318-9743-ed4a5d44b851",
                       "type": "controller",
                       "name": "on",
                       "value": 1
                   },
                   {
-                      "featureUuid": "27e9a662-173b-4bad-b547-e51e31a80b13",
+                      "featureUuid": "71cd62b7-818f-4b22-9be7-606328f962ca",
                       "type": "controller",
                       "name": "setpoint",
                       "value": 27
                   },
                   {
-                      "featureUuid": "a546d61d-ef44-4eda-91d9-501939cd5ed3",
+                      "featureUuid": "af617b11-b236-4283-9dcd-bc239a6f0ee4",
                       "type": "controller",
                       "name": "mode",
                       "value": 1
                   },
                   {
-                      "featureUuid": "62a19b24-b058-4f3c-9b76-b54fa65fefd3",
+                      "featureUuid": "f06b52f1-f215-4c81-a70f-1ce50ccf264e",
                       "type": "controller",
                       "name": "fanSpeed",
                       "value": 1
@@ -508,19 +488,19 @@ items:
           seq: 17
         http:
           method: POST
-          url: http://localhost:8082/api/devices/68d08f5ebda80c29413fc5c1/values
+          url: http://localhost:8082/api/devices/69f8f2ccafc4665ee5cb5d78/values
           body:
             type: json
             data: |-
               [
                   {
-                      "featureUuid": "0d0ba2f6-0be9-404c-85d0-0b2eaf854fd9",
+                      "featureUuid": "b5cd2199-bfb6-4d52-b7a3-805cb78a43d5",
                       "type": "controller",
                       "name": "setpoint",
                       "value": 22.40
                   },
                   {
-                      "featureUuid": "85bfb4c4-400c-42a6-9279-f3d3819387d4",
+                      "featureUuid": "ea710e8d-d9c6-45fb-81e8-2b9367db9edf",
                       "type": "controller",
                       "name": "tolerance",
                       "value": 2.0
@@ -533,12 +513,33 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
+          name: updateDevice
+          type: http
+          seq: 13
+        http:
+          method: PUT
+          url: http://localhost:8082/api/devices/69f8f2ccafc4665ee5cb5d72
+          body:
+            type: json
+            data: |-
+              {
+                  "homeId": "69f8f2cc6cc5b7f55866ace6",
+                  "roomId": "69f8f2cc6cc5b7f55866ace7",
+                  "name": "Device name"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
           name: updateHome
           type: http
           seq: 6
         http:
           method: PUT
-          url: http://localhost:8082/api/homes/678993d270ec1dedf6fc809a
+          url: http://localhost:8082/api/homes/69f90d266cc5b7f55866acf0
           body:
             type: json
             data: |-
@@ -558,7 +559,7 @@ items:
           seq: 10
         http:
           method: PUT
-          url: http://localhost:8082/api/homes/620d71c5b98386d5903d6a4d/rooms/6380095a5f985b4cfe71a1ad
+          url: http://localhost:8082/api/homes/69f8f2cc6cc5b7f55866ace6/rooms/69f90d476cc5b7f55866acf2
           body:
             type: json
             data: |-
@@ -585,7 +586,7 @@ items:
           seq: 3
         http:
           method: DELETE
-          url: http://localhost:8089/online/563efa03-9aeb-4a8d-906b-f4944a5c673f/features/6ba7ed96-a041-44a5-8b90-98e66eacfeee
+          url: http://localhost:8089/online/71bf40a1-a22c-48bf-ba54-be2290d24388/features/01fa1af7-4015-4227-a94a-0a4faccfa1a0
           auth: inherit
         settings:
           encodeUrl: true
@@ -598,7 +599,7 @@ items:
           seq: 1
         http:
           method: GET
-          url: http://localhost:8089/online/b7b6aaa7-8a58-4af9-913d-4d6ed20df7f2/features/82a10800-3960-45ba-a7a2-14fdeb2e845f
+          url: http://localhost:8089/online/b14660ba-f5fb-4fe0-af1c-97d3e328efa9/features/f9ee0970-2734-4592-abab-8b4b5bc7d951
           auth: inherit
         settings:
           encodeUrl: true
@@ -616,7 +617,7 @@ items:
             type: json
             data: |-
               {
-                  "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                  "apiToken": "690b7b00-d589-4d0f-b94a-b3ecd7fe82fb",
                   "fcmToken": "456"
               }
           auth: inherit
@@ -628,12 +629,12 @@ items:
 request:
   variables:
     - name: authToken
-      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjA1NzIwNywibmFtZSI6IlN0ZWZhbm8gQ2FwcGEiLCJleHAiOjE3Nzg3MDU2ODJ9.Ceh3PxUHyA48azHKGLwkuEdXCt42SYxftk74eP4NWa0
+      value: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjA1NzIwNywicHJvZmlsZUlkIjoiNjlmOGYyYWQ2Y2M1YjdmNTU4NjZhY2UzIiwibmFtZSI6IlN0ZWZhbm8gQ2FwcGEiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJjbGllbnRUeXBlIjoid2ViIiwiaXNzIjoiaG9tZS1hbnRoaWxsLWFwaSIsInN1YiI6IjYwNTcyMDciLCJhdWQiOlsiaG9tZS1hbnRoaWxsLWFwaSJdLCJleHAiOjE3Nzc5MzAzNTcsIm5iZiI6MTc3NzkyOTQ1NywiaWF0IjoxNzc3OTI5NDU3fQ.0SFTf2oMCl2qOegNJIrQhygbiX21cS8t9abMHQe7axy5RWVJR4p8z_NgRFvZ2zqcsq_e41IYkXNwkrXaHkgvSQ
 bundled: true
 extensions:
   bruno:
     ignore:
       - node_modules
       - .git
-    exportedAt: '2026-04-03T00:40:29.909Z'
+    exportedAt: '2026-05-04T21:27:01.478Z'
     exportedUsing: Bruno

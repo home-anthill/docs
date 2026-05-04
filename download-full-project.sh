@@ -20,6 +20,7 @@ git clone https://github.com/home-anthill/online-receiver.git
 git clone https://github.com/home-anthill/online-alarm.git
 git clone https://github.com/home-anthill/sharded-mongodb-compose.git
 git clone https://github.com/home-anthill/app.git
+git clone https://github.com/home-anthill/mqtt-communication-checker.git
 
 # always from the `home-anthill` folder created above:
 # create a folder where you can put your custom configuration

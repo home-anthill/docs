@@ -1,13 +1,13 @@
-# Hetzner cloud with Kubernetes
+# Hetzner Cloud with Kubernetes
 
 Based on https://docs.k3s.io/quick-start
 
 
-## Create an SSH key
+## Create an SSH Key
 
-`ssh-keygen -t ed25519` then choose a name like `hetzner_id_ed25519` and insert a secure password.
-You'll get two files: `hetzner_id_ed25519` and `hetzner_id_ed25519.pub`.
-Move them in `~/.ssh`.
+Run `ssh-keygen -t ed25519`, then choose a name such as `hetzner_id_ed25519` and set a strong passphrase.
+You will get two files: `hetzner_id_ed25519` and `hetzner_id_ed25519.pub`.
+Move them to `~/.ssh`.
 
 
 ## Server creation
@@ -22,7 +22,7 @@ Move them in `~/.ssh`.
 - [rabbitmq/messaging-topology-operator 'latest stable'](https://github.com/rabbitmq/messaging-topology-operator)
 
 
-From Hetzner Cloud UI create a server like this:
+From the Hetzner Cloud UI, create a server with these settings:
 
 - Location: Falkenstein
 - Image: Ubuntu 24.04
@@ -40,7 +40,7 @@ From Hetzner Cloud UI create a server like this:
 
 ## Create Floating IPs
 
-**Floating IPs are required to have static public IPs to expose public Kubernetes services**
+**Floating IPs are required to expose Kubernetes services through static public IPs.**
 
 From Hetzner Cloud UI create 2 IPs:
 
@@ -51,12 +51,12 @@ From Hetzner Cloud UI create 2 IPs:
   location: Falkenstein
   protocol: IPV4
 
-From "Assigned to" column you need to choose the server created above.
+In the "Assigned to" column, select the server you created above.
 
 
-## Apply firewall rules to Hetzner Cloud
+## Apply Firewall Rules to Hetzner Cloud
 
-Choose "Firewall" from the sidebar of your Hetzner project and configure these rules:
+Open "Firewall" in the sidebar of your Hetzner project and configure these rules:
 ```yaml
 Inbound:
   - Name: SSH
@@ -92,16 +92,16 @@ Outbound: # leave empty to allow all outgoing traffic
 Then apply this configuration to your server.
 
 
-## SSH access
+## SSH Access
 
-Login to your server with
+Log in to your server with:
 
 ```bash
 ssh -i ~/.ssh/<private_key_file> root@<HETZNER_SERVER_PUBLIC_IP>
 ```
-Insert the password used when you created your SSH key.
+Enter the passphrase you used when you created the SSH key.
 
-Please note that if you are using IPV6 as `HETZNER_SERVER_PUBLIC_IP`, it must end with `::1`.
+If you use IPv6 as `HETZNER_SERVER_PUBLIC_IP`, it must end with `::1`.
 
 
 ## Update Ubuntu
@@ -112,13 +112,13 @@ sudo apt-get upgrade -y
 ```
 
 
-## Disable Linux swap for Kubernetes
+## Disable Linux Swap for Kubernetes
 
-Check with `htop` if swap is disabled. If not, run:
+Check with `htop` whether swap is disabled. If not, run:
 
 ```bash
-# disable swap right now
-# and disable swap also when you'll reboot
+# Disable swap immediately
+# and disable it again after reboot
 sudo swapoff -a
 cp /etc/fstab /etc/fstab.backup
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
@@ -127,9 +127,9 @@ sudo reboot
 ```
 
 
-## Prepare K3s
+## Prepare K3s
 
-As described [HERE](https://docs.k3s.io/installation/configuration#configuration-file), K3s reads a config file on install located at `/etc/rancher/k3s/config.yaml`.
+As described [here](https://docs.k3s.io/installation/configuration#configuration-file), K3s reads its install-time config from `/etc/rancher/k3s/config.yaml`.
 
 ```bash
 sudo mkdir -p /etc/rancher/k3s
@@ -152,38 +152,38 @@ disable-kube-proxy: true
 ```
 
 **Attention, this is very important:**
-`cluster-cidr: "10.244.0.0/16"` must match the CIDR Cilium will use (set via `ipam.mode=kubernetes`).
+`cluster-cidr: "10.244.0.0/16"` must match the CIDR Cilium will use, set via `ipam.mode=kubernetes`.
 `flannel-backend: "none"` and `disable-network-policy: true` disable K3s's built-in Flannel and
 its network policy controller so that Cilium can take over both responsibilities.
-`disable-kube-proxy: true` disables K3s's embedded kube-proxy, required when Cilium runs with
-`kubeProxyReplacement=true` (Cilium handles all service routing via eBPF instead).
+`disable-kube-proxy: true` disables K3s's embedded kube-proxy, which is required when Cilium runs with
+`kubeProxyReplacement=true` because Cilium handles service routing via eBPF.
 
 
 ## Install K3s
 
-Install K3s via: 
+Install K3s with:
 
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.35.3+k3s1" sh -
-# It should be 'NotReady', because we need to install Cilium in the next step
+# It should be `NotReady`, because Cilium is installed in the next step
 k3s kubectl get node
 ```
 
-> **Note:** The node will show `NotReady` until Cilium is installed in the next step. This is expected.
+> **Note:** The node will remain `NotReady` until Cilium is installed in the next step. This is expected.
 
-Save the content of `/root/.kube/config` to your local machine as `~/.kube/config` file.
+Save the content of `/root/.kube/config` to your local machine as `~/.kube/config`.
 Replace `127.0.0.1` in `~/.kube/config` with the public IPv4 of your Hetzner server.
 Change permission with `chmod 600 ~/.kube/config`.
 
-Now, you should be able to connect to the cluster from your local machine via `kubectl` or a software like [k9s](https://k9scli.io/) via `k9s -n all`.
+You should now be able to connect to the cluster from your local machine via `kubectl` or a tool like [k9s](https://k9scli.io/) with `k9s -n all`.
 
 
 ## Install Cilium CNI
 
 Cilium replaces Flannel as the CNI. It provides pod networking, `NetworkPolicy` enforcement,
-kube-proxy replacement via eBPF, **and L2 LoadBalancer IP announcements** — replacing MetalLB
+kube-proxy replacement via eBPF, **and L2 LoadBalancer IP announcements**, replacing MetalLB
 entirely. Because Cilium owns both the eBPF datapath and the IP announcement, in-cluster pods
-can reach LoadBalancer IPs without hairpin NAT issues (fixing cert-manager ACME self-checks).
+can reach LoadBalancer IPs without hairpin NAT issues, which fixes cert-manager ACME self-checks.
 
 Install the Cilium CLI on the server, then deploy Cilium before installing any other components:
 
@@ -196,9 +196,9 @@ sudo tar xzvfC /tmp/cilium.tar.gz /usr/local/bin
 rm /tmp/cilium.tar.gz
 
 # Deploy Cilium with:
-#   kubeProxyReplacement=true  — Cilium handles all service routing via eBPF (no kube-proxy)
-#   l2announcements.enabled    — Cilium announces LoadBalancer IPs via ARP (replaces MetalLB)
-#   externalIPs.enabled        — required for L2 announcements to work
+#   kubeProxyReplacement=true  - Cilium handles all service routing via eBPF (no kube-proxy)
+#   l2announcements.enabled    - Cilium announces LoadBalancer IPs via ARP (replaces MetalLB)
+#   externalIPs.enabled        - required for L2 announcements to work
 cilium install \
   --set ipam.mode=kubernetes \
   --set operator.replicas=1 \
@@ -233,12 +233,12 @@ helm install cert-manager jetstack/cert-manager \
   --set config.enableGatewayAPI=true
 ```
 
-and wait until the install command completes.
+and wait for the installation to complete.
 
 
 ## Install RabbitMQ
 
-Install RabbitMQ operators:
+Install the RabbitMQ operators:
 
 ```bash
 
@@ -253,7 +253,7 @@ kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/release
 
 1. Deploy Gateway API CRDs
 
-Installs standard CRDs (Gateway, HTTPRoute, GRPCRoute, ...) and experimental ones (TCPRoute, TLSRoute, UDPRoute) to support MQTT (TCP) traffic.
+This installs the standard CRDs (Gateway, HTTPRoute, GRPCRoute, ...) and the experimental ones (TCPRoute, TLSRoute, UDPRoute) needed for MQTT (TCP) traffic.
 
 ```bash
 kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/experimental-install.yaml
@@ -264,7 +264,7 @@ kubectl wait --for=condition=Established crd/httproutes.gateway.networking.k8s.i
 
 2. Install NGINX Gateway Fabric with experimental + SnippetsFilter features
 
-Only when CRDs are ready run:
+Run this only after the CRDs are ready:
 
 ```bash
 helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric \
@@ -274,9 +274,9 @@ helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric \
   --set nginxGateway.snippetsFilters.enable=true
 ```
 
-Some observations:
-- gwAPIExperimentalFeatures.enable=true — tells NGF to watch for TCPRoute and TLSRoute resources
-- snippetsFilters.enable=true — activates the alpha SnippetsFilter CRD used for rate limiting
+Some notes:
+- `gwAPIExperimentalFeatures.enable=true` tells NGF to watch for `TCPRoute` and `TLSRoute` resources.
+- `snippetsFilters.enable=true` activates the alpha `SnippetsFilter` CRD used for rate limiting.
 
 
 
@@ -287,7 +287,7 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 ```
 
-Create file `loki-values.yaml` with this content:
+Create a file named `loki-values.yaml` with this content:
 ```
 loki:
   auth_enabled: false
@@ -323,7 +323,7 @@ resultsCache:
   enabled: false
 ```
 
-Then install Loki using `loki-values.yaml` file:
+Then install Loki using the `loki-values.yaml` file:
 ```bash
 helm install loki grafana/loki \
     --namespace monitoring --create-namespace \
@@ -349,28 +349,28 @@ helm install grafana grafana/grafana \
 
 ### Reading Logs in Grafana
 
-  1. Get Grafana URL
+  1. Get the Grafana URL
 
   ```bash
   kubectl port-forward --namespace monitoring svc/grafana 3000:80
   ```
 
-  Then open http://localhost:3000 and login with admin / <password_from_previous_step>.
+  Then open http://localhost:3000 and log in with `admin` / `<password_from_previous_step>`.
 
   2. Add Loki as a Data Source
   3. Go to Connections → Data sources → Add data source
   4. Search and select Loki
   5. Set URL to: http://loki-gateway.monitoring.svc.cluster.local/
   6. Click Save & test — should show "Data source connected"
-  7. Click on "Dilldown - Logs" from the side bar
+  7. Click on "Drilldown - Logs" from the side bar
 
 
 ## Deploy application
 
 ### Production with SSL and domain names
 
-First, you need to buy 2 public web domains, for example [HERE](https://www.godaddy.com/).
-Then, you can update DNS records of your domains:
+First, you need to buy two public web domains, for example [here](https://www.godaddy.com/).
+Then update the DNS records for your domains:
 
 ```
 A @ <gui-floating-ip_IP_ADDRESS>
@@ -381,13 +381,13 @@ A www <gui-floating-ip_IP_ADDRESS>
 A @ <mosquitto-floating-ip_IP_ADDRESS>
 ```
 
-Wait some time and then check if the domains and IPs match with:
+Wait a little while, then check that the domains and IPs match with:
 ```bash
 dig <YOUR_DOMAIN>
 dig <YOUR_MQTT_DOMAIN>
 ```
 
-**Warning: please don't proceed until your domain shows the correct IP in the `dig` command output.**
+**Warning: do not proceed until your domain shows the correct IP in the `dig` command output.**
 
 #### Password requirements
 
@@ -407,7 +407,7 @@ dig <YOUR_MQTT_DOMAIN>
 
 #### Step 1 — Define personal config in a private repository
 
-Create a new private repository to store your secrets and private configurations, for instance `private-config`.
+Create a new private repository to store your secrets and private configuration, for example `private-config`.
 
 #### Step 2 — Create custom values file
 
@@ -436,8 +436,19 @@ dhi:
 mosquitto:
   auth:
     enable: true
-    username: "<CHOOSE_MOSQUITTO_USERNAME>"
-    password: "<ALPHANUMERIC_PASSWORD_ONLY>"
+    users:
+      device:
+        username: "<CHOOSE_MOSQUITTO_USERNAME_1>"
+        password: "<ALPHANUMERIC_PASSWORD_1>"
+      producer:
+        username: "<CHOOSE_MOSQUITTO_USERNAME_2>"
+        password: "<ALPHANUMERIC_PASSWORD_2>"
+      onlineReceiver:
+        username: "<CHOOSE_MOSQUITTO_USERNAME_3>"
+        password: "<ALPHANUMERIC_PASSWORD_3>"
+      apiDevices:
+        username: "<CHOOSE_MOSQUITTO_USERNAME_4>"
+        password: "<ALPHANUMERIC_PASSWORD_4>"
 
 redis:
   username: "redisuser"
@@ -487,40 +498,40 @@ onlineAlarm:
     <PUT_FIREBASE_SERVICE_ACCOUNT_JSON_HERE>
 
 
-# debug configuration, not for production environment
+# debug configuration, not for production environments
 debug:
   pods:
     alwaysPullContainers: false
     # if your pods are crashing, you can enable this to prevent restarts
-    # and to access them using your terminal.
-    # Don't enable this on a production environment!!!
+    # and to access them from your terminal.
+    # Do not enable this in production.
     sleepInfinity: false
 ```
 
-#### Step 3 (optional) — Preview rendered manifests
+#### Step 3 (optional) - Preview rendered manifests
 
 ```bash
 cd deployer/home-anthill
 helm template -f values.yaml -f ../../private-config/custom-values.yaml . > output-manifests.yaml
 ```
 
-#### Step 4 — Deploy with Helm
+#### Step 4 - Deploy with Helm
 
 ```bash
 cd deployer/home-anthill
 helm install -f values.yaml -f ../../private-config/custom-values.yaml home-anthill .
 ```
 
-#### Step 5 — Verify in-cluster routing (no hairpin NAT workaround needed)
+#### Step 5 - Verify in-cluster routing (no hairpin NAT workaround needed)
 
-With Cilium L2 announcements, in-cluster pods can reach LoadBalancer IPs directly via eBPF —
-no CoreDNS split-horizon DNS patch is required.
+With Cilium L2 announcements, in-cluster pods can reach LoadBalancer IPs directly via eBPF,
+so no CoreDNS split-horizon DNS patch is required.
 
 Verify by running a test pod in the `cert-manager` namespace (which the NetworkPolicy allows to
 reach NGF) using the LoadBalancer IP directly (domain name would redirect to HTTPS via 301):
 
 ```bash
-# Get the webapp LoadBalancer IP
+# Get the web app LoadBalancer IP
 LB_IP=$(kubectl get svc webapp-gateway-nginx -n home-anthill \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo "Testing hairpin NAT to: $LB_IP"
@@ -531,7 +542,7 @@ kubectl run hairpin-test --image=busybox -n cert-manager --restart=Never --rm -i
 
 Expected output: `wget: server returned error: HTTP/1.1 404 Not Found`
 
-`404` means the packet successfully reached NGF — hairpin NAT is working. A **timeout** means
+`404` means the packet successfully reached NGF, so hairpin NAT is working. A **timeout** means
 something is wrong. Check:
 
 ```bash
@@ -550,14 +561,14 @@ Watch until both show `READY = True`:
 kubectl get certificates -n home-anthill -w
 ```
 
-Expected output (may take 2–5 minutes):
+Expected output, which may take 2-5 minutes:
 ```
 NAME         READY   SECRET       AGE
 mqtt-tls     True    mqtt-tls     3m
 webapp-tls   True    webapp-tls   3m
 ```
 
-If certificates remain `False` after 10 minutes, diagnose with:
+If certificates remain `False` after 10 minutes, diagnose the issue with:
 ```bash
 kubectl get challenges -n home-anthill
 kubectl get orders -n home-anthill
@@ -574,13 +585,13 @@ kubectl delete orders -n home-anthill --all
 
 #### Step 7 — Verify all pods are running
 
-Once both certificates are `True`, all services start within 1–2 minutes:
+Once both certificates are `True`, all services start within 1-2 minutes:
 
 ```bash
 kubectl get pods -n home-anthill
 ```
 
-Expected: all pods in `Running` state. Key startup dependencies:
+Expected result: all pods in the `Running` state. Key startup dependencies:
 - `mosquitto` — waits for `mqtt-tls` secret via `wait-for-cert` init container
 - `api-devices`, `producer`, `online-receiver` — wait for mosquitto port 1883 via `wait-for-mqtt` init container
 
@@ -615,7 +626,7 @@ cilium connectivity test
 
 ## Useful things
 
-If you want to force renew Let's Encrypt certificates in `cert-manager`, you can install `cmctl` via `brew install cmctl` on your local machine and run this:
+If you want to force-renew Let's Encrypt certificates in `cert-manager`, you can install `cmctl` with `brew install cmctl` on your local machine and run:
 
 ```bash
 cmctl renew webapp-tls -n home-anthill

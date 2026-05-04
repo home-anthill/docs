@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**home-anthill** is an IoT home automation system where ESP32 microcontrollers send sensor data over MQTT. A Kubernetes-based microservice backend collects, stores, and exposes that data via REST/gRPC APIs. React web UI and Android mobile app let users manage their devices.
+**home-anthill** is an IoT home automation system where ESP32 microcontrollers send sensor data over MQTT. A Kubernetes-based microservice backend collects, stores, and exposes that data through REST and gRPC APIs. A React web UI and an Android mobile app let users manage their devices.
 
 ---
 
@@ -26,6 +26,7 @@ home-anthill/
 ├── mosquitto/           # Go + Docker - MQTT broker with dynamic auth
 ├── sharded-mongodb-compose/  # Docker Compose - Local MongoDB cluster
 ├── k8s-config-reloader/ # Go - K8s sidecar for ConfigMap/Secret changes
+├── mqtt-communication-checker/ # Python - Script to test local MQTT communication
 ├── firmwares/           # C++ - ESP32 firmware variants
 └── docs/                # Documentation, diagrams, Postman collections
 ```
@@ -81,7 +82,7 @@ home-anthill/
           │                    ┌─────────────────────────────────────────────┐
           │                    │            RabbitMQ                        │
           │                    │            Port: 5672 (5671 TLS)            │
-          │                    │            Queue: ks89                       │
+          │                    │            Durable queue: ks89               │
           │                    │            Ports: 15672 (Management UI)      │
           │                    │            Port: 15671 (Management TLS)     │
           │                    └────────────────────┬─────────────────────────┘
@@ -176,8 +177,8 @@ home-anthill/
                         │               (Go/Gin)                       │
                         │                                             │
                         │ REST: device registration                     │
-                        │ gRPC: calls api-devices                      │
-                        │ HTTP: calls register                          │
+                        │ gRPC: invokes api-devices                    │
+                        │ HTTP: invokes register                      │
                         └─────────────────────────────────────────────┘
 
                         ┌─────────────────────────────────────────────┐
@@ -194,6 +195,7 @@ home-anthill/
 ```
 ESP32 → Mosquitto → producer → RabbitMQ → consumer → MongoDB (sensors)
 ```
+RabbitMQ uses the durable `ks89` queue for this path. The producer publishes to the AMQP default exchange (`exchange=""`) with routing key `ks89`, which routes to the queue with the same name. Because RabbitMQ checks write permissions against the default exchange, the producer RabbitMQ user must be allowed to write to `amq.default`; it also needs configure and write permission for the `ks89` queue. RabbitMQ 4.x rejects transient, non-exclusive named queues by default, so the producer and consumer must not declare `ks89` with `QueueDeclareOptions::default()`.
 
 #### Path 2: Device Online Status
 ```
@@ -223,9 +225,9 @@ ESP32 → admission (REST) → api-devices (gRPC) + register (HTTP) → MongoDB
 
 | Service | Image | Port(s) | Purpose |
 |---------|-------|---------|---------|
-| MongoDB | sharded-mongodb-compose | 27017 | Main + Sensors DB |
+| MongoDB | sharded-mongodb-compose | 27017 | Main and sensors databases |
 | Redis | redis:alpine | 6379 | Device online status |
-| RabbitMQ | rabbitmq:management | 5672, 15672, 15671 | Message queue |
+| RabbitMQ | rabbitmq:management | 5672, 15672, 15671 | Durable `ks89` AMQP queue |
 | Mosquitto | ks89/mosquitto | 1883, 9001 | MQTT broker |
 
 ### 4.2 Application Services
@@ -264,8 +266,8 @@ ESP32 → admission (REST) → api-devices (gRPC) + register (HTTP) → MongoDB
 ### 5.2 REST API Endpoints
 
 #### api-server (Port 8082)
-- `POST /api/callback` - GitHub OAuth2 callback (web)
-- `POST /api/app_callback` - GitHub OAuth2 callback (mobile)
+- `POST /api/callback` - GitHub OAuth2 callback for web
+- `POST /api/app_callback` - GitHub OAuth2 callback for mobile
 - `GET /api/profiles` - List profiles
 - `GET /api/profiles/:id` - Get profile
 - `POST /api/profiles` - Create profile
@@ -324,6 +326,15 @@ ESP32 → admission (REST) → api-devices (gRPC) + register (HTTP) → MongoDB
 #### admission → api-devices
 - Calls `Registration.Register()` via gRPC
 
+### 5.4 AMQP Queue
+
+- Queue name: `ks89`
+- Queue declaration: durable named shared queue
+- Producer publish target: AMQP default exchange (`exchange=""`), routing key `ks89`
+- Required producer write permission: `amq.default` for the publish operation; `ks89` for queue-level access
+- Required consumer permission: read from `ks89`
+- RabbitMQ 4.x note: transient non-exclusive named queues are denied by default via the deprecated `transient_nonexcl_queues` feature. Keep producer and consumer declarations durable.
+
 ---
 
 ## 6. Authentication & Security
@@ -337,7 +348,7 @@ gui/app → GitHub OAuth2 → api-server → JWT token
 - **GitHub OAuth2**: Web and mobile app authentication
 - **JWT**: Session tokens for API requests
 - **apiToken**: UUIDv4 for device authentication
-  - Stored in plain text in register service
+  - Stored in plain text in the register service
   - SHA-256 hashed in register MongoDB storage
   - Stored in plain text in consumer
 
@@ -393,7 +404,7 @@ Internal DNS: `<service-name>.home-anthill.svc.cluster.local`
 │ admission    │ 8099         │ REST (HTTP)                       │
 │ register     │ 8000         │ REST (HTTP) - Debug               │
 │ online       │ 8089         │ REST (HTTP) - Debug               │
-│ online-alarm │ 8088         │ REST (HTTP) - Debug               │
+│ online-alarm │ 8091         │ REST (HTTP) - Debug               │
 │ gui          │ 4200         │ REST (HTTP) - Dev Server          │
 ├──────────────┼──────────────┼───────────────────────────────────┤
 │ api-devices  │ 50051        │ gRPC                              │
