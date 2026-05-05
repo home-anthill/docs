@@ -177,6 +177,18 @@ Change permission with `chmod 600 ~/.kube/config`.
 
 You should now be able to connect to the cluster from your local machine via `kubectl` or a tool like [k9s](https://k9scli.io/) with `k9s -n all`.
 
+## Verify Local Storage
+
+k3s usually ships with the `local-path` storage provisioner enabled by default. That is the simplest way to replace the chart's `hostPath` volumes on a single remote server.
+
+Check that the storage class exists:
+
+```bash
+kubectl get storageclass
+```
+
+You should see `local-path`. If it is not present, install the k3s local-path provisioner before deploying the chart. For this setup, the Helm chart uses `local-path` for Redis and Mosquitto persistent volumes.
+
 
 ## Install Cilium CNI
 
