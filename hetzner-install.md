@@ -481,7 +481,7 @@ rabbitmq:
 mongodbUrl: "mongodb+srv://<MONGODB_ATLAS_USERNAME>:<MONGODB_ATLAS_PASSWORD>@cluster0.4wies.mongodb.net"
 
 apiServer:
-  singleUserLoginEmail: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>"
+  limitToUserEmails: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>,<SECOND_GITHUB_ACCOUNT_EMAIL_TO_LOGIN>" # comma separated
   jwtPassword: "<JWT_PASSWORD>"
   jwtRefreshPassword: "<JWT_REFRESH_PASSWORD>"
   cookieSecret: "<COOKIE_SECRET>"

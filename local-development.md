@@ -510,8 +510,12 @@ cd mqtt-communication-checker
 # install dependencies
 poetry install
 
-# run this
-poetry run mqtt-communication-checker
+# run this command
+# ATTENTION: be sure to replace `API_TOKEN_ENCRYPTION_KEY` value with the one in `api-server/.env`
+API_TOKEN_ENCRYPTION_KEY=cZk!tEefGGEwAK7PwKba3ZCBRbp6Vj8* poetry run mqtt-communication-checker
+
+# next, if You want to update online status of power-outage you can run this:
+API_TOKEN_ENCRYPTION_KEY=cZk!tEefGGEwAK7PwKba3ZCBRbp6Vj8* poetry run mqtt-communication-checker --only-update-online
 ```
 
 This script sends a value or command for every supported feature and verifies that MongoDB collections stored those values correctly.
