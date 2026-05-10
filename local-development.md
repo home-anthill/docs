@@ -550,7 +550,7 @@ api_token: '<PROFILE API TOKEN>' # from your local DB or via `regenApiToken` in 
 ssl: false
 
 server_domain: '192.168.1.7' # your local IP discovered above
-server_port: '4200'          # if you don't want to start `gui` you can also use '8082' without differences
+server_port: '8099'
 server_path: '/admission/register'
 
 mqtt_domain: '192.168.1.7' # your local IP discovered above
