@@ -70,11 +70,10 @@ You can change these inputs as needed and adjust the firmware accordingly.
 
 1. Configure [Arduino IDE 2.x](https://www.arduino.cc/en/software) to build and flash ESP32 firmware. You need the `esp32` board in `Board Manager`, as described in [the official tutorial](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/installing.html).
 Then build and flash one of the official examples to verify that everything works correctly.
-I use the `esp32` board package from Espressif, version `3.3.7`, for all firmwares.
+These firmwares are known to build with the `esp32` board package from Espressif, version `3.3.7`.
 
 2. In Arduino IDE, install these libraries from the `Library Manager` tab:
-- `ArduinoJson` by Benoit Blanchon (version `7.4.2`)
-- `HttpClient` by Adrian McEwen (version `2.2.0`)
+- `ArduinoJson` by Benoit Blanchon (version `7.4.3`)
 - `PubSubClient` by Nick O'Leary (version `2.8`)
 - `TimeAlarms` by Michael Margolis (version `1.5`)
 - `Adafruit Unified Sensor` by Adafruit (version `1.1.15`)
@@ -88,6 +87,8 @@ I use the `esp32` board package from Espressif, version `3.3.7`, for all firmwar
 - `Adafruit SSD1306` by Adafruit (version `2.5.16`)
 - `Adafruit BusIO` by Adafruit (version `1.17.4`)
 - `Adafruit MCP9600 Library` by Adafruit (version `2.0.4`)
+
+`HTTPClient` is provided by the ESP32 Arduino core, so do not install the older `HttpClient` library by Adrian McEwen for this project.
 
 3. Create a new `private-config/secrets.yaml` file.
 

@@ -403,8 +403,8 @@ dig <YOUR_MQTT_DOMAIN>
 
 #### Password requirements
 
-> **Important:** Passwords used in RabbitMQ (`rabbitmq.producer.password`, `rabbitmq.consumer.password`,
-> `rabbitmq.admin.password`) and Mosquitto (`mosquitto.auth.password`) are embedded verbatim into
+> **Important:** Passwords used in RabbitMQ (`rabbitmq.password`, `rabbitmq.producer.password`,
+> `rabbitmq.consumer.password`) and Mosquitto (`mosquitto.auth.users.*.password`) are embedded verbatim into
 > connection URI strings (e.g. `amqp://user:PASSWORD@host:5672`). URI-unsafe characters cause
 > `invalid port number` or silent connection failures at runtime.
 >
@@ -466,9 +466,13 @@ redis:
   username: "redisuser"
   password: "<REDIS_PASSWORD>"
 
+apiToken:
+  hashSecret: "<API_TOKEN_HASH_SECRET>"
+  encryptionKey: "<32_BYTE_API_TOKEN_ENCRYPTION_KEY>"
+
 # create rabbit password with 'openssl rand -hex 24'
 rabbitmq:
-  user: rabbituse
+  user: rabbituser
   password: <RABBIT_PASSWORD_HEX>
   producer:
     user: "produceruser"
@@ -484,6 +488,7 @@ apiServer:
   limitToUserEmails: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>,<SECOND_GITHUB_ACCOUNT_EMAIL_TO_LOGIN>" # comma separated
   jwtPassword: "<JWT_PASSWORD>"
   jwtRefreshPassword: "<JWT_REFRESH_PASSWORD>"
+  refreshTokenHashSecret: "<REFRESH_TOKEN_HASH_SECRET>"
   cookieSecret: "<COOKIE_SECRET>"
   oauth2ClientID: "<GITHUB_OAUTH_CLIENT>"
   oauth2SecretID: "<GITHUB_OAUTH_SECRET>"

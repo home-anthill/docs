@@ -2,7 +2,7 @@
 
 ## 0. Install prerequisites
 
-### Install GNU Make and CMake (both required)
+### Install GNU Make, CMake, and protoc
 
 On macOS install these with:
 ```bash
@@ -10,12 +10,16 @@ brew install make
 
 # cmake is required by some rust dependencies
 brew install cmake
+
+# protoc is required by Go services that generate gRPC code
+brew install protobuf
 ```
 
 Check that everything works correctly by running:
 ```bash
 make -v
 cmake --version
+protoc --version
 ```
 
 
@@ -29,10 +33,10 @@ On macOS, install it via [Homebrew](https://formulae.brew.sh/formula/mosquitto) 
 
 
 1. On macOS install it via [Homebrew](https://formulae.brew.sh/formula/go) with `brew install go`
-2. Install [air](https://github.com/cosmtrek/air) to watch for changes and automatically rebuild:
+2. Install [air](https://github.com/air-verse/air) to watch for changes and automatically rebuild:
 
 ```bash
-curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+go install github.com/air-verse/air@latest
 ```
 
 Check that everything works correctly by running:
@@ -400,6 +404,7 @@ make run
 
 ```bash
 cd home-anthill/online
+cp .env_template .env
 make deps
 make run
 ```
