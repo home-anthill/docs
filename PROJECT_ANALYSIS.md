@@ -1,433 +1,416 @@
 # Home-Anthill Project Analysis
 
+Last scanned from `docs/` on 2026-05-28 across all sibling folders under `..`.
+
 ## Project Overview
 
-**home-anthill** is an IoT home automation system where ESP32 microcontrollers send sensor data over MQTT. A Kubernetes-based microservice backend collects, stores, and exposes that data through REST and gRPC APIs. A React web UI and an Android mobile app let users manage their devices.
+**home-anthill** is a multi-repository IoT home automation platform. ESP32 devices publish signed sensor and presence messages over MQTT. Backend services register devices, bridge MQTT into RabbitMQ, persist readings in MongoDB, track online state in Redis, send Firebase Cloud Messaging notifications, and expose user/device management through REST and gRPC APIs. A React web UI and a Kotlin Android app provide the user-facing control surfaces.
 
----
+## Workspace Inventory
 
-## 1. Project Structure
+| Folder | Role | Main stack |
+|---|---|---|
+| `.agents` | Local assistant workflow notes | Markdown |
+| `.claude` | Local assistant settings | JSON |
+| `.github` | Organization profile repository | Markdown, Git metadata |
+| `admission` | Device/sensor registration gateway | Go 1.26.3, Gin, gRPC client, MongoDB |
+| `api-devices` | Device registration and command publishing service | Go 1.26.3, gRPC, MongoDB, MQTT |
+| `api-server` | Main user-facing API | Go 1.26.3, Gin, MongoDB, GitHub OAuth2, JWT, gRPC client |
+| `app` | Android mobile app | Kotlin, Jetpack Compose, Retrofit, Koin, Firebase |
+| `consumer` | RabbitMQ to MongoDB ingestion worker | Rust 2024, Tokio, lapin, MongoDB, Redis |
+| `deployer` | Kubernetes deployment chart | Helm, Gateway API, Cilium, RabbitMQ Operator |
+| `docs` | Architecture and setup documentation | Markdown, diagrams, Bruno collection |
+| `esp32-configurator` | Firmware secret/header generator | Python 3.12, Poetry, Jinja2, Pydantic, YAML |
+| `firmwares` | ESP32 firmware variants | Arduino/C++ |
+| `gui` | Web dashboard | TypeScript, React 19.2, Vite 8.0, Nx 22.6, Redux Toolkit Query, Mantine 9 |
+| `k8s-config-reloader` | Sidecar that reloads processes on config file changes | Go 1.26.3, fsnotify, gopsutil |
+| `mosquitto` | MQTT broker image entrypoint and examples | Go 1.26.3, Docker, Mosquitto |
+| `mqtt-communication-checker` | Local end-to-end MQTT verification CLI | Python 3.12, Poetry, paho-mqtt, PyMongo, Redis |
+| `online` | Online-state REST API and FCM token storage | Rust 2024, Rocket, Redis |
+| `online-alarm` | Offline-device detector and FCM notifier | Rust 2024, Rocket, Redis, Firebase Cloud Messaging |
+| `online-receiver` | MQTT presence receiver | Rust 2024, Rocket health endpoint, MQTT, Redis, MongoDB |
+| `private-config` | Local deployment override and secret values | YAML, intentionally not analyzed in detail |
+| `producer` | MQTT to RabbitMQ bridge | Rust 2024, Tokio, paho-mqtt, lapin |
+| `rabbitmq-local` | Local RabbitMQ definitions/config | JSON, RabbitMQ config |
+| `register` | Sensor registration and value retrieval API | Rust 2024, Rocket, MongoDB |
+| `sharded-mongodb-compose` | Local MongoDB sharded cluster | Docker Compose |
 
-```
-home-anthill/
-├── api-server/          # Go - Central REST API (homes, rooms, devices, profiles, auth)
-├── api-devices/         # Go - gRPC service (device registration + MQTT publishing)
-├── admission/           # Go - REST + gRPC device/sensor registration gateway
-├── register/            # Rust - Sensor registration and data retrieval (MongoDB)
-├── producer/            # Rust - MQTT → RabbitMQ bridge
-├── consumer/            # Rust - RabbitMQ → MongoDB persistence
-├── online/              # Rust - Device online status tracking (Redis)
-├── online-receiver/     # Rust - MQTT → Redis (device presence)
-├── online-alarm/        # Rust - Offline device detection + FCM push notifications
-├── gui/                 # TypeScript - React web dashboard
-├── app/                 # Kotlin - Android mobile app
-├── esp32-configurator/  # Python - C header generator from YAML for ESP32 firmware
-├── deployer/            # Helm - Kubernetes deployment charts
-├── mosquitto/           # Go + Docker - MQTT broker with dynamic auth
-├── sharded-mongodb-compose/  # Docker Compose - Local MongoDB cluster
-├── k8s-config-reloader/ # Go - K8s sidecar for ConfigMap/Secret changes
-├── mqtt-communication-checker/ # Python - Script to test local MQTT communication
-├── firmwares/           # C++ - ESP32 firmware variants
-└── docs/                # Documentation, diagrams, Postman collections
-```
+Generated or local-only directories were present in several repos (`coverage`, `target`, `build`, `dist`, `node_modules`, `.venv`, `.gocache`, `.gomodcache`, `.idea`, logs, tmp). They were treated as generated output, not primary source. The `private-config` folder was counted in the workspace inventory but not inspected beyond filenames because it contains local values and secrets.
 
----
+## High-Level Architecture
 
-## 2. Services Summary
+```text
+ESP32 firmware
+  | MQTT signed sensor payloads: sensors/{deviceUuid}/{featureName}
+  | MQTT signed presence payloads: online/{deviceUuid}/features/{featureUuid}
+  v
+Mosquitto
+  |--> producer --> RabbitMQ queue ks89 --> consumer --> MongoDB sensors DB
+  |--> online-receiver -------------------------------> Redis online state
 
-| Service | Language | Framework | Database | Protocol |
-|---------|----------|-----------|----------|----------|
-| api-server | Go 1.26 | Gin | MongoDB | REST, gRPC |
-| api-devices | Go 1.26 | gRPC | MongoDB | gRPC, MQTT |
-| admission | Go 1.26 | Gin | MongoDB | REST, gRPC |
-| register | Rust | Rocket | MongoDB | REST |
-| producer | Rust | Tokio | - | MQTT, AMQP |
-| consumer | Rust | Tokio | MongoDB | AMQP |
-| online | Rust | Rocket | Redis | REST |
-| online-receiver | Rust | Tokio | Redis | MQTT |
-| online-alarm | Rust | Rocket | Redis | REST, FCM |
-| gui | TypeScript | React 19 | - | REST |
-| app | Kotlin | Jetpack Compose | - | REST |
+gui / app
+  | REST + OAuth/JWT
+  v
+api-server --> MongoDB api-server DB
+  |--> register HTTP for sensor values
+  |--> online HTTP for online state and token rotation
+  |--> api-devices gRPC for controller commands
 
----
-
-## 3. Communication Flow & Protocols
-
-### 3.1 High-Level Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          ESP32 Devices (IoT)                                  │
-│                    Sensors: temperature, humidity, motion                      │
-└────────────────────────────┬────────────────────────────────────────────────┘
-                             │ MQTT (TLS)
-                             ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         Mosquitto (MQTT Broker)                              │
-│                            Port: 1883 (8883 TLS)                             │
-└──────┬─────────────────────────────────┬─────────────────────────────────────┘
-       │                                 │
-       │ MQTT Subscribe                  │ MQTT Subscribe
-       ▼                                 ▼
-┌─────────────────────┐         ┌─────────────────────────────────────────────┐
-│   online-receiver   │         │              producer                       │
-│   (Rust/Tokio)      │         │              (Rust/Tokio)                  │
-│                     │         │                                             │
-│ Subscribes to:      │         │ Subscribes to: sensors/{deviceId}/{feature}│
-│ online/+/features/+ │         │                                             │
-└─────────┬───────────┘         └──────────────┬──────────────────────────────┘
-          │                                      │
-          │                                      │ AMQP Publish
-          │                                      ▼
-          │                    ┌─────────────────────────────────────────────┐
-          │                    │            RabbitMQ                        │
-          │                    │            Port: 5672 (5671 TLS)            │
-          │                    │            Durable queue: ks89               │
-          │                    │            Ports: 15672 (Management UI)      │
-          │                    │            Port: 15671 (Management TLS)     │
-          │                    └────────────────────┬─────────────────────────┘
-          │                                         │
-          │                                         │ AMQP Consume
-          │                                         ▼
-          │                    ┌─────────────────────────────────────────────┐
-          │                    │              consumer                        │
-          │                    │            (Rust/Tokio)                      │
-          │                    │                                             │
-          │                    │ Persists sensor data to MongoDB              │
-          │                    └────────────────────┬─────────────────────────┘
-          │                                         │
-          │                                         │ Write
-          │                                         ▼
-          │                    ┌─────────────────────────────────────────────┐
-          │                    │         MongoDB (Sensors DB)                │
-          │                    │         Port: 27017                         │
-          │                    └─────────────────────────────────────────────┘
-          │
-          │ Write
-          ▼
-┌─────────────────────┐
-│       Redis         │
-│    Port: 6379       │
-└─────────┬───────────┘
-          │
-          │ Read                    ┌─────────────────────────────────────────────┐
-          │                         │           api-server                      │
-          │                         │              (Go/Gin)                      │
-          │                         │                                             │
-          │                         │ REST API: homes, rooms, devices, profiles  │
-          │                         │ gRPC: device commands                       │
-          │                         └──────────────┬──────────────────────────────┘
-          │                                    │           │
-          │                                    │ REST      │ gRPC
-          │                                    ▼           ▼
-          │                    ┌─────────────────────────────────────────────┐
-          │                    │         MongoDB (Main DB)                   │
-          │                    │         Port: 27017                         │
-          │                    └─────────────────────────────────────────────┘
-          │
-          │                    ┌─────────────────────────────────────────────┐
-          │                    │          api-devices                        │
-          │                    │           (Go/gRPC)                         │
-          │                    │                                             │
-          │                    │ gRPC Services: Registration, Device, Health │
-          │                    │ Publishes commands to MQTT                   │
-          │                    └──────────────┬──────────────────────────────┘
-          │                                   │
-          │                                   │ MQTT Publish
-          │                                   ▼
-          │                    ┌─────────────────────────────────────────────┐
-          │                    │           Mosquitto                          │
-          │                    │    Commands to devices/{uuid}/values          │
-          │                    └─────────────────────────────────────────────┘
-          │                                          │
-          │                                          │ MQTT
-          │                                          ▼
-          │                          ┌─────────────────────────────┐
-          │                          │     ESP32 Devices           │
-          │                          │    (Receive commands)        │
-          │                          └─────────────────────────────┘
-          │
-          │ Polls every 10s           ┌─────────────────────────────────────────────┐
-          │                           │          online-alarm                       │
-          │                           │            (Rust/Rocket)                    │
-          │                           │                                             │
-          │                           │ Polls Redis for offline devices            │
-          │                           │ Sends FCM push notifications               │
-          │                           └─────────────────────────────────────────────┘
-          │                                          │
-          │                                          │ FCM Push
-          │                                          ▼
-          │                    ┌─────────────────────────────────────────────┐
-          │                    │          Firebase Cloud Messaging           │
-          │                    │              (FCM)                          │
-          │                    └────────────────────┬──────────────────────┘
-          │                                             │
-          │                                             │
-          ▼                                             ▼
-┌─────────────────────┐                 ┌─────────────────────────────────────┐
-│        online       │                 │              app                   │
-│    (Rust/Rocket)    │                 │         (Android/Kotlin)            │
-│                     │                 │                                      │
-│ REST API: online    │                 │ FCM notifications, device management │
-│ status, FCM tokens  │                 └─────────────────────────────────────┘
-└─────────────────────┘
-
-                        ┌─────────────────────────────────────────────┐
-                        │              admission                        │
-                        │               (Go/Gin)                       │
-                        │                                             │
-                        │ REST: device registration                     │
-                        │ gRPC: invokes api-devices                    │
-                        │ HTTP: invokes register                      │
-                        └─────────────────────────────────────────────┘
-
-                        ┌─────────────────────────────────────────────┐
-                        │              register                         │
-                        │             (Rust/Rocket)                     │
-                        │                                             │
-                        │ REST: sensor registration, data retrieval    │
-                        └─────────────────────────────────────────────┘
+admission REST --> api-devices gRPC + register HTTP
+api-devices --> MongoDB controllers DB + MQTT commands: devices/{deviceUuid}/values
+online-alarm --> Redis offline scan --> Firebase Cloud Messaging --> app
 ```
 
-### 3.2 Data Flow Paths
+## Service Summary
 
-#### Path 1: Sensor Data Ingestion (Write Path)
-```
-ESP32 → Mosquitto → producer → RabbitMQ → consumer → MongoDB (sensors)
-```
-RabbitMQ uses the durable `ks89` queue for this path. The producer publishes to the AMQP default exchange (`exchange=""`) with routing key `ks89`, which routes to the queue with the same name. Because RabbitMQ checks write permissions against the default exchange, the producer RabbitMQ user must be allowed to write to `amq.default`; it also needs configure and write permission for the `ks89` queue. RabbitMQ 4.x rejects transient, non-exclusive named queues by default, so the producer and consumer must not declare `ks89` with `QueueDeclareOptions::default()`.
+| Service | Runtime | Primary purpose | Stores | Protocols |
+|---|---|---|---|---|
+| `api-server` | Go/Gin | Homes, rooms, devices, profile, OAuth2, JWT, value access | MongoDB | REST, gRPC client, HTTP clients |
+| `api-devices` | Go/gRPC | Controller registration and value commands | MongoDB | gRPC, MQTT publish |
+| `admission` | Go/Gin | Public device registration endpoint | MongoDB | REST, gRPC client, HTTP client |
+| `register` | Rust/Rocket | Sensor registration and latest value reads | MongoDB | REST |
+| `producer` | Rust/Tokio | Subscribe to sensor MQTT topics and publish AMQP messages | None | MQTT, AMQP |
+| `consumer` | Rust/Tokio | Validate and persist signed sensor readings | MongoDB, Redis | AMQP |
+| `online` | Rust/Rocket | Read/delete online records, store FCM tokens, rotate API tokens in Redis | Redis | REST |
+| `online-receiver` | Rust/Tokio/Rocket | Validate signed online MQTT messages and update Redis | Redis, MongoDB | MQTT, REST health |
+| `online-alarm` | Rust/Tokio/Rocket | Poll Redis for offline devices and send push notifications | Redis | REST health, FCM |
+| `gui` | React/Vite/Nx | Browser dashboard for homes, devices, profile, values | Browser state | REST |
+| `app` | Android/Kotlin | Mobile dashboard, OAuth2 PKCE login, FCM token upload | SecurePrefs | REST, FCM |
+| `mosquitto` | Mosquitto + Go entrypoint | MQTT broker with generated password file | Filesystem | MQTT, MQTT/TLS |
+| `k8s-config-reloader` | Go | Watch mounted config dirs and signal a named process | None | fsnotify, Unix signals |
 
-#### Path 2: Device Online Status
-```
-ESP32 → Mosquitto → online-receiver → Redis
-```
+## Data Flows
 
-#### Path 3: Offline Detection & Notifications
-```
-Redis → online-alarm (polls every 10s) → FCM → app (Android)
-```
+### Sensor Ingestion
 
-#### Path 4: Device Command (Write Path)
-```
-gui/app → api-server → api-devices (gRPC) → Mosquitto → ESP32
-```
-
-#### Path 5: Device Registration
-```
-ESP32 → admission (REST) → api-devices (gRPC) + register (HTTP) → MongoDB
+```text
+ESP32 -> Mosquitto -> producer -> RabbitMQ queue ks89 -> consumer -> MongoDB sensors.sensors
 ```
 
----
+The producer subscribes to typed sensor topics and wraps MQTT payloads into AMQP messages. It validates MQTT topic shape, UUIDs, known sensor feature names, and payload size before publishing. AMQP publisher confirms are enabled; a publish only counts as accepted after broker confirmation, and the producer retries once after rebuilding the AMQP connection on publish failure.
 
-## 4. Services & Ports
+The consumer validates:
 
-### 4.1 Infrastructure Services
+- AMQP body HMAC in the `x-hmac-sha256` header using `AMQP_HMAC_SECRET`.
+- MQTT signed payload HMAC using the feature API token loaded from MongoDB.
+- Timestamp freshness with a 300 second skew window.
+- Nonce replay protection using Redis keys with a 720 second TTL.
+- Topic/device/feature binding before updating MongoDB.
 
-| Service | Image | Port(s) | Purpose |
-|---------|-------|---------|---------|
-| MongoDB | sharded-mongodb-compose | 27017 | Main and sensors databases |
-| Redis | redis:alpine | 6379 | Device online status |
-| RabbitMQ | rabbitmq:management | 5672, 15672, 15671 | Durable `ks89` AMQP queue |
-| Mosquitto | ks89/mosquitto | 1883, 9001 | MQTT broker |
+### Online State
 
-### 4.2 Application Services
-
-| Service | Language | HTTP/REST Port | gRPC Port | Other Ports | Database |
-|---------|----------|----------------|-----------|-------------|----------|
-| api-server | Go | 8082 | - | - | MongoDB :27017 |
-| api-devices | Go | - | 50051 | - | MongoDB :27017 |
-| admission | Go | 8099 | - | - | MongoDB :27017 |
-| register | Rust | 8000 (dev) / 80 (prod) | - | - | MongoDB :27017 |
-| producer | Rust | - | - | - | - |
-| consumer | Rust | - | - | - | MongoDB :27017 |
-| online | Rust | 8089 (dev) / 80 (prod) | - | - | Redis :6379 |
-| online-receiver | Rust | - | - | - | Redis :6379 |
-| online-alarm | Rust | 8088 (dev) / 80 (prod) | - | - | Redis :6379 |
-| gui | TypeScript | 4200 (dev) / served by api-server | - | - | - |
-| app | Kotlin | - | - | - | - |
-
----
-
-## 5. Protocol Details
-
-### 5.1 MQTT Topics
-
-| Topic Pattern | Direction | Purpose |
-|--------------|-----------|---------|
-| `sensors/{deviceId}/{featureName}` | ESP32 → producer | Sensor data (temperature, humidity, etc.) |
-| `online/{deviceId}/features/{featureId}` | ESP32 → online-receiver | Device online status |
-| `devices/{deviceId}/values` | api-devices → ESP32 | Device command values |
-
-**Supported Feature Names:**
-- Float: `temperature`, `humidity`, `light`, `airpressure`
-- Integer: `motion`, `airquality`
-- Boolean: `online`
-
-### 5.2 REST API Endpoints
-
-#### api-server (Port 8082)
-- `POST /api/callback` - GitHub OAuth2 callback for web
-- `POST /api/app_callback` - GitHub OAuth2 callback for mobile
-- `GET /api/profiles` - List profiles
-- `GET /api/profiles/:id` - Get profile
-- `POST /api/profiles` - Create profile
-- `PUT /api/profiles/:id` - Update profile
-- `GET /api/profiles/:id/tokens` - Regenerate API token
-- `GET /api/homes` - List homes
-- `POST /api/homes` - Create home
-- `GET /api/homes/:id` - Get home
-- `PUT /api/homes/:id` - Update home
-- `DELETE /api/homes/:id` - Delete home
-- `GET /api/rooms` - List rooms
-- `POST /api/rooms` - Create room
-- `GET /api/rooms/:id` - Get room
-- `PUT /api/rooms/:id` - Update room
-- `DELETE /api/rooms/:id` - Delete room
-- `GET /api/devices` - List devices
-- `POST /api/devices` - Create device
-- `GET /api/devices/:id` - Get device
-- `PUT /api/devices/:id` - Update device
-- `DELETE /api/devices/:id` - Delete device
-- `POST /api/devices/:id/features` - Add feature to device
-- `GET /api/devices/:id/features/:featureId/values` - Get feature value
-
-#### admission (Port 8099)
-- `POST /admission/register` - Register device
-- `POST /admission/keepalive` - Device keepalive
-- `GET /admission/keepalive` - Health check
-
-#### register (Port 8000/80)
-- `POST /sensors/register/:featureName` - Register sensor
-- `GET /sensors/:deviceUuid/features/:featureUuid/:featureName` - Get sensor value
-- `GET /keepalive` - Health check
-
-#### online (Port 8089/80)
-- `GET /online/:deviceUuid/features/:featureUuid` - Get online status
-- `DELETE /online/:deviceUuid/features/:featureUuid` - Delete online record
-- `POST /fcmtoken` - Set FCM token
-- `GET /keepalive` - Health check
-
-#### online-alarm (Port 8088/80)
-- `GET /keepalive` - Health check
-
-### 5.3 gRPC Services
-
-#### api-devices (Port 50051)
-
-**Registration Service:**
-- `RegisterController(Controller) returns (RegistrationResponse)`
-- `UpdateController(Controller) returns (RegistrationResponse)`
-
-**Device Service:**
-- `GetValue(DeviceRequest) returns (DeviceResponse)`
-- `SetValues(DeviceValuesRequest) returns (DeviceValuesResponse)`
-- `HealthCheck(HealthCheckRequest) returns (HealthCheckResponse)`
-
-#### admission → api-devices
-- Calls `Registration.Register()` via gRPC
-
-### 5.4 AMQP Queue
-
-- Queue name: `ks89`
-- Queue declaration: durable named shared queue
-- Producer publish target: AMQP default exchange (`exchange=""`), routing key `ks89`
-- Required producer write permission: `amq.default` for the publish operation; `ks89` for queue-level access
-- Required consumer permission: read from `ks89`
-- RabbitMQ 4.x note: transient non-exclusive named queues are denied by default via the deprecated `transient_nonexcl_queues` feature. Keep producer and consumer declarations durable.
-
----
-
-## 6. Authentication & Security
-
-### 6.1 Authentication Flow
-```
-gui/app → GitHub OAuth2 → api-server → JWT token
+```text
+ESP32 -> Mosquitto -> online-receiver -> Redis
+online -> Redis
+online-alarm -> Redis -> FCM -> Android app
 ```
 
-### 6.2 API Security
-- **GitHub OAuth2**: Web and mobile app authentication
-- **JWT**: Session tokens for API requests
-- **apiToken**: UUIDv4 for device authentication
-  - Stored in plain text in the register service
-  - SHA-256 hashed in register MongoDB storage
-  - Stored in plain text in consumer
+`online-receiver` subscribes to `online/+/features/+`, verifies the signed envelope, looks up the feature API token in MongoDB, claims a replay nonce in Redis, then inserts or updates the Redis online record. `online-alarm` scans Redis every 10 seconds, caches already-notified offline devices, and sends FCM notifications when the cache timeout has elapsed.
 
-### 6.3 Transport Security
-| Protocol | TLS Support | Default |
-|----------|-------------|---------|
-| MQTT | ✅ | Disabled |
-| gRPC | ✅ | Disabled |
-| REST/HTTP | ❌ | Plaintext |
-| AMQP | ❌ | Plaintext (no amqps://) |
-| Redis | ❌ | Plaintext |
-| MongoDB | ❌ | Plaintext |
+### Commands To Controllers
 
----
-
-## 7. External Integrations
-
-| Service | Protocol | Purpose |
-|---------|----------|---------|
-| GitHub OAuth2 | HTTPS | User authentication |
-| Firebase Cloud Messaging (FCM) | HTTPS | Push notifications |
-| MongoDB Atlas | mongodb:// | Production database |
-
----
-
-## 8. Kubernetes Deployment
-
-### 8.1 Cluster Setup
-- **K3s** cluster on Hetzner Cloud
-- **NGINX Gateway Fabric** for ingress
-- **MetalLB** for bare-metal load balancing
-- **cert-manager** for TLS certificates
-
-### 8.2 Service Discovery
-Internal DNS: `<service-name>.home-anthill.svc.cluster.local`
-
-| K8s Service | Internal DNS |
-|-------------|--------------|
-| api-server | api-server-svc.home-anthill.svc.cluster.local |
-| admission | admission-svc.home-anthill.svc.cluster.local |
-
----
-
-## 9. Development Ports Quick Reference
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        localhost                                │
-├──────────────┬──────────────┬───────────────────────────────────┤
-│ Service      │ Port         │ Protocol                          │
-├──────────────┼──────────────┼───────────────────────────────────┤
-│ api-server   │ 8082         │ REST (HTTP)                       │
-│ admission    │ 8099         │ REST (HTTP)                       │
-│ register     │ 8000         │ REST (HTTP) - Debug               │
-│ online       │ 8089         │ REST (HTTP) - Debug               │
-│ online-alarm │ 8091         │ REST (HTTP) - Debug               │
-│ gui          │ 4200         │ REST (HTTP) - Dev Server          │
-├──────────────┼──────────────┼───────────────────────────────────┤
-│ api-devices  │ 50051        │ gRPC                              │
-├──────────────┼──────────────┼───────────────────────────────────┤
-│ MongoDB      │ 27017        │ MongoDB Wire Protocol             │
-│ Redis        │ 6379         │ Redis Protocol                    │
-│ RabbitMQ     │ 5672         │ AMQP 0-9-1                        │
-│ RabbitMQ UI  │ 15672        │ HTTP (Management)                  │
-│ Mosquitto    │ 1883         │ MQTT                              │
-│ Mosquitto WS │ 9001         │ MQTT over WebSocket               │
-└──────────────┴──────────────┴───────────────────────────────────┘
+```text
+gui/app -> api-server -> api-devices gRPC -> Mosquitto -> ESP32
 ```
 
----
+The command topic is `devices/{deviceUuid}/values`. Controller commands include values such as `on`, `setpoint`, `mode`, `fanSpeed`, and `tolerance`.
 
-## 10. Technology Stack Summary
+### Registration
 
-| Layer | Technologies |
-|-------|-------------|
-| Go Services | Go 1.26, Gin, gRPC/Protobuf, MongoDB driver v2 |
-| Rust Services | Rust 2024, Rocket, lapin (AMQP), paho-mqtt, redis, tokio |
-| Frontend | React 19, Material UI 7, Redux Toolkit, Vite |
-| Mobile | Kotlin, Jetpack Compose, Koin, Retrofit, Firebase FCM |
-| Infrastructure | Kubernetes (K3s), Helm, NGINX Gateway Fabric, MetalLB |
-| Messaging | RabbitMQ (AMQP), Mosquitto (MQTT) |
-| Data | MongoDB, Redis |
+```text
+ESP32 -> admission /admission/register -> api-devices gRPC + register HTTP
+```
+
+The registration path creates/updates controller metadata through `api-devices` and sensor metadata through `register`.
+
+## Protocol Details
+
+### MQTT Topics
+
+| Topic | Direction | Purpose |
+|---|---|---|
+| `sensors/{deviceUuid}/temperature` | ESP32 to producer | Temperature readings |
+| `sensors/{deviceUuid}/humidity` | ESP32 to producer | Humidity readings |
+| `sensors/{deviceUuid}/light` | ESP32 to producer | Light readings |
+| `sensors/{deviceUuid}/motion` | ESP32 to producer | Motion readings |
+| `sensors/{deviceUuid}/airquality` | ESP32 to producer | Air quality enum readings |
+| `sensors/{deviceUuid}/airpressure` | ESP32 to producer | Air pressure readings |
+| `sensors/{deviceUuid}/online` | ESP32 to producer | Online sensor feature readings |
+| `online/{deviceUuid}/features/{featureUuid}` | ESP32 to online-receiver | Dedicated presence updates |
+| `devices/{deviceUuid}/values` | api-devices to ESP32 | Controller command array |
+| `clients/{clientId}/status` | MQTT clients to broker | Last-will status topic configured by MQTT clients |
+
+### Feature Names
+
+Supported sensor features scanned in source and local checker:
+
+- Float/decimal: `temperature`, `humidity`, `light`, `airpressure`
+- Integer/enum: `motion`, `airquality`
+- Boolean/status: `online`
+
+Controller command features scanned in the local checker:
+
+- `on`
+- `setpoint`
+- `mode`
+- `fanSpeed`
+- `tolerance`
+
+### AMQP
+
+| Setting | Value |
+|---|---|
+| Queue | `ks89` by default |
+| Publish exchange | Default exchange (`exchange=""`) |
+| Routing key | Queue name (`ks89`) |
+| Producer permission | Configure `ks89`, write `amq.default` and `ks89`, read `ks89` |
+| Consumer permission | Configure `ks89`, read `ks89`, no write |
+| Message integrity | `x-hmac-sha256` header |
+
+RabbitMQ 4.x rejects transient non-exclusive named queues by default, so producer and consumer declare the named queue as durable. Producer channels use publisher confirms and treat returned messages, broker `Nack`s, missing confirm mode, and confirm failures as publish errors.
+
+## Public And Internal APIs
+
+### `api-server` REST
+
+Public routes:
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/api/keepalive` | Health check |
+| `GET` | `/api/oauth/login` | Start web GitHub OAuth2 |
+| `GET` | `/api/oauth/callback` | Complete web OAuth2 |
+| `GET` | `/api/oauth/app/login` | Start mobile GitHub OAuth2 with PKCE |
+| `GET` | `/api/oauth/app/callback` | Complete mobile OAuth2 |
+| `POST` | `/api/oauth/app/exchange-code` | Exchange mobile login code |
+| `POST` | `/api/oauth/app/refresh` | Refresh mobile token |
+| `POST` | `/api/oauth/app/logout` | Logout mobile session |
+| `POST` | `/api/oauth/refresh` | Refresh web token |
+| `POST` | `/api/oauth/logout` | Logout web session |
+
+JWT-protected routes:
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/api/homes` | List homes |
+| `POST` | `/api/homes` | Create home |
+| `PUT` | `/api/homes/:id` | Update home |
+| `DELETE` | `/api/homes/:id` | Delete home |
+| `GET` | `/api/homes/:id/rooms` | List rooms in home |
+| `POST` | `/api/homes/:id/rooms` | Create room |
+| `PUT` | `/api/homes/:id/rooms/:rid` | Update room |
+| `DELETE` | `/api/homes/:id/rooms/:rid` | Delete room |
+| `GET` | `/api/profile` | Current profile |
+| `POST` | `/api/profiles/:id/tokens` | Rotate profile API token |
+| `POST` | `/api/profiles/:id/fcmTokens` | Store profile FCM token |
+| `GET` | `/api/devices` | List devices |
+| `PUT` | `/api/devices/:id` | Assign/update device home and room metadata |
+| `DELETE` | `/api/devices/:id` | Delete device |
+| `GET` | `/api/devices/:id/values` | Get sensor/controller values |
+| `POST` | `/api/devices/:id/values` | Set controller values |
+| `POST` | `/api/fcmtoken` | Store FCM token |
+| `GET` | `/api/online/:id` | Get online state for device |
+
+### `admission` REST
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/admission/register` | Public device registration |
+| `GET` | `/admission/keepalive` | Health check |
+
+### `register` REST
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/sensors/register/:featureName` | Register a sensor feature |
+| `GET` | `/sensors/:deviceUuid/features/:featureUuid/:featureName` | Get latest value for a feature |
+| `GET` | `/keepalive` | Health check |
+
+### `online` REST
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/online/:deviceUuid/features/:featureUuid` | Get online state |
+| `DELETE` | `/online/:deviceUuid/features/:featureUuid` | Delete online state |
+| `POST` | `/fcmtoken` | Initialize/store FCM token |
+| `POST` | `/api-token/rotate` | Rotate API token references in Redis |
+| `GET` | `/keepalive` | Health check |
+
+### `online-receiver` and `online-alarm`
+
+Both expose Rocket health endpoints through `/keepalive`. Their main work happens in background loops:
+
+- `online-receiver`: MQTT event loop.
+- `online-alarm`: Redis scan and FCM notification loop.
+
+### `api-devices` gRPC
+
+Registered gRPC services:
+
+- Standard `grpc.health.v1.Health`.
+- `Registration` service from `api/register/register.proto`.
+- `Device` service from `api/device/device.proto`.
+
+Responsibilities found in source:
+
+- Register or update controllers.
+- Get controller values.
+- Set device/controller values by signing requested feature values and publishing MQTT messages to `devices/{deviceUuid}/values`.
+- Cap `SetValues` requests at 100 values and update MongoDB command status only after MQTT publish succeeds.
+- Use optional gRPC TLS when `GRPC_TLS=true`.
+
+## Ports
+
+| Component | Local/debug port | Production/chart port | Notes |
+|---|---:|---:|---|
+| `api-server` | `8082` commonly used in tests/docs | `80` | Gin HTTP |
+| `admission` | `8099` commonly used in tests/docs | `80` | Gin HTTP |
+| `api-devices` | `50051` | `50051` | gRPC |
+| `register` | Rocket debug default or `8000` in docs/tests | `80` | Rocket release chart exposes 80 |
+| `online` | `8089` | `80` | Rocket debug port is configured |
+| `online-receiver` | `8088` | `80` | Health endpoint plus MQTT background loop |
+| `online-alarm` | `8091` | `80` | Health endpoint plus notification loop |
+| `gui` | Vite/Nx dev server | `80` | Built assets served by standalone GUI image or copied to `api-server/public` for dev |
+| `Mosquitto` | `1883`, `8883`, `9001` historically | `1883`/`8883` | MQTT, optional TLS |
+| `RabbitMQ` | `5672`, `15672` | `5672`, `15672` | AMQP and management |
+| `Redis` | `6379` | `6379` | Authenticated in chart |
+| `MongoDB` | `27017`, `27018` via local compose | External Atlas URL in chart | Main and sensors DBs |
+
+## Authentication And Security
+
+- User auth uses GitHub OAuth2.
+- Web auth uses sessions, cookies, access JWTs, refresh tokens, and CSRF/PKCE-like OAuth state handling.
+- Android auth uses OAuth2 app routes, PKCE, secure preferences, and token refresh.
+- API routes under `/api` are protected by JWT middleware except OAuth and keepalive routes.
+- Device/API tokens are hashed with `API_TOKEN_HASH_SECRET`; some services also require `API_TOKEN_ENCRYPTION_KEY` for encrypted token storage/lookup.
+- MQTT sensor and online payloads are signed with HMAC and include timestamp, nonce, device UUID, feature UUID, feature name/payload, and signature.
+- Redis is used for replay protection of signed MQTT nonces.
+- AMQP messages from producer to consumer are signed with an HMAC header.
+- The Helm chart creates separate MQTT users for device, producer, online-receiver, and api-devices roles.
+- The Helm chart includes network policies, dedicated service accounts, disabled service account token automounts for workloads, Gateway security headers, optional TLS certificates, and egress policies for GitHub, MongoDB Atlas, and Google/FCM.
+
+## Deployment
+
+`deployer/home-anthill` is a Helm application chart:
+
+- Chart version: `6.0.0`.
+- App version: `5.0.0`.
+- Namespace default: `home-anthill`.
+- Uses NGINX Gateway Fabric Gateway API routes for web HTTP/HTTPS and MQTT TCP routing.
+- Uses cert-manager Issuers/Certificates for web and MQTT TLS.
+- Uses Cilium LB-IPAM/L2 announcement and Cilium network policies for selected egress.
+- Uses RabbitMQ Cluster Operator resources for RabbitMQ users and permissions.
+- Deploys Redis, Mosquitto, GUI, admission, api-server, api-devices, register, producer, consumer, online, online-receiver, and online-alarm.
+- Includes smoke tests for GUI, API, online, Redis, Mosquitto, and RabbitMQ.
+- Uses external MongoDB through `mongodbUrl`, typically MongoDB Atlas.
+
+Important deployment sidecars/helpers:
+
+- `admission-nginx` is deployed in front of `admission` for the public registration path.
+- `k8s-config-reloader` can watch mounted config/secret directories and send `SIGHUP` or another configured signal to a named process.
+- `mosquitto` image entrypoint generates `/mosquitto/passwd/password_file` from `MOSQUITTO_USERS` or `MOSQUITTO_USERNAME`/`MOSQUITTO_PASSWORD`, validates credentials, clears secret env vars, then `exec`s Mosquitto.
+
+## Local Infrastructure
+
+### MongoDB
+
+`sharded-mongodb-compose` runs a local sharded MongoDB cluster:
+
+- Shard0: `shard0-replica0`, `shard0-replica1`.
+- ConfigDB: `configdb-replica0`, `configdb-replica1`.
+- Routers: `mongos-router0` on `127.0.0.1:27017`, `mongos-router1` on `127.0.0.1:27018`.
+
+### RabbitMQ
+
+`rabbitmq-local` contains:
+
+- `guest` administrator.
+- `produceruser` with configure permission on `ks89`, write permission on `amq.default` and `ks89`, read permission on `ks89`.
+- `consumeruser` with configure/read permission on `ks89` and no write permission.
+- `management.load_definitions = /etc/rabbitmq/definitions.json`.
+
+### MQTT Checker
+
+`mqtt-communication-checker` is the main local end-to-end verification tool. It:
+
+- Checks Mosquitto, RabbitMQ, MongoDB, Redis, producer, consumer, and online-receiver readiness.
+- Reads profiles/devices from the `api-server` MongoDB database.
+- Joins registered feature metadata from `sensors.sensors` and controller metadata from `controllers.controllers`.
+- Generates signed MQTT payloads and verifies resulting MongoDB/Redis state.
+- Publishes controller command messages to `devices/{deviceUuid}/values`.
+
+## Frontends
+
+### Web GUI
+
+The `gui` repository is a React 19.2 app using Vite 8.0, Nx 22.6, Mantine 9, Redux Toolkit Query, React Router 7, and MSW/Vitest tests. Main screens found:
+
+- Login and post-login OAuth handling.
+- Devices list and device details.
+- Sensor values, online status, and controller value controls.
+- Homes and rooms management.
+- Profile display, logout, and API token rotation.
+
+REST API calls are centralized through RTK Query services under `src/services`, with `/api` as the base path.
+
+### Android App
+
+The Android app uses Jetpack Compose, Material 3, Navigation Compose, Retrofit, OkHttp, Koin, WorkManager, Firebase Messaging, Firebase Analytics, and secure preferences. Main scanned capabilities:
+
+- GitHub OAuth2 app login with PKCE.
+- Token refresh and logout.
+- Homes, rooms, devices, sensor values, controller values, and online state screens.
+- FCM token worker/scheduler.
+- Firebase messaging service and in-app notification bus.
+
+Build config:
+
+- Namespace/application id: `eu.homeanthill`.
+- `minSdk = 33`, `targetSdk = 36`, `compileSdk = 37`.
+- Build types: `debug`, `staging`, `release`.
+
+## Firmware And Device Types
+
+Firmware variants present:
+
+- `ac-beko`: Beko air-conditioner controller, IR handling, MQTT, registration, storage, Wi-Fi.
+- `ac-lg`: LG air-conditioner controller, IR handling, MQTT, registration, storage, Wi-Fi.
+- `airquality-pir`: Air quality plus PIR motion sensor.
+- `barometer`: Air pressure sensor.
+- `dht-light`: Temperature/humidity plus light sensor.
+- `power-outage`: Online/power outage style sensor.
+- `thermostat`: Controller, display, temperature sensor, MQTT, registration, storage, Wi-Fi.
+
+Each firmware folder has source files plus tests. Shared patterns include:
+
+- Wi-Fi handling.
+- Registration with backend.
+- MQTT publishing/handling.
+- Local storage of identifiers/secrets.
+- Signed payload generation expected by backend services.
+
+`esp32-configurator` generates ESP32 header files from YAML using Jinja2 templates, including `templates/secrets.h`.
+
+## Documentation Assets
+
+`docs` contains:
+
+- `README.md`, local development, Hetzner install, and firmware install guides.
+- Architecture and workflow diagrams in Draw.io and PNG form.
+- Hardware images and ESP32 pinout images.
+- Logo/icon assets.
+- Bruno API collection.
+- Helper scripts such as `download-full-project.sh` and `fill-local-db.sh`.
+
+The organization profile in `.github/profile/README.md` contains a concise public-facing architecture summary and service table.
+
+## Notable Corrections From The Previous Analysis
+
+- The web GUI is React/Vite/Nx, not Angular and not Material UI.
+- `api-server` currently exposes `/api/profile`, not `/api/profiles` for listing profiles.
+- `admission` currently exposes only `POST /admission/register` and `GET /admission/keepalive`; no `POST /admission/keepalive` route was found.
+- `online-receiver` uses debug port `8088`; `online-alarm` uses debug port `8091`.
+- Signed MQTT payload validation and AMQP HMAC validation are core ingestion security controls.
+- `rabbitmq-local` explicitly grants producer write access to `amq.default`, which is required when publishing to the default exchange.
+- Go services now declare Go 1.26.3 in `go.mod`.
+- The producer now uses AMQP publisher confirms and a one-time publish retry after rebuilding the connection.
