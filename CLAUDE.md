@@ -36,7 +36,7 @@ home-anthill is a multi-repo project. The full list of repos is in `download-ful
 
 ## Local Data Seeding
 
-- `fill-local-db.sh` requires a JWT and the OAuth session cookie as positional parameters:
-  `./fill-local-db.sh "<JWT_VALUE>" "oauth_session=<COOKIE_VALUE>"`
-- The script defaults to `API_SERVER=http://localhost:8082` and `ADMISSION_SERVER=http://localhost:8099`; override those environment variables before running if needed.
-- It regenerates the profile `apiToken`, creates one home with four rooms, registers supported devices through `admission`, leaves one random device unassigned, and assigns all other devices to random rooms. Device names are set to their model during the home/room assignment update.
+- `fill-local-db.sh` starts the app OAuth2 browser flow, then reads the issued app login code from local MongoDB and exchanges it for a mobile JWT. It does not accept manual JWT/cookie arguments.
+- The script runs preflight checks for MongoDB, Mosquitto, Redis, GUI, `api-server`, `admission`, `online`, `register`, and `api-devices`, then asks for confirmation before opening the browser.
+- The script defaults to `LOGIN_SERVER=http://localhost:4200`, `API_SERVER=http://localhost:8082`, `ADMISSION_SERVER=http://localhost:8099`, `ONLINE_SERVER=http://localhost:8089`, `REGISTER_SERVER=http://localhost:8000`, `API_DEVICES_HOST=localhost`, `API_DEVICES_PORT=50051`, `MOSQUITTO_HOST=localhost`, `MOSQUITTO_PORT=1883`, `REDIS_HOST=localhost`, `REDIS_PORT=6379`, and `MONGODB_URL=mongodb://localhost:27017`; override those environment variables before running if needed.
+- It regenerates the profile `apiToken`, creates one home with four rooms, asks for confirmation, registers supported devices through `admission`, leaves one random device unassigned, and assigns all other devices to random rooms. Device names are set to their model during the home/room assignment update.

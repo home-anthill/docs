@@ -454,21 +454,16 @@ At this point, you should be able to log in to the app, so the database already 
 However, you do not have any other data yet.
 
 
-### Log in to create a Profile and get a valid JWT
-
-1. From your browser, log in via GitHub at `http://localhost:4200`
-2. Open the browser developer tools and copy the JWT `token` value (standard format `xxxx.xxxx.xxxx`) from `Local Storage` (in Chrome, you can find `Local Storage` under the `Application` tab).
-3. From the `Cookies` section, copy the cookie called `oauth_session`.
-
-
 ### Fill MongoDB with useful data
 
-If you logged in and copied the JWT `token` and `oauth_session` cookie, I suggest using this script to fill MongoDB with sample data and expose all `home-anthill` capabilities.
+The script can start the OAuth2 login for you. Before opening the browser, it checks MongoDB, Mosquitto, Redis, GUI, `api-server`, `admission`, `online`, `register`, and `api-devices`, then asks for confirmation. It opens the browser at `http://localhost:4200/api/oauth/app/login`, waits for the issued app login code in local MongoDB, exchanges that code for a JWT, and fills MongoDB with sample data. This requires `mongosh` and uses `MONGODB_URL=mongodb://localhost:27017` by default.
+
+After regenerating the profile API token and creating the home/rooms, the script asks for confirmation before registering sample devices.
 
 ATTENTION: this script regenerates the profile API token. If you followed this guide in order, that is not a problem, because the API token is still unknown at this point.
 
 ```bash
-./fill-local-db.sh "<JWT_VALUE>" "<COOKIE_VALUE>"
+./fill-local-db.sh
 ```
 
 
@@ -477,8 +472,8 @@ ATTENTION: this script regenerates the profile API token. If you followed this g
 1. Install the [Bruno](https://www.usebruno.com/) desktop app.
 2. Open Bruno and click **Open Collection**, then select the `docs/bruno-collections` folder from this repository.
 3. The collection includes requests for endpoints such as `api-server`, `admission`, and `online`.
-4. In Bruno, open the collection's **Environments** (top-right), create or edit an environment, and set `authToken` to the **JWT token** you copied.
-5. In Bruno, **create a new cookie** called `oauth_session`, with path `/` and the value copied from the browser.
+4. For JWT-protected web API requests, log in to the GUI at `http://localhost:4200`, then copy the JWT `token` value from browser Local Storage into Bruno's `authToken` environment variable.
+5. In Bruno, **create a new cookie** called `oauth_session`, with path `/` and the value copied from the browser Cookies section.
 6. Select the `getProfile` request (because it requires JWT authentication) from the collection and click **Send**. The response should be something like this:
 
 ```json
@@ -517,7 +512,7 @@ poetry install
 
 # run this command
 # ATTENTION: be sure to replace `API_TOKEN_ENCRYPTION_KEY` value with the one in `api-server/.env`
-API_TOKEN_ENCRYPTION_KEY=cZk!tEefGGEwAK7PwKba3ZCBRbp6Vj8* poetry run mqtt-communication-checker
+API_TOKEN_ENCRYPTION_KEY='cZk!tEefGGEwAK7PwKba3ZCBRbp6Vj8*' poetry run mqtt-communication-checker
 ```
 
 This script sends a value or command for every supported feature and verifies that MongoDB collections stored those values correctly.
