@@ -44,35 +44,83 @@ items:
                 "mac": "AA:02:55:99:99:FF",
                 "manufacturer": "ks89",
                 "model": "ac-lg",
-                "apiToken": "473a4861-632b-4915-b01e-cf1d418966c6",
+                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                   "features": [
                       {
                           "type": "controller",
                           "name": "on",
                           "enable": true,
                           "order": 1,
-                          "unit": "-"
+                          "unit": "-",
+                          "spec": {
+                            "format": "bool"
+                          }
                       },
                       {
                           "type": "controller",
                           "name": "setpoint",
                           "enable": true,
                           "order": 2,
-                          "unit": "°C"
+                          "unit": "°C",
+                          "spec": {
+                            "format": "int",
+                            "min": 16,
+                            "max": 30,
+                            "step": 1
+                          }
                       },
                       {
                           "type": "controller",
                           "name": "mode",
                           "enable": true,
                           "order": 3,
-                          "unit": "-"
+                          "unit": "-",
+                          "spec": {
+                            "format": "list",
+                            "list": [
+                              {
+                                "value": 0,
+                                "text": "Cool"
+                              }, {
+                                "value": 1,
+                                "text": "Dry"
+                              }, {
+                                "value": 2,
+                                "text": "Fan"
+                              }, {
+                                "value": 3,
+                                "text": "Auto"
+                              }, {
+                                "value": 4,
+                                "text": "Heat"
+                              }
+                            ]
+                          }
                       },
                       {
                           "type": "controller",
                           "name": "fanSpeed",
                           "enable": true,
                           "order": 4,
-                          "unit": "-"
+                          "unit": "-",
+                          "spec": {
+                            "format": "list",
+                            "list": [
+                              {
+                                "value": 10,
+                                "text": "Max"
+                              }, {
+                                "value": 2,
+                                "text": "Med"
+                              }, {
+                                "value": 0,
+                                "text": "Min"
+                              }, {
+                                "value": 5,
+                                "text": "Auto"
+                              }
+                            ]
+                          }
                       }
                   ]
               }
@@ -95,28 +143,46 @@ items:
                 "mac": "90:90:33:77:22:FA",
                 "manufacturer": "ks89",
                 "model": "thermostat",
-                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                 "features": [
                     {
                         "type": "controller",
                         "name": "setpoint",
                         "enable": true,
                         "order": 1,
-                        "unit": "°C"
+                        "unit": "°C",
+                        "spec": {
+                            "format": "float",
+                            "min": 10,
+                            "max": 30,
+                            "step": 0.5
+                        }
                     },
                     {
                         "type": "controller",
                         "name": "tolerance",
                         "enable": true,
                         "order": 2,
-                        "unit": "°C"
+                        "unit": "°C",
+                        "spec": {
+                            "format": "float",
+                            "min": 0,
+                            "max": 10,
+                            "step": 0.5
+                        }
                     },
                     {
                         "type": "sensor",
                         "name": "temperature",
                         "enable": true,
                         "order": 3,
-                        "unit": "°C"
+                        "unit": "°C",
+                        "spec": {
+                            "format": "float",
+                            "min": -40,
+                            "max": 200,
+                            "step": 0.01
+                        }
                     }
                 ]
               }
@@ -139,14 +205,17 @@ items:
                 "mac": "FF:99:77:22:12:AA",
                 "manufacturer": "ks89",
                 "model": "power-outage",
-                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                 "features": [
                     {
                         "type": "sensor",
                         "name": "online",
                         "enable": true,
                         "order": 1,
-                        "unit": "-"
+                        "unit": "-",
+                        "spec": {
+                          "format": "bool"
+                        }
                     }
                 ]
               }
@@ -169,49 +238,82 @@ items:
                 "mac": "C6:99:77:22:12:AA",
                 "manufacturer": "ks89",
                 "model": "example",
-                "apiToken": "a67a4861-912b-4915-b01e-cf1d418966c6",
+                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                 "features": [
                     {
                         "type": "sensor",
                         "name": "temperature",
                         "enable": true,
                         "order": 1,
-                        "unit": "°C"
+                        "unit": "°C",
+                        "spec": {
+                            "format": "float",
+                            "min": -40,
+                            "max": 80,
+                            "step": 0.05
+                        }
                     },
                     {
                         "type": "sensor",
                         "name": "humidity",
                         "enable": true,
                         "order": 2,
-                        "unit": "%"
+                        "unit": "%",
+                        "spec": {
+                            "format": "float",
+                            "min": 0,
+                            "max": 10,
+                            "step": 2.5
+                        }
                     },
                     {
                         "type": "sensor",
                         "name": "light",
                         "enable": true,
                         "order": 3,
-                        "unit": "lux"
+                        "unit": "lux",
+                        "spec": {
+                            "format": "int",
+                            "min": 0,
+                            "max": 40000,
+                            "step": 1
+                        }
                     },
                     {
                         "type": "sensor",
                         "name": "motion",
                         "enable": true,
                         "order": 4,
-                        "unit": "-"
+                        "unit": "-",
+                        "spec": {
+                            "format": "bool"
+                        }
                     },
                     {
                         "type": "sensor",
                         "name": "airquality",
                         "enable": true,
                         "order": 5,
-                        "unit": "-"
+                        "unit": "-",
+                        "spec": {
+                            "format": "int",
+                            "min": 0,
+                            "max": 3,
+                            "step": 1
+                        }
                     },
                     {
                         "type": "sensor",
                         "name": "airpressure",
                         "enable": true,
                         "order": 6,
-                        "unit": "hPa"
+                        "unit": "hPa",
+                        "spec": {
+                            "format": "float",
+                            "min": 1200,
+                            "max": 3000,
+                            "step": 0.0002
+                        }
                     }
                 ]
               }
@@ -277,7 +379,7 @@ items:
           seq: 15
         http:
           method: GET
-          url: http://localhost:8082/api/devices/69f8f2ccafc4665ee5cb5d72/values
+          url: http://localhost:8082/api/devices/6a1ab85e2aa5ea71aaec8b9e/values
           auth: inherit
         settings:
           encodeUrl: true
@@ -573,6 +675,19 @@ items:
           timeout: 0
           followRedirects: true
           maxRedirects: 5
+      - info:
+          name: notifications
+          type: http
+          seq: 20
+        http:
+          method: GET
+          url: http://localhost:8082/api/notifications
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
   - info:
       name: online (secondary nginx entrypoint)
       type: folder
@@ -580,6 +695,19 @@ items:
     request:
       auth: inherit
     items:
+      - info:
+          name: notifications
+          type: http
+          seq: 5
+        http:
+          method: GET
+          url: http://localhost:8089/notifications/9fb54137-6eeb-4757-a37e-2bec0726d249
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
       - info:
           name: online - delete
           type: http
@@ -600,6 +728,19 @@ items:
         http:
           method: GET
           url: http://localhost:8089/online/b14660ba-f5fb-4fe0-af1c-97d3e328efa9/features/f9ee0970-2734-4592-abab-8b4b5bc7d951
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: online - keepalive
+          type: http
+          seq: 4
+        http:
+          method: GET
+          url: http://localhost:8089/keepalive
           auth: inherit
         settings:
           encodeUrl: true
@@ -629,12 +770,12 @@ items:
 request:
   variables:
     - name: authToken
-      value: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjA1NzIwNywicHJvZmlsZUlkIjoiNjlmOGYyYWQ2Y2M1YjdmNTU4NjZhY2UzIiwibmFtZSI6IlN0ZWZhbm8gQ2FwcGEiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJjbGllbnRUeXBlIjoid2ViIiwiaXNzIjoiaG9tZS1hbnRoaWxsLWFwaSIsInN1YiI6IjYwNTcyMDciLCJhdWQiOlsiaG9tZS1hbnRoaWxsLWFwaSJdLCJleHAiOjE3Nzc5MzAzNTcsIm5iZiI6MTc3NzkyOTQ1NywiaWF0IjoxNzc3OTI5NDU3fQ.0SFTf2oMCl2qOegNJIrQhygbiX21cS8t9abMHQe7axy5RWVJR4p8z_NgRFvZ2zqcsq_e41IYkXNwkrXaHkgvSQ
+      value: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjA1NzIwNywicHJvZmlsZUlkIjoiNmExYzk1Yzg0NjI3OWEwNTYwNzM3NzAyIiwibmFtZSI6IlN0ZWZhbm8gQ2FwcGEiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJjbGllbnRUeXBlIjoid2ViIiwiaXNzIjoiaG9tZS1hbnRoaWxsLWFwaSIsInN1YiI6IjYwNTcyMDciLCJhdWQiOlsiaG9tZS1hbnRoaWxsLWFwaSJdLCJleHAiOjE3ODAzMDU3MDcsIm5iZiI6MTc4MDMwNDgwNywiaWF0IjoxNzgwMzA0ODA3fQ.oVXMGOJGmgLXkbuU6UfIu9dCDgn9T35g8cfkp-fQN4PONxEym7vY4PQfUVXe93NRBl_uO_PRfaEshwzurc72_w
 bundled: true
 extensions:
   bruno:
     ignore:
       - node_modules
       - .git
-    exportedAt: '2026-05-04T21:27:01.478Z'
+    exportedAt: '2026-06-01T09:15:31.143Z'
     exportedUsing: Bruno
