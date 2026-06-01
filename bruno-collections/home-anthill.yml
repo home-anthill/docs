@@ -31,7 +31,7 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: registerDevice (AC)
+          name: registerDevice ac-lg
           type: http
           seq: 2
         http:
@@ -45,84 +45,91 @@ items:
                 "manufacturer": "ks89",
                 "model": "ac-lg",
                 "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
-                  "features": [
-                      {
-                          "type": "controller",
-                          "name": "on",
-                          "enable": true,
-                          "order": 1,
-                          "unit": "-",
-                          "spec": {
-                            "format": "bool"
-                          }
-                      },
-                      {
-                          "type": "controller",
-                          "name": "setpoint",
-                          "enable": true,
-                          "order": 2,
-                          "unit": "°C",
-                          "spec": {
-                            "format": "int",
-                            "min": 16,
-                            "max": 30,
-                            "step": 1
-                          }
-                      },
-                      {
-                          "type": "controller",
-                          "name": "mode",
-                          "enable": true,
-                          "order": 3,
-                          "unit": "-",
-                          "spec": {
-                            "format": "list",
-                            "list": [
-                              {
-                                "value": 0,
-                                "text": "Cool"
-                              }, {
-                                "value": 1,
-                                "text": "Dry"
-                              }, {
-                                "value": 2,
-                                "text": "Fan"
-                              }, {
-                                "value": 3,
-                                "text": "Auto"
-                              }, {
-                                "value": 4,
-                                "text": "Heat"
-                              }
-                            ]
-                          }
-                      },
-                      {
-                          "type": "controller",
-                          "name": "fanSpeed",
-                          "enable": true,
-                          "order": 4,
-                          "unit": "-",
-                          "spec": {
-                            "format": "list",
-                            "list": [
-                              {
-                                "value": 10,
-                                "text": "Max"
-                              }, {
-                                "value": 2,
-                                "text": "Med"
-                              }, {
-                                "value": 0,
-                                "text": "Min"
-                              }, {
-                                "value": 5,
-                                "text": "Auto"
-                              }
-                            ]
-                          }
-                      }
-                  ]
+                "features": [
+                  {
+                    "type": "controller",
+                    "name": "on",
+                    "enable": true,
+                    "order": 1,
+                    "unit": "-",
+                    "spec": {
+                      "format": "bool"
+                    }
+                  },
+                  {
+                    "type": "controller",
+                    "name": "setpoint",
+                    "enable": true,
+                    "order": 2,
+                    "unit": "°C",
+                    "spec": {
+                      "format": "int",
+                      "min": 16,
+                      "max": 30,
+                      "step": 1
+                    }
+                  },
+                  {
+                    "type": "controller",
+                    "name": "mode",
+                    "enable": true,
+                    "order": 3,
+                    "unit": "-",
+                    "spec": {
+                      "format": "list",
+                      "list": [
+                        {
+                          "value": 0,
+                          "text": "Cool"
+                        },
+                        {
+                          "value": 1,
+                          "text": "Dry"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Fan"
+                        },
+                        {
+                          "value": 3,
+                          "text": "Auto"
+                        },
+                        {
+                          "value": 4,
+                          "text": "Heat"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "controller",
+                    "name": "fanSpeed",
+                    "enable": true,
+                    "order": 4,
+                    "unit": "-",
+                    "spec": {
+                      "format": "list",
+                      "list": [
+                        {
+                          "value": 10,
+                          "text": "Max"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Med"
+                        },
+                        {
+                          "value": 0,
+                          "text": "Min"
+                        },
+                        {
+                          "value": 5,
+                          "text": "Auto"
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
         settings:
           encodeUrl: true
@@ -130,9 +137,119 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: registerHybrid
+          name: registerDevice ac-beko
           type: http
-          seq: 5
+          seq: 3
+        http:
+          method: POST
+          url: http://localhost:8099/admission/register
+          body:
+            type: json
+            data: |-
+              {
+                "mac": "AA:02:55:99:99:BE",
+                "manufacturer": "ks89",
+                "model": "ac-beko",
+                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
+                "features": [
+                  {
+                    "type": "controller",
+                    "name": "on",
+                    "enable": true,
+                    "order": 1,
+                    "unit": "-",
+                    "spec": {
+                      "format": "bool"
+                    }
+                  },
+                  {
+                    "type": "controller",
+                    "name": "setpoint",
+                    "enable": true,
+                    "order": 2,
+                    "unit": "°C",
+                    "spec": {
+                      "format": "int",
+                      "min": 17,
+                      "max": 30,
+                      "step": 1
+                    }
+                  },
+                  {
+                    "type": "controller",
+                    "name": "mode",
+                    "enable": true,
+                    "order": 3,
+                    "unit": "-",
+                    "spec": {
+                      "format": "list",
+                      "list": [
+                        {
+                          "value": 0,
+                          "text": "Cool"
+                        },
+                        {
+                          "value": 1,
+                          "text": "Dry"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Auto"
+                        },
+                        {
+                          "value": 3,
+                          "text": "Heat"
+                        },
+                        {
+                          "value": 4,
+                          "text": "Fan"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "controller",
+                    "name": "fanSpeed",
+                    "enable": true,
+                    "order": 4,
+                    "unit": "-",
+                    "spec": {
+                      "format": "list",
+                      "list": [
+                        {
+                          "value": 0,
+                          "text": "Auto0"
+                        },
+                        {
+                          "value": 1,
+                          "text": "Max"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Med"
+                        },
+                        {
+                          "value": 4,
+                          "text": "Min"
+                        },
+                        {
+                          "value": 5,
+                          "text": "Auto"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: registerDevice thermostat
+          type: http
+          seq: 4
         http:
           method: POST
           url: http://localhost:8099/admission/register
@@ -145,45 +262,45 @@ items:
                 "model": "thermostat",
                 "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                 "features": [
-                    {
-                        "type": "controller",
-                        "name": "setpoint",
-                        "enable": true,
-                        "order": 1,
-                        "unit": "°C",
-                        "spec": {
-                            "format": "float",
-                            "min": 10,
-                            "max": 30,
-                            "step": 0.5
-                        }
-                    },
-                    {
-                        "type": "controller",
-                        "name": "tolerance",
-                        "enable": true,
-                        "order": 2,
-                        "unit": "°C",
-                        "spec": {
-                            "format": "float",
-                            "min": 0,
-                            "max": 10,
-                            "step": 0.5
-                        }
-                    },
-                    {
-                        "type": "sensor",
-                        "name": "temperature",
-                        "enable": true,
-                        "order": 3,
-                        "unit": "°C",
-                        "spec": {
-                            "format": "float",
-                            "min": -40,
-                            "max": 200,
-                            "step": 0.01
-                        }
+                  {
+                    "type": "controller",
+                    "name": "setpoint",
+                    "enable": true,
+                    "order": 1,
+                    "unit": "°C",
+                    "spec": {
+                      "format": "float",
+                      "min": 10,
+                      "max": 30,
+                      "step": 0.5
                     }
+                  },
+                  {
+                    "type": "controller",
+                    "name": "tolerance",
+                    "enable": true,
+                    "order": 2,
+                    "unit": "°C",
+                    "spec": {
+                      "format": "float",
+                      "min": 0,
+                      "max": 10,
+                      "step": 0.5
+                    }
+                  },
+                  {
+                    "type": "sensor",
+                    "name": "temperature",
+                    "enable": true,
+                    "order": 3,
+                    "unit": "°C",
+                    "spec": {
+                      "format": "float",
+                      "min": -40,
+                      "max": 200,
+                      "step": 0.01
+                    }
+                  }
                 ]
               }
         settings:
@@ -192,9 +309,9 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: registerSensor online
+          name: registerSensor power-outage
           type: http
-          seq: 4
+          seq: 5
         http:
           method: POST
           url: http://localhost:8099/admission/register
@@ -207,16 +324,16 @@ items:
                 "model": "power-outage",
                 "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                 "features": [
-                    {
-                        "type": "sensor",
-                        "name": "online",
-                        "enable": true,
-                        "order": 1,
-                        "unit": "-",
-                        "spec": {
-                          "format": "bool"
-                        }
+                  {
+                    "type": "sensor",
+                    "name": "online",
+                    "enable": true,
+                    "order": 1,
+                    "unit": "-",
+                    "spec": {
+                      "format": "bool"
                     }
+                  }
                 ]
               }
         settings:
@@ -225,9 +342,9 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: registerSensor
+          name: registerSensor dht-light
           type: http
-          seq: 3
+          seq: 6
         http:
           method: POST
           url: http://localhost:8099/admission/register
@@ -237,84 +354,143 @@ items:
               {
                 "mac": "C6:99:77:22:12:AA",
                 "manufacturer": "ks89",
-                "model": "example",
+                "model": "dht-light",
                 "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                 "features": [
-                    {
-                        "type": "sensor",
-                        "name": "temperature",
-                        "enable": true,
-                        "order": 1,
-                        "unit": "°C",
-                        "spec": {
-                            "format": "float",
-                            "min": -40,
-                            "max": 80,
-                            "step": 0.05
-                        }
-                    },
-                    {
-                        "type": "sensor",
-                        "name": "humidity",
-                        "enable": true,
-                        "order": 2,
-                        "unit": "%",
-                        "spec": {
-                            "format": "float",
-                            "min": 0,
-                            "max": 10,
-                            "step": 2.5
-                        }
-                    },
-                    {
-                        "type": "sensor",
-                        "name": "light",
-                        "enable": true,
-                        "order": 3,
-                        "unit": "lux",
-                        "spec": {
-                            "format": "int",
-                            "min": 0,
-                            "max": 40000,
-                            "step": 1
-                        }
-                    },
-                    {
-                        "type": "sensor",
-                        "name": "motion",
-                        "enable": true,
-                        "order": 4,
-                        "unit": "-",
-                        "spec": {
-                            "format": "bool"
-                        }
-                    },
-                    {
-                        "type": "sensor",
-                        "name": "airquality",
-                        "enable": true,
-                        "order": 5,
-                        "unit": "-",
-                        "spec": {
-                            "format": "int",
-                            "min": 0,
-                            "max": 3,
-                            "step": 1
-                        }
-                    },
-                    {
-                        "type": "sensor",
-                        "name": "airpressure",
-                        "enable": true,
-                        "order": 6,
-                        "unit": "hPa",
-                        "spec": {
-                            "format": "float",
-                            "min": 1200,
-                            "max": 3000,
-                            "step": 0.0002
-                        }
+                  {
+                    "type": "sensor",
+                    "name": "humidity",
+                    "enable": true,
+                    "order": 1,
+                    "unit": "%",
+                    "spec": {
+                      "format": "float",
+                      "min": 0,
+                      "max": 100,
+                      "step": 2.5
                     }
+                  },
+                  {
+                    "type": "sensor",
+                    "name": "temperature",
+                    "enable": true,
+                    "order": 2,
+                    "unit": "°C",
+                    "spec": {
+                      "format": "float",
+                      "min": -40,
+                      "max": 80,
+                      "step": 0.05
+                    }
+                  },
+                  {
+                    "type": "sensor",
+                    "name": "light",
+                    "enable": true,
+                    "order": 3,
+                    "unit": "lux",
+                    "spec": {
+                      "format": "int",
+                      "min": 0,
+                      "max": 40000,
+                      "step": 1
+                    }
+                  }
+                ]
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: registerSensor airquality-pir
+          type: http
+          seq: 7
+        http:
+          method: POST
+          url: http://localhost:8099/admission/register
+          body:
+            type: json
+            data: |-
+              {
+                "mac": "C6:99:77:22:12:AB",
+                "manufacturer": "ks89",
+                "model": "airquality-pir",
+                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
+                "features": [
+                  {
+                    "type": "sensor",
+                    "name": "airquality",
+                    "enable": true,
+                    "order": 1,
+                    "unit": "-",
+                    "spec": {
+                      "format": "int",
+                      "min": 0,
+                      "max": 3,
+                      "step": 1
+                    }
+                  },
+                  {
+                    "type": "sensor",
+                    "name": "motion",
+                    "enable": true,
+                    "order": 2,
+                    "unit": "-",
+                    "spec": {
+                      "format": "bool"
+                    }
+                  }
+                ]
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: registerSensor barometer
+          type: http
+          seq: 8
+        http:
+          method: POST
+          url: http://localhost:8099/admission/register
+          body:
+            type: json
+            data: |-
+              {
+                "mac": "C6:99:77:22:12:AC",
+                "manufacturer": "ks89",
+                "model": "barometer",
+                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
+                "features": [
+                  {
+                    "type": "sensor",
+                    "name": "airpressure",
+                    "enable": true,
+                    "order": 1,
+                    "unit": "hPa",
+                    "spec": {
+                      "format": "float",
+                      "min": 300,
+                      "max": 1200,
+                      "step": 0.0002
+                    }
+                  },
+                  {
+                    "type": "sensor",
+                    "name": "temperature",
+                    "enable": true,
+                    "order": 2,
+                    "unit": "°C",
+                    "spec": {
+                      "format": "float",
+                      "min": -40,
+                      "max": 85,
+                      "step": 0.5
+                    }
+                  }
                 ]
               }
         settings:

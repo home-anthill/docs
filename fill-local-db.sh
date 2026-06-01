@@ -395,7 +395,7 @@ register_device "BB:99:77:22:12:04" "airquality-pir" '[
 ]'
 
 register_device "CC:99:77:22:12:05" "barometer" '[
-  { "type": "sensor", "name": "airpressure", "enable": true, "order": 1, "unit": "hPa", "spec": { "format": "float", "min": 1200, "max": 3000, "step": 0.0002 } },
+  { "type": "sensor", "name": "airpressure", "enable": true, "order": 1, "unit": "hPa", "spec": { "format": "float", "min": 300, "max": 1200, "step": 0.0002 } },
   { "type": "sensor", "name": "temperature", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": -40, "max": 85, "step": 0.5 } }
 ]'
 
