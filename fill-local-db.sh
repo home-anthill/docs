@@ -386,17 +386,20 @@ register_device() {
 register_device "AA:99:77:22:12:AA" "dht-light" '[
   { "type": "sensor", "name": "temperature", "enable": true, "order": 1, "unit": "\u00b0C", "spec": { "format": "float", "min": -40, "max": 80, "step": 0.05 } },
   { "type": "sensor", "name": "humidity", "enable": true, "order": 2, "unit": "%", "spec": { "format": "float", "min": 0, "max": 100, "step": 2.5 } },
-  { "type": "sensor", "name": "light", "enable": true, "order": 3, "unit": "lux", "spec": { "format": "int", "min": 0, "max": 40000, "step": 1 } }
+  { "type": "sensor", "name": "light", "enable": true, "order": 3, "unit": "lux", "spec": { "format": "int", "min": 0, "max": 40000, "step": 1 } },
+  { "type": "sensor", "name": "online", "enable": true, "order": 4, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
 register_device "BB:99:77:22:12:04" "airquality-pir" '[
   { "type": "sensor", "name": "motion", "enable": true, "order": 1, "unit": "-", "spec": { "format": "bool" } },
-  { "type": "sensor", "name": "airquality", "enable": true, "order": 2, "unit": "-", "spec": { "format": "int", "min": 0, "max": 3, "step": 1 } }
+  { "type": "sensor", "name": "airquality", "enable": true, "order": 2, "unit": "-", "spec": { "format": "int", "min": 0, "max": 3, "step": 1 } },
+  { "type": "sensor", "name": "online", "enable": true, "order": 3, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
 register_device "CC:99:77:22:12:05" "barometer" '[
   { "type": "sensor", "name": "airpressure", "enable": true, "order": 1, "unit": "hPa", "spec": { "format": "float", "min": 300, "max": 1200, "step": 0.0002 } },
-  { "type": "sensor", "name": "temperature", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": -40, "max": 85, "step": 0.5 } }
+  { "type": "sensor", "name": "temperature", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": -40, "max": 85, "step": 0.5 } },
+  { "type": "sensor", "name": "online", "enable": true, "order": 3, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
 register_device "DD:99:77:22:12:06" "power-outage" '[
@@ -407,20 +410,23 @@ register_device "EE:02:55:99:99:01" "ac-lg" '[
   { "type": "controller", "name": "on", "enable": true, "order": 1, "unit": "-", "spec": { "format": "bool" } },
   { "type": "controller", "name": "setpoint", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": 16, "max": 30, "step": 1 } },
   { "type": "controller", "name": "mode", "enable": true, "order": 3, "unit": "-", "spec": { "format": "list", "list": [ { "value": 0, "text": "Cool" }, { "value": 1, "text": "Dry" }, { "value": 2, "text": "Fan" }, { "value": 3, "text": "Auto" }, { "value": 5, "text": "Heat" } ] } },
-  { "type": "controller", "name": "fanSpeed", "enable": true, "order": 4, "unit": "-", "spec": { "format": "list", "list": [ { "value": 10, "text": "Max" }, { "value": 2, "text": "Med" }, { "value": 3, "text": "Min" }, { "value": 4, "text": "Auto" } ] } }
+  { "type": "controller", "name": "fanSpeed", "enable": true, "order": 4, "unit": "-", "spec": { "format": "list", "list": [ { "value": 10, "text": "Max" }, { "value": 2, "text": "Med" }, { "value": 3, "text": "Min" }, { "value": 4, "text": "Auto" } ] } },
+  { "type": "sensor", "name": "online", "enable": true, "order": 5, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
 register_device "FF:02:55:99:99:02" "ac-beko" '[
   { "type": "controller", "name": "on", "enable": true, "order": 1, "unit": "-", "spec": { "format": "bool" } },
   { "type": "controller", "name": "setpoint", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": 17, "max": 30, "step": 1 } },
   { "type": "controller", "name": "mode", "enable": true, "order": 3, "unit": "-", "spec": { "format": "list", "list": [ { "value": 0, "text": "Cool" }, { "value": 1, "text": "Dry" }, { "value": 2, "text": "Auto" }, { "value": 3, "text": "Heat" }, { "value": 5, "text": "Fan" } ] } },
-  { "type": "controller", "name": "fanSpeed", "enable": true, "order": 4, "unit": "-", "spec": { "format": "list", "list": [ { "value": 10, "text": "Auto0" }, { "value": 1, "text": "Max" }, { "value": 2, "text": "Med" }, { "value": 0, "text": "Min" }, { "value": 5, "text": "Auto" } ] } }
+  { "type": "controller", "name": "fanSpeed", "enable": true, "order": 4, "unit": "-", "spec": { "format": "list", "list": [ { "value": 10, "text": "Auto0" }, { "value": 1, "text": "Max" }, { "value": 2, "text": "Med" }, { "value": 0, "text": "Min" }, { "value": 5, "text": "Auto" } ] } },
+  { "type": "sensor", "name": "online", "enable": true, "order": 5, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
 register_device "00:90:33:77:22:03" "thermostat" '[
   { "type": "controller", "name": "setpoint", "enable": true, "order": 1, "unit": "\u00b0C", "spec": { "format": "float", "min": 10, "max": 30, "step": 0.5 } },
   { "type": "controller", "name": "tolerance", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": 0, "max": 10, "step": 0.5 } },
-  { "type": "sensor", "name": "temperature", "enable": true, "order": 3, "unit": "\u00b0C", "spec": { "format": "float", "min": -40, "max": 200, "step": 0.01 } }
+  { "type": "sensor", "name": "temperature", "enable": true, "order": 3, "unit": "\u00b0C", "spec": { "format": "float", "min": -40, "max": 200, "step": 0.01 } },
+  { "type": "sensor", "name": "online", "enable": true, "order": 4, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
 UNASSIGNED_INDEX=$((RANDOM % ${#DEVICE_IDS[@]}))
