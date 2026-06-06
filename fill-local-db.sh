@@ -402,10 +402,6 @@ register_device "CC:99:77:22:12:05" "barometer" '[
   { "type": "sensor", "name": "online", "enable": true, "order": 3, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
-register_device "DD:99:77:22:12:06" "power-outage" '[
-  { "type": "sensor", "name": "online", "enable": true, "order": 1, "unit": "-", "spec": { "format": "bool" } }
-]'
-
 register_device "EE:02:55:99:99:01" "ac-lg" '[
   { "type": "controller", "name": "on", "enable": true, "order": 1, "unit": "-", "spec": { "format": "bool" } },
   { "type": "controller", "name": "setpoint", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": 16, "max": 30, "step": 1 } },

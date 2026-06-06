@@ -155,7 +155,6 @@ poetry install
 poetry run python -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../firmwares/dht-light
 poetry run python -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../firmwares/airquality-pir
 poetry run python -m src --model=barometer --source=../private-config/secrets.yaml --destination=../firmwares/barometer
-poetry run python -m src --model=power-outage --source=../private-config/secrets.yaml --destination=../firmwares/power-outage
 
 poetry run python -m src --model=thermostat --source=../private-config/secrets.yaml --destination=../firmwares/thermostat
 
@@ -170,5 +169,4 @@ poetry run python -m src --model=ac-lg --source=../private-config/secrets.yaml -
 - Open `firmwares/dht-light/dht-light.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/airquality-pir/airquality-pir.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/barometer/barometer.ino` in Arduino IDE and flash the firmware.
-- Open `firmwares/power-outage/power-outage.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/thermostat/thermostat.ino` in Arduino IDE and flash the firmware.

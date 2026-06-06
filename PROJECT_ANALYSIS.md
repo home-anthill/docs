@@ -1,6 +1,6 @@
 # Home-Anthill Project Analysis
 
-Last scanned from `docs/` on 2026-05-28 across all sibling folders under `..`.
+Last scanned from `docs/` on 2026-06-06 across all sibling folders under `..`.
 
 ## Project Overview
 
@@ -71,9 +71,9 @@ online-alarm --> Redis offline scan --> Firebase Cloud Messaging --> app
 | `register` | Rust/Rocket | Sensor registration and latest value reads | MongoDB | REST |
 | `producer` | Rust/Tokio | Subscribe to sensor MQTT topics and publish AMQP messages | None | MQTT, AMQP |
 | `consumer` | Rust/Tokio | Validate and persist signed sensor readings | MongoDB, Redis | AMQP |
-| `online` | Rust/Rocket | Read/delete online records, store FCM tokens, rotate API tokens in Redis | Redis | REST |
+| `online` | Rust/Rocket | Read/delete online records, store FCM tokens, notification preferences, API-token migration, and notification history | Redis, notifications Redis | REST |
 | `online-receiver` | Rust/Tokio/Rocket | Validate signed online MQTT messages and update Redis | Redis, MongoDB | MQTT, REST health |
-| `online-alarm` | Rust/Tokio/Rocket | Poll Redis for offline devices and send push notifications | Redis | REST health, FCM |
+| `online-alarm` | Rust/Tokio/Rocket | Poll Redis for offline devices, send grouped push notifications, and persist notification history | Redis, notifications Redis | REST health, FCM |
 | `gui` | React/Vite/Nx | Browser dashboard for homes, devices, profile, values | Browser state | REST |
 | `app` | Android/Kotlin | Mobile dashboard, OAuth2 PKCE login, FCM token upload | SecurePrefs | REST, FCM |
 | `mosquitto` | Mosquitto + Go entrypoint | MQTT broker with generated password file | Filesystem | MQTT, MQTT/TLS |
@@ -103,9 +103,10 @@ The consumer validates:
 ESP32 -> Mosquitto -> online-receiver -> Redis
 online -> Redis
 online-alarm -> Redis -> FCM -> Android app
+online-alarm -> notifications Redis history -> online -> api-server -> gui/app
 ```
 
-`online-receiver` subscribes to `online/+/features/+`, verifies the signed envelope, looks up the feature API token in MongoDB, claims a replay nonce in Redis, then inserts or updates the Redis online record. `online-alarm` scans Redis every 10 seconds, caches already-notified offline devices, and sends FCM notifications when the cache timeout has elapsed.
+`online-receiver` subscribes to `online/+/features/+`, verifies the signed envelope, looks up the feature API token in MongoDB, claims a replay nonce in Redis, then inserts or updates the Redis online record. `online-alarm` scans Redis every 10 seconds, filters silenced features, caches already-notified offline devices, groups due offline devices by FCM token, sends FCM notifications when the cache timeout has elapsed, and stores sent-notification history in Redis with a 90 day retention window.
 
 ### Commands To Controllers
 
@@ -205,11 +206,14 @@ JWT-protected routes:
 | `POST` | `/api/profiles/:id/fcmTokens` | Store profile FCM token |
 | `GET` | `/api/devices` | List devices |
 | `PUT` | `/api/devices/:id` | Assign/update device home and room metadata |
+| `PUT` | `/api/devices/:id/features/:featureUuid/notifications` | Silence or unsilence notifications for a device feature |
 | `DELETE` | `/api/devices/:id` | Delete device |
 | `GET` | `/api/devices/:id/values` | Get sensor/controller values |
 | `POST` | `/api/devices/:id/values` | Set controller values |
 | `POST` | `/api/fcmtoken` | Store FCM token |
+| `GET` | `/api/online` | Get online state for all devices in the current profile |
 | `GET` | `/api/online/:id` | Get online state for device |
+| `GET` | `/api/notifications` | Get notification history for the current profile |
 
 ### `admission` REST
 
@@ -224,6 +228,7 @@ JWT-protected routes:
 |---|---|---|
 | `POST` | `/sensors/register/:featureName` | Register a sensor feature |
 | `GET` | `/sensors/:deviceUuid/features/:featureUuid/:featureName` | Get latest value for a feature |
+| `DELETE` | `/sensors/:deviceUuid/features/:featureUuid` | Delete a sensor feature value |
 | `GET` | `/keepalive` | Health check |
 
 ### `online` REST
@@ -233,7 +238,9 @@ JWT-protected routes:
 | `GET` | `/online/:deviceUuid/features/:featureUuid` | Get online state |
 | `DELETE` | `/online/:deviceUuid/features/:featureUuid` | Delete online state |
 | `POST` | `/fcmtoken` | Initialize/store FCM token |
-| `POST` | `/api-token/rotate` | Rotate API token references in Redis |
+| `PUT` | `/online/:deviceUuid/features/:featureUuid/notifications` | Update per-feature notification silence flag |
+| `PUT` | `/api-token` | Update API token references in Redis |
+| `GET` | `/notifications/:apiToken` | List sent notification history for a profile API token |
 | `GET` | `/keepalive` | Health check |
 
 ### `online-receiver` and `online-alarm`
@@ -241,7 +248,7 @@ JWT-protected routes:
 Both expose Rocket health endpoints through `/keepalive`. Their main work happens in background loops:
 
 - `online-receiver`: MQTT event loop.
-- `online-alarm`: Redis scan and FCM notification loop.
+- `online-alarm`: Redis scan, FCM notification, and notification-history persistence loop.
 
 ### `api-devices` gRPC
 
@@ -256,6 +263,7 @@ Responsibilities found in source:
 - Register or update controllers.
 - Get controller values.
 - Set device/controller values by signing requested feature values and publishing MQTT messages to `devices/{deviceUuid}/values`.
+- Delete controller metadata and publish cleanup/delete state as part of device deletion flows.
 - Cap `SetValues` requests at 100 values and update MongoDB command status only after MQTT publish succeeds.
 - Use optional gRPC TLS when `GRPC_TLS=true`.
 
@@ -293,14 +301,15 @@ Responsibilities found in source:
 
 `deployer/home-anthill` is a Helm application chart:
 
-- Chart version: `6.0.0`.
-- App version: `5.0.0`.
+- Chart version: `6.1.0`.
+- App version: `5.1.0`.
 - Namespace default: `home-anthill`.
 - Uses NGINX Gateway Fabric Gateway API routes for web HTTP/HTTPS and MQTT TCP routing.
 - Uses cert-manager Issuers/Certificates for web and MQTT TLS.
 - Uses Cilium LB-IPAM/L2 announcement and Cilium network policies for selected egress.
 - Uses RabbitMQ Cluster Operator resources for RabbitMQ users and permissions.
 - Deploys Redis, Mosquitto, GUI, admission, api-server, api-devices, register, producer, consumer, online, online-receiver, and online-alarm.
+- Uses Redis DB 1 as the default notifications Redis store for sent-notification history.
 - Includes smoke tests for GUI, API, online, Redis, Mosquitto, and RabbitMQ.
 - Uses external MongoDB through `mongodbUrl`, typically MongoDB Atlas.
 
@@ -350,6 +359,7 @@ The `gui` repository is a React 19.2 app using Vite 8.0, Nx 22.6, Mantine 9, Red
 - Sensor values, online status, and controller value controls.
 - Homes and rooms management.
 - Profile display, logout, and API token rotation.
+- Notification history and per-feature notification mute controls.
 
 REST API calls are centralized through RTK Query services under `src/services`, with `/api` as the base path.
 
@@ -362,6 +372,7 @@ The Android app uses Jetpack Compose, Material 3, Navigation Compose, Retrofit, 
 - Homes, rooms, devices, sensor values, controller values, and online state screens.
 - FCM token worker/scheduler.
 - Firebase messaging service and in-app notification bus.
+- Notification history and per-feature notification mute state support.
 
 Build config:
 
@@ -378,7 +389,6 @@ Firmware variants present:
 - `airquality-pir`: Air quality plus PIR motion sensor.
 - `barometer`: Air pressure sensor.
 - `dht-light`: Temperature/humidity plus light sensor.
-- `power-outage`: Online/power outage style sensor.
 - `thermostat`: Controller, display, temperature sensor, MQTT, registration, storage, Wi-Fi.
 
 Each firmware folder has source files plus tests. Shared patterns include:
@@ -398,19 +408,9 @@ Each firmware folder has source files plus tests. Shared patterns include:
 - `README.md`, local development, Hetzner install, and firmware install guides.
 - Architecture and workflow diagrams in Draw.io and PNG form.
 - Hardware images and ESP32 pinout images.
+- A Beko RG52A9/BGEF remote control PDF reference.
 - Logo/icon assets.
 - Bruno API collection.
 - Helper scripts such as `download-full-project.sh` and `fill-local-db.sh`.
 
 The organization profile in `.github/profile/README.md` contains a concise public-facing architecture summary and service table.
-
-## Notable Corrections From The Previous Analysis
-
-- The web GUI is React/Vite/Nx, not Angular and not Material UI.
-- `api-server` currently exposes `/api/profile`, not `/api/profiles` for listing profiles.
-- `admission` currently exposes only `POST /admission/register` and `GET /admission/keepalive`; no `POST /admission/keepalive` route was found.
-- `online-receiver` uses debug port `8088`; `online-alarm` uses debug port `8091`.
-- Signed MQTT payload validation and AMQP HMAC validation are core ingestion security controls.
-- `rabbitmq-local` explicitly grants producer write access to `amq.default`, which is required when publishing to the default exchange.
-- Go services now declare Go 1.26.3 in `go.mod`.
-- The producer now uses AMQP publisher confirms and a one-time publish retry after rebuilding the connection.

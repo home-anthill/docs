@@ -309,39 +309,6 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: registerSensor power-outage
-          type: http
-          seq: 5
-        http:
-          method: POST
-          url: http://localhost:8099/admission/register
-          body:
-            type: json
-            data: |-
-              {
-                "mac": "FF:99:77:22:12:AA",
-                "manufacturer": "ks89",
-                "model": "power-outage",
-                "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
-                "features": [
-                  {
-                    "type": "sensor",
-                    "name": "online",
-                    "enable": true,
-                    "order": 1,
-                    "unit": "-",
-                    "spec": {
-                      "format": "bool"
-                    }
-                  }
-                ]
-              }
-        settings:
-          encodeUrl: true
-          timeout: 0
-          followRedirects: true
-          maxRedirects: 5
-      - info:
           name: registerSensor dht-light
           type: http
           seq: 6
@@ -601,6 +568,133 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
+          name: oauth - web login
+          type: http
+          seq: 21
+        http:
+          method: GET
+          url: http://localhost:8082/api/oauth/login
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - web callback
+          type: http
+          seq: 22
+        http:
+          method: GET
+          url: http://localhost:8082/api/oauth/callback?code=github-code&state=oauth-state
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - app login
+          type: http
+          seq: 23
+        http:
+          method: GET
+          url: http://localhost:8082/api/oauth/app/login?code_challenge=app-code-challenge&code_challenge_method=S256&app_state=app-state
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - app callback
+          type: http
+          seq: 24
+        http:
+          method: GET
+          url: http://localhost:8082/api/oauth/app/callback?code=github-code&state=oauth-state
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - app exchange code
+          type: http
+          seq: 25
+        http:
+          method: POST
+          url: http://localhost:8082/api/oauth/app/exchange-code
+          body:
+            type: json
+            data: |-
+              {
+                  "code": "app-login-code",
+                  "codeVerifier": "app-code-verifier"
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - app refresh
+          type: http
+          seq: 26
+        http:
+          method: POST
+          url: http://localhost:8082/api/oauth/app/refresh
+          body:
+            type: json
+            data: |-
+              {
+                  "refreshToken": "mobile-refresh-token"
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - app logout
+          type: http
+          seq: 27
+        http:
+          method: POST
+          url: http://localhost:8082/api/oauth/app/logout
+          body:
+            type: json
+            data: |-
+              {
+                  "refreshToken": "mobile-refresh-token"
+              }
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - web refresh
+          type: http
+          seq: 28
+        http:
+          method: POST
+          url: http://localhost:8082/api/oauth/refresh
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: oauth - web logout
+          type: http
+          seq: 29
+        http:
+          method: POST
+          url: http://localhost:8082/api/oauth/logout
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
           name: getProfile
           type: http
           seq: 2
@@ -684,6 +778,19 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
+          name: online - get profile
+          type: http
+          seq: 30
+        http:
+          method: GET
+          url: http://localhost:8082/api/online
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
           name: online-fcmtoken
           type: http
           seq: 19
@@ -708,10 +815,29 @@ items:
           seq: 3
         http:
           method: POST
-          url: localhost:8082/api/profiles/620d710e4e8fe8f3394084bc/tokens
+          url: http://localhost:8082/api/profiles/620d710e4e8fe8f3394084bc/tokens
           body:
             type: json
             data: '{}'
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: setProfileFCMToken
+          type: http
+          seq: 31
+        http:
+          method: POST
+          url: http://localhost:8082/api/profiles/620d710e4e8fe8f3394084bc/fcmTokens
+          body:
+            type: json
+            data: |-
+              {
+                  "fcmToken": "456"
+              }
           auth: inherit
         settings:
           encodeUrl: true
@@ -804,6 +930,25 @@ items:
                   "homeId": "69f8f2cc6cc5b7f55866ace6",
                   "roomId": "69f8f2cc6cc5b7f55866ace7",
                   "name": "Device name"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: updateFeatureNotification
+          type: http
+          seq: 32
+        http:
+          method: PUT
+          url: http://localhost:8082/api/devices/69f8f2ccafc4665ee5cb5d72/features/01fa1af7-4015-4227-a94a-0a4faccfa1a0/notifications
+          body:
+            type: json
+            data: |-
+              {
+                  "notificationSilenced": true
               }
           auth: inherit
         settings:
@@ -936,6 +1081,51 @@ items:
               {
                   "apiToken": "690b7b00-d589-4d0f-b94a-b3ecd7fe82fb",
                   "fcmToken": "456"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: online - update feature notification
+          type: http
+          seq: 6
+        http:
+          method: PUT
+          url: http://localhost:8089/online/71bf40a1-a22c-48bf-ba54-be2290d24388/features/01fa1af7-4015-4227-a94a-0a4faccfa1a0/notifications
+          body:
+            type: json
+            data: |-
+              {
+                  "notificationSilenced": true
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: online - update api token
+          type: http
+          seq: 7
+        http:
+          method: PUT
+          url: http://localhost:8089/api-token
+          body:
+            type: json
+            data: |-
+              {
+                  "oldApiToken": "690b7b00-d589-4d0f-b94a-b3ecd7fe82fb",
+                  "newApiToken": "9fb54137-6eeb-4757-a37e-2bec0726d249",
+                  "deviceFeatures": [
+                      {
+                          "deviceUuid": "71bf40a1-a22c-48bf-ba54-be2290d24388",
+                          "featureUuid": "01fa1af7-4015-4227-a94a-0a4faccfa1a0"
+                      }
+                  ]
               }
           auth: inherit
         settings:
