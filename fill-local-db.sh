@@ -422,7 +422,8 @@ register_device "00:90:33:77:22:03" "thermostat" '[
   { "type": "controller", "name": "setpoint", "enable": true, "order": 1, "unit": "\u00b0C", "spec": { "format": "float", "min": 10, "max": 30, "step": 0.5 } },
   { "type": "controller", "name": "tolerance", "enable": true, "order": 2, "unit": "\u00b0C", "spec": { "format": "float", "min": 0, "max": 10, "step": 0.5 } },
   { "type": "sensor", "name": "temperature", "enable": true, "order": 3, "unit": "\u00b0C", "spec": { "format": "float", "min": -40, "max": 200, "step": 0.01 } },
-  { "type": "sensor", "name": "online", "enable": true, "order": 4, "unit": "-", "spec": { "format": "bool" } }
+  { "type": "sensor", "name": "mode", "enable": true, "order": 4, "unit": "-", "spec": { "format": "int", "min": -1, "max": 2, "step": 1 } },
+  { "type": "sensor", "name": "online", "enable": true, "order": 5, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
 UNASSIGNED_INDEX=$((RANDOM % ${#DEVICE_IDS[@]}))
