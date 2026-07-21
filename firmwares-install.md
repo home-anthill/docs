@@ -8,10 +8,13 @@ You can use only the ones you need.
 
 Suggested hardware:
 - some generic cables (I suggest [this product](https://www.amazon.it/gp/product/B08YRGVYPV/ref=ppx_yo_dt_b_asin_title_o07_s01?ie=UTF8&psc=1))
-- 4 x Mini Breadboards [HERE](https://www.amazon.it/AZDelivery-MB-102-Breadboard-Alimentazione-Arduino/dp/B07VFK5CRP/ref=sr_1_5?keywords=breadboards&qid=1670794035&sr=8-5)
-- 1 x `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)` [HERE](https://www.mouser.it/ProductDetail/Espressif-Systems/ESP32-S3-DevKitC-1-N8?qs=Wj%2FVkw3K%252BMCTHFMHLvA1pQ%3D%3D)
-- 3 x `ESP32 S2 DevKit-C (ESP32-S2-SOLO)` [HERE](https://www.mouser.it/ProductDetail/Espressif-Systems/ESP32-S2-DevKitC-1?qs=sGAEpiMZZMuqBwn8WqcFUipNgoezRlc4yCMrcjU15dajQwJoGbTgng%3D%3D)
-- 1 x `Grove - 4 pin Male Jumper to Grove 4 pin Conversion Cable` (SKU 110990210) [HERE](https://www.seeedstudio.com/Grove-4-pin-Male-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-Pack.html?queryID=2303afdc4903ae3d41e29da30f358b96&objectID=1321&indexName=bazaar_retailer_products)
+- 5 x Breadboards 830 points [HERE](https://www.amazon.it/ELEGOO-Breadboard-compatibile-Arduino-Jumper/dp/B06XRG7C5L?th=1)
+- 5 x `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)` [HERE](https://www.digikey.it/it/products/detail/espressif-systems/ESP32-S3-DEVKITC-1U-N8R8/16162636?srsltid=AfmBOorUlJqz4HeVhK1713fLamIR2dg4pMgumz8HgpirVfO7L4LVzpTK)
+- 5 x Micro USB cables
+- 5 x USB power adapter
+- 5 (all optional) x `Display OLED I2C 0,91” 128×32 pixel` [HERE](https://futuranet.it/prodotto/display-oled-i2c-091-128x32-pixel/?srsltid=AfmBOopjRC6Q5s2GWDbei20VWqEDNmeBWH89Jfnmz4c2NbtdR3P-GtGZ)
+- 5 (all optional, and useful only with display) x `Push Button` [HERE](https://www.amazon.it/Interruttore-momentaneo-interruttore-Interruttori-elettrodomestici/dp/B08D6PHYV2)
+- 5 x `Grove - 4 pin Male Jumper to Grove 4 pin Conversion Cable` (SKU 110990210) [HERE](https://www.seeedstudio.com/Grove-4-pin-Male-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-Pack.html?queryID=2303afdc4903ae3d41e29da30f358b96&objectID=1321&indexName=bazaar_retailer_products)
 - 1 x `Grove - Digital Light Sensor - TSL2561` (SKU 101020030) [HERE](https://www.seeedstudio.com/Grove-Digital-Light-Sensor-TSL2561.html?queryID=4a3675ce800dd579fb0e50d00ef6b601&objectID=1594&indexName=bazaar_retailer_products)
 - 1 x `Grove - Infrared Emitter` (SKU 101020026) [HERE](https://www.seeedstudio.com/Grove-Infrared-Emitter.html?queryID=160934d31f7e88ba03efa75a63d27010&objectID=2248&indexName=bazaar_retailer_products)
 - 1 x `Grove - Air Quality Sensor v1.3 - Arduino Compatible` (SKU 101020078) [HERE](https://www.seeedstudio.com/Grove-Air-Quality-Sensor-v1-3-Arduino-Compatible.html?queryID=b39ed7edc031e50e2d00e646247cba7c&objectID=700&indexName=bazaar_retailer_products)
@@ -20,10 +23,7 @@ Suggested hardware:
 - 1 x `DHT22 AM2302 sensor` [HERE](https://www.amazon.it/AZDelivery-temperatura-circuito-Raspberry-gratuito/dp/B078SVZB1X/ref=sr_1_1_sspa?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=5C1HXGIU9M4H&keywords=dht22&qid=1670794113&sprefix=dht22%2Caps%2C90&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1&smid=A1X7QLRQH87QA3)
 - 1 x `Grove - High Precision Barometric Pressure Sensor (DPS310)` [HERE](https://it.farnell.com/en-IT/seeed-studio/101020812/pressure-sensor-board-arduino/dp/4007743?CMP=e-email-sys-orderack-GLB)
 - 1 x  `Adafruit MCP9600 I2C Thermocouple Amplifier - K, J, T, N, S, E, B and R Type T` [HERE](https://www.adafruit.com/product/4101?srsltid=AfmBOop2GS--fyHQFLK_w9Hz3XF21xN-o0HnBQf9MVE9l1vp0C1ncZiX)
-- 1 x `Display OLED I2C 0,91” 128×32 pixel` [HERE](https://futuranet.it/prodotto/display-oled-i2c-091-128x32-pixel/?srsltid=AfmBOopjRC6Q5s2GWDbei20VWqEDNmeBWH89Jfnmz4c2NbtdR3P-GtGZ)
-- 1 x `Thermocouple K-Type`
-- 4 x Micro USB cables
-- 4 x USB power adapter
+- 1 x `Thermocouple K-Type` to connect to the `Adafruit MCP9600`
 
 
 DHT + Light
@@ -46,9 +46,14 @@ Air Conditioner Beko or LG
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-ac.jpg" alt="air conditioner">
 <br/>
 
-Thermostat
+Thermostat (outputs connected to LEDS)
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/device-thermostat.jpg" alt="thermostat">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/thermostat-thermocouple-k.jpg" alt="thermostat">
+<br/>
+
+Thermostat (outputs connected to LEDS) with MCP9600 simulator (development only)
+<br/>
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/thermostat-with-mcp9600-simulator.jpg" alt="thermostat-with-mcp9600-simultor">
 <br/>
 
 Connections:
@@ -92,6 +97,30 @@ These firmwares are known to build with the `esp32` board package from Espressif
 
 3. Create a new `private-config/secrets.yaml` file.
 
+For local development (suggested as first try):
+
+```yaml
+# development configuration used locally
+
+wifi_ssid: '<YOUR WIFI SSID>'
+wifi_password: '<YOUR WIFI PASSWORD>'
+
+manufacturer: 'ks89'
+api_token: '<PROFILE API TOKEN>' # from your local DB or via `regenApiToken` in Bruno
+
+ssl: false
+
+server_domain: '192.168.1.7' # your local IP discovered above
+server_port: '8099'
+server_path: '/admission/register'
+
+mqtt_domain: '192.168.1.7' # your local IP discovered above
+mqtt_port: 1883
+mqtt_auth: true
+mqtt_username: "<YOUR MOSQUITTO USERNAME>"
+mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
+```
+
 For production:
 
 ```yaml
@@ -117,31 +146,6 @@ mqtt_auth: true
 mqtt_username: "<YOUR MOSQUITTO USERNAME>"
 mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
 ```
-
-For local development:
-
-```yaml
-# development configuration used locally
-
-wifi_ssid: '<YOUR WIFI SSID>'
-wifi_password: '<YOUR WIFI PASSWORD>'
-
-manufacturer: 'ks89'
-api_token: '<PROFILE API TOKEN>' # from your local DB or via `regenApiToken` in Bruno
-
-ssl: false
-
-server_domain: '192.168.1.7' # your local IP discovered above
-server_port: '8099'
-server_path: '/admission/register'
-
-mqtt_domain: '192.168.1.7' # your local IP discovered above
-mqtt_port: 1883
-mqtt_auth: true
-mqtt_username: "<YOUR MOSQUITTO USERNAME>"
-mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
-```
-
 
 4. Run the `esp32-configurator` Python script:
 

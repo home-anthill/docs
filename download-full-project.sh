@@ -25,10 +25,3 @@ git clone https://github.com/home-anthill/mqtt-communication-checker.git
 # always from the `home-anthill` folder created above:
 # create a folder where you can put your custom configuration
 mkdir private-config
-# use the Helm Chart `values.yaml` file as a starting point to simplify the configuration
-cp deployer/home-anthill/values.yaml private-config/custom-values.yaml
-# use the `secrets-template` template as a starting point to simplify the configuration 
-cp firmwares/secrets-template private-config/secrets-local.yaml
-cp firmwares/secrets-template private-config/secrets.yaml
-
-echo "Update `private-config` yaml files with your configurations!!!"
