@@ -12,8 +12,10 @@ Suggested hardware:
 - 5 x `ESP32 S3 DevKit-C (ESP32-S3-WROOM-1)` [HERE](https://www.digikey.it/it/products/detail/espressif-systems/ESP32-S3-DEVKITC-1U-N8R8/16162636?srsltid=AfmBOorUlJqz4HeVhK1713fLamIR2dg4pMgumz8HgpirVfO7L4LVzpTK)
 - 5 x Micro USB cables
 - 5 x USB power adapter
-- 5 (all optional) x `Display OLED I2C 0,91” 128×32 pixel` [HERE](https://futuranet.it/prodotto/display-oled-i2c-091-128x32-pixel/?srsltid=AfmBOopjRC6Q5s2GWDbei20VWqEDNmeBWH89Jfnmz4c2NbtdR3P-GtGZ)
-- 5 (all optional, and useful only with display) x `Push Button` [HERE](https://www.amazon.it/Interruttore-momentaneo-interruttore-Interruttori-elettrodomestici/dp/B08D6PHYV2)
+- 5 (all optional, 6 if you want to use the `thermostat-mcp9600-simulator`) x `Display OLED I2C 0,91” 128×32 pixel` [HERE](https://futuranet.it/prodotto/display-oled-i2c-091-128x32-pixel/?srsltid=AfmBOopjRC6Q5s2GWDbei20VWqEDNmeBWH89Jfnmz4c2NbtdR3P-GtGZ)
+- 5 (all optional, and useful only with display. 9 buttons if you want to use the `thermostat-mcp9600-simulator`) x `Push Button` [HERE](https://www.amazon.it/Interruttore-momentaneo-interruttore-Interruttori-elettrodomestici/dp/B08D6PHYV2)
+- 4 (all optional, only useful to show thermostat outputs) x `LED 5mm` [HERE](https://www.amazon.it/Assortimento-Progetti-Arduino-Esperimenti-Scientifici/dp/B0GHNSR6X8/)
+and 4 `Resistor 200 Ohm 1/4 W` [HERE](https://www.amazon.it/ELEGOO-Resistenze-Resistori-Tolleranza-Resistenza/dp/B071Z66XDV)
 - 5 x `Grove - 4 pin Male Jumper to Grove 4 pin Conversion Cable` (SKU 110990210) [HERE](https://www.seeedstudio.com/Grove-4-pin-Male-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-Pack.html?queryID=2303afdc4903ae3d41e29da30f358b96&objectID=1321&indexName=bazaar_retailer_products)
 - 1 x `Grove - Digital Light Sensor - TSL2561` (SKU 101020030) [HERE](https://www.seeedstudio.com/Grove-Digital-Light-Sensor-TSL2561.html?queryID=4a3675ce800dd579fb0e50d00ef6b601&objectID=1594&indexName=bazaar_retailer_products)
 - 1 x `Grove - Infrared Emitter` (SKU 101020026) [HERE](https://www.seeedstudio.com/Grove-Infrared-Emitter.html?queryID=160934d31f7e88ba03efa75a63d27010&objectID=2248&indexName=bazaar_retailer_products)
@@ -174,3 +176,14 @@ poetry run python -m src --model=ac-lg --source=../private-config/secrets.yaml -
 - Open `firmwares/airquality-pir/airquality-pir.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/barometer/barometer.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/thermostat/thermostat.ino` in Arduino IDE and flash the firmware.
+
+
+6. (optional) Thermostat simulator with ESP-IDF
+
+Testing `thermostat` firmware is difficult when relying on a real `thermocouple` and an `Adafruit MCP9600` to control temperatures. To make this easier, I built a simulator using another ESP32-S3, a display, and four buttons to send exact temperature values.
+
+First, power off the `thermostat` and disconnect the `Adafruit MCP9600` from the I2C bus. Then, connect a second breadboard according to the wiring described in `firmwares/thermostat-mcp9600-simulator/README.md` (as shown in the image above). Once connected, you can simply press the buttons to increase or decrease the temperature registered by the `thermostat`.
+
+**ATTENTION: You must start first the simulator and next the thermostat**
+
+To build, flash firmware and read serial monitor of the simulator, please follow the guide in firmwares repository at `firmwares/thermostat-mcp9600-simulator/README.md`.

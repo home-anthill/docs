@@ -22,6 +22,8 @@ cmake --version
 protoc --version
 ```
 
+If you want to use also the optional `thermostat-mcp9600-simulator` to test and develop `thermostat` firmware, you must install and configure ESP-IDF on your local machine. Please check the tutorial Appendix A, at the end of this guide.
+
 
 ### Install `mosquitto_passwd` CLI
 
@@ -164,7 +166,7 @@ docker run -it --name mosquitto \
     -v ./mosquitto-local-acl.conf:/mosquitto/acl/acl_file:ro \
     -v ./data:/mosquitto/data \
     -v ./log:/mosquitto/log \
-    -e MOSQUITTO_USERS='device_pubsub:DevicePassword1!,producer_sub:ProducerPassword1!,online_receiver_sub:OnlineReceiverPassword1!,api_devices_pub:ApiDevicesPassword1!' \
+    -e MOSQUITTO_USERS='device_pubsub:DevicePassword1!,producer_sub:ProducerPassword1!,alarm_receiver_sub:AlarmReceiverPassword1!,api_devices_pub:ApiDevicesPassword1!' \
     ks89/mosquitto:local
 ```
 **Do not close this terminal window.**
@@ -327,7 +329,7 @@ Create a new project in the [Firebase console](https://console.firebase.google.c
 4. download the `google-services.json` file from `Project Settings` -> `General`. This file is required to build the Android app below and receive push notifications.
 5. create the app
 6. go to `Project Settings` -> `Service account`, select `SDK Firebase Admin`, and click
-   the `Generate a new private key` button to download `serviceAccountKey.json` (this is required to run `online-alarm` below and send push notifications).
+   the `Generate a new private key` button to download `serviceAccountKey.json` (this is required to run `alarm-notifier` below and send push notifications).
 
 
 ## 12. Run all microservices
@@ -391,28 +393,28 @@ make deps
 make run
 ```
 
-7. online-receiver
+7. alarm-receiver
 
 ```bash
-cd home-anthill/online-receiver
+cd home-anthill/alarm-receiver
 cp .env_template .env
 make deps
 make run
 ```
 
-8. online
+8. alarm
 
 ```bash
-cd home-anthill/online
+cd home-anthill/alarm
 cp .env_template .env
 make deps
 make run
 ```
 
-9. online-alarm
+9. alarm-notifier
 
 ```bash
-cd home-anthill/online-alarm
+cd home-anthill/alarm-notifier
 cp .env_template .env
 # replace the template file with the one obtained above
 cp serviceAccountKey.json_template serviceAccountKey.json
@@ -456,7 +458,7 @@ However, you do not have any other data yet.
 
 ### Fill MongoDB with useful data
 
-The script can start the OAuth2 login for you. Before opening the browser, it checks MongoDB, Mosquitto, Redis, GUI, `api-server`, `admission`, `online`, `register`, and `api-devices`, then asks for confirmation. It opens the browser at `http://localhost:4200/api/oauth/app/login`, waits for the issued app login code in local MongoDB, exchanges that code for a JWT, and fills MongoDB with sample data. This requires `mongosh` and uses `MONGODB_URL=mongodb://localhost:27017` by default.
+The script can start the OAuth2 login for you. Before opening the browser, it checks MongoDB, Mosquitto, Redis, GUI, `api-server`, `admission`, `alarm`, `register`, and `api-devices`, then asks for confirmation. It opens the browser at `http://localhost:4200/api/oauth/app/login`, waits for the issued app login code in local MongoDB, exchanges that code for a JWT, and fills MongoDB with sample data. This requires `mongosh` and uses `MONGODB_URL=mongodb://localhost:27017` by default.
 
 After regenerating the profile API token and creating the home/rooms, the script asks for confirmation before registering sample devices.
 
@@ -586,3 +588,24 @@ mqtt_password: "DevicePassword1!"
    <br/>
 8. Build the app with the Debug variant (default) on the virtual device.
 9. On the virtual device, use the app to log in via GitHub. You should be redirected to GitHub and back to the app with a valid FCMToken.
+
+
+## Appendix A (optional)
+
+### Install ESP-IDF on macOS
+
+Install prerequisites:
+
+```bash
+brew install cmake ninja dfu-util ccache python git wget flex bison gperf
+```
+
+Install the tested ESP-IDF release:
+
+```bash
+mkdir -p ~/esp
+cd ~/esp
+git clone --branch v5.5.4 --recursive https://github.com/espressif/esp-idf.git
+cd esp-idf
+./install.sh esp32s3
+```

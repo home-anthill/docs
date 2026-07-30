@@ -14,7 +14,7 @@ API_SERVER="${API_SERVER:-http://localhost:8082}"
 API_DEVICES_HOST="${API_DEVICES_HOST:-localhost}"
 API_DEVICES_PORT="${API_DEVICES_PORT:-50051}"
 REGISTER_SERVER="${REGISTER_SERVER:-http://localhost:8000}"
-ONLINE_SERVER="${ONLINE_SERVER:-http://localhost:8089}"
+ALARM_SERVER="${ALARM_SERVER:-http://localhost:8089}"
 
 JWT=""
 
@@ -110,7 +110,7 @@ preflight_checks() {
   check_http "GUI" "$LOGIN_SERVER" || failed=1
   check_http "api-server" "$API_SERVER/api/keepalive" || failed=1
   check_http "admission" "$ADMISSION_SERVER/admission/keepalive" || failed=1
-  check_http "online" "$ONLINE_SERVER/keepalive" || failed=1
+  check_http "alarm" "$ALARM_SERVER/keepalive" || failed=1
   check_http "register" "$REGISTER_SERVER/keepalive" || failed=1
   check_tcp "api-devices gRPC" "$API_DEVICES_HOST" "$API_DEVICES_PORT" || failed=1
 

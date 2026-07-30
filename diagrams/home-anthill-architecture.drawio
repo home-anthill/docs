@@ -327,7 +327,7 @@
         <mxCell id="Hcw29AwPkGS2vUysVvsq-6" connectable="0" parent="Hcw29AwPkGS2vUysVvsq-5" style="group" value="" vertex="1">
           <mxGeometry height="66" width="137.81000000000006" as="geometry" />
         </mxCell>
-        <mxCell id="Hcw29AwPkGS2vUysVvsq-7" parent="Hcw29AwPkGS2vUysVvsq-6" style="rounded=0;whiteSpace=wrap;html=1;" value="online-alarm" vertex="1">
+        <mxCell id="Hcw29AwPkGS2vUysVvsq-7" parent="Hcw29AwPkGS2vUysVvsq-6" style="rounded=0;whiteSpace=wrap;html=1;" value="alarm-notifier" vertex="1">
           <mxGeometry height="60" width="120" y="6" as="geometry" />
         </mxCell>
         <mxCell id="Hcw29AwPkGS2vUysVvsq-8" parent="Hcw29AwPkGS2vUysVvsq-6" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png;" value="" vertex="1">
@@ -342,7 +342,7 @@
         <mxCell id="Hcw29AwPkGS2vUysVvsq-11" connectable="0" parent="Hcw29AwPkGS2vUysVvsq-10" style="group" value="" vertex="1">
           <mxGeometry height="66" width="137.81" as="geometry" />
         </mxCell>
-        <mxCell id="Hcw29AwPkGS2vUysVvsq-12" parent="Hcw29AwPkGS2vUysVvsq-11" style="rounded=0;whiteSpace=wrap;html=1;" value="online" vertex="1">
+        <mxCell id="Hcw29AwPkGS2vUysVvsq-12" parent="Hcw29AwPkGS2vUysVvsq-11" style="rounded=0;whiteSpace=wrap;html=1;" value="alarm" vertex="1">
           <mxGeometry height="60" width="120" y="6" as="geometry" />
         </mxCell>
         <mxCell id="Hcw29AwPkGS2vUysVvsq-13" parent="Hcw29AwPkGS2vUysVvsq-11" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png;" value="" vertex="1">
@@ -369,7 +369,7 @@
         <mxCell id="Hcw29AwPkGS2vUysVvsq-16" connectable="0" parent="Hcw29AwPkGS2vUysVvsq-15" style="group" value="" vertex="1">
           <mxGeometry height="66" width="137.81" as="geometry" />
         </mxCell>
-        <mxCell id="Hcw29AwPkGS2vUysVvsq-17" parent="Hcw29AwPkGS2vUysVvsq-16" style="rounded=0;whiteSpace=wrap;html=1;" value="online-receiver&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="Hcw29AwPkGS2vUysVvsq-17" parent="Hcw29AwPkGS2vUysVvsq-16" style="rounded=0;whiteSpace=wrap;html=1;" value="alarm-receiver&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="120" y="6" as="geometry" />
         </mxCell>
         <mxCell id="Hcw29AwPkGS2vUysVvsq-18" parent="Hcw29AwPkGS2vUysVvsq-16" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png;" value="" vertex="1">

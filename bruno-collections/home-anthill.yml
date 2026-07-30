@@ -1089,12 +1089,12 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: online - update feature notification
+          name: alarm - update feature notification
           type: http
           seq: 6
         http:
           method: PUT
-          url: http://localhost:8089/online/71bf40a1-a22c-48bf-ba54-be2290d24388/features/01fa1af7-4015-4227-a94a-0a4faccfa1a0/notifications
+          url: http://localhost:8089/alarms/71bf40a1-a22c-48bf-ba54-be2290d24388/features/01fa1af7-4015-4227-a94a-0a4faccfa1a0/notifications
           body:
             type: json
             data: |-

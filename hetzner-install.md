@@ -14,9 +14,9 @@ Move them to `~/.ssh`.
 
 ### Environment
 
-- Ubuntu 24.04 LTS
-- Kubernetes v1.35.3+k3s1
-- [gateway-api 1.5.1](https://github.com/kubernetes-sigs/gateway-api)
+- Ubuntu 26.04 LTS
+- Kubernetes v1.36.2+k3s1
+- [gateway-api 1.6.1](https://github.com/kubernetes-sigs/gateway-api)
 - [Cilium 'latest stable'](https://github.com/cilium/cilium) — CNI, NetworkPolicy enforcement, kube-proxy replacement, and L2 LoadBalancer IP announcements (replaces MetalLB)
 - [rabbitmq/cluster-operator 'latest stable'](https://github.com/rabbitmq/cluster-operator)
 - [rabbitmq/messaging-topology-operator 'latest stable'](https://github.com/rabbitmq/messaging-topology-operator)
@@ -25,7 +25,7 @@ Move them to `~/.ssh`.
 From the Hetzner Cloud UI, create a server with these settings:
 
 - Location: Falkenstein
-- Image: Ubuntu 24.04
+- Image: Ubuntu 26.04
 - Type: Shared vCPU - x86 Intel - CX22 - 2 vCPU - 4 GB RAM - 40 GB disk
 - Networking: Public IPv4 (optionally, also Public IPv6)
 - SSH Keys: Add your SSH Public key created before
@@ -164,7 +164,7 @@ its network policy controller so that Cilium can take over both responsibilities
 Install K3s with:
 
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.35.3+k3s1" sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.36.2+k3s1" sh -
 # It should be `NotReady`, because Cilium is installed in the next step
 k3s kubectl get node
 ```
@@ -240,7 +240,7 @@ helm repo update
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.20.0 \
+  --version v1.21.0 \
   --set crds.enabled=true \
   --set config.enableGatewayAPI=true
 ```
@@ -268,7 +268,7 @@ kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/release
 This installs the standard CRDs (Gateway, HTTPRoute, GRPCRoute, ...) and the experimental ones (TCPRoute, TLSRoute, UDPRoute) needed for MQTT (TCP) traffic.
 
 ```bash
-kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/experimental-install.yaml
+kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/experimental-install.yaml
 
 # wait for CRDs to be established
 kubectl wait --for=condition=Established crd/httproutes.gateway.networking.k8s.io --timeout=60s
@@ -441,6 +441,11 @@ domains:
 letsencrypt:
   email: "YOUR_EMAIL_ADDRESS_FOR_LETSENCRYPT"
 
+apiToken:
+  hashSecret: "<API_TOKEN_HASH_SECRET>"
+  encryptionKey: "<32_BYTE_API_TOKEN_ENCRYPTION_KEY>"
+
+# dhi.io hardened image registry credentials
 dhi:
   username: "your docker hub username"
   password: "your docker hub password"
@@ -449,13 +454,14 @@ mosquitto:
   auth:
     enable: true
     users:
+      # Shared by all firmware devices. Backend services use separate role credentials below.
       device:
         username: "<CHOOSE_MOSQUITTO_USERNAME_1>"
         password: "<ALPHANUMERIC_PASSWORD_1>"
       producer:
         username: "<CHOOSE_MOSQUITTO_USERNAME_2>"
         password: "<ALPHANUMERIC_PASSWORD_2>"
-      onlineReceiver:
+      alarmReceiver:
         username: "<CHOOSE_MOSQUITTO_USERNAME_3>"
         password: "<ALPHANUMERIC_PASSWORD_3>"
       apiDevices:
@@ -465,10 +471,6 @@ mosquitto:
 redis:
   username: "redisuser"
   password: "<REDIS_PASSWORD>"
-
-apiToken:
-  hashSecret: "<API_TOKEN_HASH_SECRET>"
-  encryptionKey: "<32_BYTE_API_TOKEN_ENCRYPTION_KEY>"
 
 # create rabbit password with 'openssl rand -hex 24'
 rabbitmq:
@@ -483,6 +485,13 @@ rabbitmq:
   amqpHmacSecret: "<AMQP_HMAC_SECRET_HEX>"
 
 mongodbUrl: "mongodb+srv://<MONGODB_ATLAS_USERNAME>:<MONGODB_ATLAS_PASSWORD>@cluster0.4wies.mongodb.net"
+
+# required to enable Android App Links and to verify the ownership of the domain for the app
+androidAppLinks:
+  enabled: true
+  packageName: "eu.homeanthill" # this is the package name of the android app
+  sha256CertFingerprints:
+    - "<DEVELOPMENT_CERTIFICATE_FINGERPRINT>"
 
 apiServer:
   limitToUserEmails: "<GITHUB_ACCOUNT_EMAIL_TO_LOGIN>,<SECOND_GITHUB_ACCOUNT_EMAIL_TO_LOGIN>" # comma separated
@@ -500,17 +509,17 @@ register:
   rocketSecretKey:
     release: "<ROCKET_REGISTER_SECRET_KEY>"
 
-online:
+alarm:
   rocketSecretKey:
-    release: "<ROCKET_ONLINE_SECRET_KEY>"
+    release: "<ROCKET_ALARM_SECRET_KEY>"
 
-onlineReceiver:
+alarmReceiver:
   rocketSecretKey:
-    release: "<ROCKET_ONLINE_RECEIVER_SECRET_KEY>"
+    release: "<ROCKET_ALARM_RECEIVER_SECRET_KEY>"
 
-onlineAlarm:
+alarmNotifier:
   rocketSecretKey:
-    release: "<ROCKET_ONLINE_ALARM_SECRET_KEY>"
+    release: "<ROCKET_ALARM_NOTIFIER_SECRET_KEY>"
   firebaseServiceAccount:
     <PUT_FIREBASE_SERVICE_ACCOUNT_JSON_HERE>
 
@@ -610,7 +619,7 @@ kubectl get pods -n home-anthill
 
 Expected result: all pods in the `Running` state. Key startup dependencies:
 - `mosquitto` — waits for `mqtt-tls` secret via `wait-for-cert` init container
-- `api-devices`, `producer`, `online-receiver` — wait for mosquitto port 1883 via `wait-for-mqtt` init container
+- `api-devices`, `producer`, `alarm-receiver` — wait for mosquitto port 1883 via `wait-for-mqtt` init container
 
 
 #### Step 8 — Verify Gateways and connectivity

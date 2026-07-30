@@ -15,9 +15,9 @@ git clone https://github.com/home-anthill/esp32-configurator.git
 git clone https://github.com/home-anthill/mosquitto.git
 git clone https://github.com/home-anthill/firmwares.git
 git clone https://github.com/home-anthill/deployer.git
-git clone https://github.com/home-anthill/online.git
-git clone https://github.com/home-anthill/online-receiver.git
-git clone https://github.com/home-anthill/online-alarm.git
+git clone https://github.com/home-anthill/alarm.git
+git clone https://github.com/home-anthill/alarm-receiver.git
+git clone https://github.com/home-anthill/alarm-notifier.git
 git clone https://github.com/home-anthill/sharded-mongodb-compose.git
 git clone https://github.com/home-anthill/app.git
 git clone https://github.com/home-anthill/mqtt-communication-checker.git

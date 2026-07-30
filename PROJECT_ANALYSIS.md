@@ -26,9 +26,9 @@ Last scanned from `docs/` on 2026-06-06 across all sibling folders under `..`.
 | `k8s-config-reloader` | Sidecar that reloads processes on config file changes | Go 1.26.3, fsnotify, gopsutil |
 | `mosquitto` | MQTT broker image entrypoint and examples | Go 1.26.3, Docker, Mosquitto |
 | `mqtt-communication-checker` | Local end-to-end MQTT verification CLI | Python 3.12, Poetry, paho-mqtt, PyMongo, Redis |
-| `online` | Online-state REST API and FCM token storage | Rust 2024, Rocket, Redis |
-| `online-alarm` | Offline-device detector and FCM notifier | Rust 2024, Rocket, Redis, Firebase Cloud Messaging |
-| `online-receiver` | MQTT presence receiver | Rust 2024, Rocket health endpoint, MQTT, Redis, MongoDB |
+| `alarm` | Online-state REST API and FCM token storage | Rust 2024, Rocket, Redis |
+| `alarm-notifier` | Offline-device detector and FCM notifier | Rust 2024, Rocket, Redis, Firebase Cloud Messaging |
+| `alarm-receiver` | MQTT presence receiver | Rust 2024, Rocket health endpoint, MQTT, Redis, MongoDB |
 | `private-config` | Local deployment override and secret values | YAML, intentionally not analyzed in detail |
 | `producer` | MQTT to RabbitMQ bridge | Rust 2024, Tokio, paho-mqtt, lapin |
 | `rabbitmq-local` | Local RabbitMQ definitions/config | JSON, RabbitMQ config |
@@ -43,22 +43,23 @@ Generated or local-only directories were present in several repos (`coverage`, `
 ESP32 firmware
   | MQTT signed sensor payloads: sensors/{deviceUuid}/{featureName}
   | MQTT signed presence payloads: online/{deviceUuid}/features/{featureUuid}
+  | MQTT signed alarm payloads: alarms/{deviceUuid}/features/{featureUuid}/{alarmType}
   v
 Mosquitto
   |--> producer --> RabbitMQ queue ks89 --> consumer --> MongoDB sensors DB
-  |--> online-receiver -------------------------------> Redis online state
+  |--> alarm-receiver -------------------------------> Redis online state + pending alarms
 
 gui / app
   | REST + OAuth/JWT
   v
 api-server --> MongoDB api-server DB
   |--> register HTTP for sensor values
-  |--> online HTTP for online state and token rotation
+  |--> alarm HTTP for online state and token rotation
   |--> api-devices gRPC for controller commands
 
 admission REST --> api-devices gRPC + register HTTP
 api-devices --> MongoDB controllers DB + MQTT commands: devices/{deviceUuid}/values
-online-alarm --> Redis offline scan --> Firebase Cloud Messaging --> app
+alarm-notifier --> Redis offline scan --> Firebase Cloud Messaging --> app
 ```
 
 ## Service Summary
@@ -71,9 +72,9 @@ online-alarm --> Redis offline scan --> Firebase Cloud Messaging --> app
 | `register` | Rust/Rocket | Sensor registration and latest value reads | MongoDB | REST |
 | `producer` | Rust/Tokio | Subscribe to sensor MQTT topics and publish AMQP messages | None | MQTT, AMQP |
 | `consumer` | Rust/Tokio | Validate and persist signed sensor readings | MongoDB, Redis | AMQP |
-| `online` | Rust/Rocket | Read/delete online records, store FCM tokens, notification preferences, API-token migration, and notification history | Redis, notifications Redis | REST |
-| `online-receiver` | Rust/Tokio/Rocket | Validate signed online MQTT messages and update Redis | Redis, MongoDB | MQTT, REST health |
-| `online-alarm` | Rust/Tokio/Rocket | Poll Redis for offline devices, send grouped push notifications, and persist notification history | Redis, notifications Redis | REST health, FCM |
+| `alarm` | Rust/Rocket | Read/delete online records, store FCM tokens, alarm preferences, API-token migration, and notification history | Redis DB 0/1/3 | REST |
+| `alarm-receiver` | Rust/Tokio/Rocket | Validate signed online/alarm MQTT messages and update Redis | Redis DB 0/2/3, MongoDB | MQTT, REST health |
+| `alarm-notifier` | Rust/Tokio/Rocket | Poll offline state and pending alarms, send grouped push notifications, and persist notification history | Redis DB 0/1/3 | REST health, FCM |
 | `gui` | React/Vite/Nx | Browser dashboard for homes, devices, profile, values | Browser state | REST |
 | `app` | Android/Kotlin | Mobile dashboard, OAuth2 PKCE login, FCM token upload | SecurePrefs | REST, FCM |
 | `mosquitto` | Mosquitto + Go entrypoint | MQTT broker with generated password file | Filesystem | MQTT, MQTT/TLS |
@@ -100,13 +101,13 @@ The consumer validates:
 ### Online State
 
 ```text
-ESP32 -> Mosquitto -> online-receiver -> Redis
-online -> Redis
-online-alarm -> Redis -> FCM -> Android app
-online-alarm -> notifications Redis history -> online -> api-server -> gui/app
+ESP32 -> Mosquitto -> alarm-receiver -> Redis
+alarm -> Redis
+alarm-notifier -> Redis -> FCM -> Android app
+alarm-notifier -> notifications Redis history -> alarm -> api-server -> gui/app
 ```
 
-`online-receiver` subscribes to `online/+/features/+`, verifies the signed envelope, looks up the feature API token in MongoDB, claims a replay nonce in Redis, then inserts or updates the Redis online record. `online-alarm` scans Redis every 10 seconds, filters silenced features, caches already-notified offline devices, groups due offline devices by FCM token, sends FCM notifications when the cache timeout has elapsed, and stores sent-notification history in Redis with a 90 day retention window.
+`alarm-receiver` subscribes to `online/+/features/+` and `alarms/+/features/+/+`, verifies the signed envelope against the registered MongoDB feature, claims a replay nonce in Redis DB 2, then updates online state in DB 0 or stores a pending alarm in DB 3. `alarm-notifier` scans every 10 seconds, applies DB 3 silence preferences to offline and generic alarms, groups notifications by recipient/type, acknowledges alarms after successful FCM delivery, and stores sent-notification history in DB 1 with a 90 day retention window.
 
 ### Commands To Controllers
 
@@ -137,7 +138,9 @@ The registration path creates/updates controller metadata through `api-devices` 
 | `sensors/{deviceUuid}/airquality` | ESP32 to producer | Air quality enum readings |
 | `sensors/{deviceUuid}/airpressure` | ESP32 to producer | Air pressure readings |
 | `sensors/{deviceUuid}/online` | ESP32 to producer | Online sensor feature readings |
-| `online/{deviceUuid}/features/{featureUuid}` | ESP32 to online-receiver | Dedicated presence updates |
+| `online/{deviceUuid}/features/{featureUuid}` | ESP32 to alarm-receiver | Dedicated presence updates |
+| `alarms/{deviceUuid}/features/{featureUuid}/motion` | ESP32 to alarm-receiver | Motion alarm (`value=1`) |
+| `alarms/{deviceUuid}/features/{featureUuid}/thermostat-mode-error` | ESP32 to alarm-receiver | Thermostat mode fault (`value=-1`) |
 | `devices/{deviceUuid}/values` | api-devices to ESP32 | Controller command array |
 | `clients/{clientId}/status` | MQTT clients to broker | Last-will status topic configured by MQTT clients |
 
@@ -231,24 +234,24 @@ JWT-protected routes:
 | `DELETE` | `/sensors/:deviceUuid/features/:featureUuid` | Delete a sensor feature value |
 | `GET` | `/keepalive` | Health check |
 
-### `online` REST
+### `alarm` REST
 
 | Method | Path | Purpose |
 |---|---|---|
 | `GET` | `/online/:deviceUuid/features/:featureUuid` | Get online state |
 | `DELETE` | `/online/:deviceUuid/features/:featureUuid` | Delete online state |
 | `POST` | `/fcmtoken` | Initialize/store FCM token |
-| `PUT` | `/online/:deviceUuid/features/:featureUuid/notifications` | Update per-feature notification silence flag |
+| `PUT` | `/alarms/:deviceUuid/features/:featureUuid/notifications` | Update per-feature alarm notification silence flag |
 | `PUT` | `/api-token` | Update API token references in Redis |
 | `GET` | `/notifications/:apiToken` | List sent notification history for a profile API token |
 | `GET` | `/keepalive` | Health check |
 
-### `online-receiver` and `online-alarm`
+### `alarm-receiver` and `alarm-notifier`
 
 Both expose Rocket health endpoints through `/keepalive`. Their main work happens in background loops:
 
-- `online-receiver`: MQTT event loop.
-- `online-alarm`: Redis scan, FCM notification, and notification-history persistence loop.
+- `alarm-receiver`: MQTT event loop.
+- `alarm-notifier`: Redis scan, FCM notification, and notification-history persistence loop.
 
 ### `api-devices` gRPC
 
@@ -275,9 +278,9 @@ Responsibilities found in source:
 | `admission` | `8099` commonly used in tests/docs | `80` | Gin HTTP |
 | `api-devices` | `50051` | `50051` | gRPC |
 | `register` | Rocket debug default or `8000` in docs/tests | `80` | Rocket release chart exposes 80 |
-| `online` | `8089` | `80` | Rocket debug port is configured |
-| `online-receiver` | `8088` | `80` | Health endpoint plus MQTT background loop |
-| `online-alarm` | `8091` | `80` | Health endpoint plus notification loop |
+| `alarm` | `8089` | `80` | Rocket debug port is configured |
+| `alarm-receiver` | `8088` | `80` | Health endpoint plus MQTT background loop |
+| `alarm-notifier` | `8091` | `80` | Health endpoint plus notification loop |
 | `gui` | Vite/Nx dev server | `80` | Built assets served by standalone GUI image or copied to `api-server/public` for dev |
 | `Mosquitto` | `1883`, `8883`, `9001` historically | `1883`/`8883` | MQTT, optional TLS |
 | `RabbitMQ` | `5672`, `15672` | `5672`, `15672` | AMQP and management |
@@ -293,8 +296,9 @@ Responsibilities found in source:
 - Device/API tokens are hashed with `API_TOKEN_HASH_SECRET`; some services also require `API_TOKEN_ENCRYPTION_KEY` for encrypted token storage/lookup.
 - MQTT sensor and online payloads are signed with HMAC and include timestamp, nonce, device UUID, feature UUID, feature name/payload, and signature.
 - Redis is used for replay protection of signed MQTT nonces.
+- Redis DB assignments are fixed: DB 0 online/FCM lookups, DB 1 notification history, DB 2 signed replay claims, and DB 3 alarm settings/pending events. DB 15 is test-only.
 - AMQP messages from producer to consumer are signed with an HMAC header.
-- The Helm chart creates separate MQTT users for device, producer, online-receiver, and api-devices roles.
+- The Helm chart creates separate MQTT users for device, producer, alarm-receiver, and api-devices roles.
 - The Helm chart includes network policies, dedicated service accounts, disabled service account token automounts for workloads, Gateway security headers, optional TLS certificates, and egress policies for GitHub, MongoDB Atlas, and Google/FCM.
 
 ## Deployment
@@ -308,9 +312,10 @@ Responsibilities found in source:
 - Uses cert-manager Issuers/Certificates for web and MQTT TLS.
 - Uses Cilium LB-IPAM/L2 announcement and Cilium network policies for selected egress.
 - Uses RabbitMQ Cluster Operator resources for RabbitMQ users and permissions.
-- Deploys Redis, Mosquitto, GUI, admission, api-server, api-devices, register, producer, consumer, online, online-receiver, and online-alarm.
+- Deploys Redis, Mosquitto, GUI, admission, api-server, api-devices, register, producer, consumer, alarm, alarm-receiver, and alarm-notifier.
 - Uses Redis DB 1 as the default notifications Redis store for sent-notification history.
-- Includes smoke tests for GUI, API, online, Redis, Mosquitto, and RabbitMQ.
+- Uses Redis DB 3 for alarm notification settings and pending generic alarm events.
+- Includes smoke tests for GUI, API, alarm, Redis, Mosquitto, and RabbitMQ.
 - Uses external MongoDB through `mongodbUrl`, typically MongoDB Atlas.
 
 Important deployment sidecars/helpers:
@@ -342,7 +347,7 @@ Important deployment sidecars/helpers:
 
 `mqtt-communication-checker` is the main local end-to-end verification tool. It:
 
-- Checks Mosquitto, RabbitMQ, MongoDB, Redis, producer, consumer, and online-receiver readiness.
+- Checks Mosquitto, RabbitMQ, MongoDB, Redis, producer, consumer, and alarm-receiver readiness.
 - Reads profiles/devices from the `api-server` MongoDB database.
 - Joins registered feature metadata from `sensors.sensors` and controller metadata from `controllers.controllers`.
 - Generates signed MQTT payloads and verifies resulting MongoDB/Redis state.
