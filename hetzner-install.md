@@ -240,7 +240,7 @@ helm repo update
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.21.0 \
+  --version v1.21.1 \
   --set crds.enabled=true \
   --set config.enableGatewayAPI=true
 ```
