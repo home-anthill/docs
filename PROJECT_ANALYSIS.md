@@ -26,7 +26,7 @@ Last scanned from `docs/` on 2026-06-06 across all sibling folders under `..`.
 | `k8s-config-reloader` | Sidecar that reloads processes on config file changes | Go 1.26.3, fsnotify, gopsutil |
 | `mosquitto` | MQTT broker image entrypoint and examples | Go 1.26.3, Docker, Mosquitto |
 | `mqtt-communication-checker` | Local end-to-end MQTT verification CLI | Python 3.12, Poetry, paho-mqtt, PyMongo, Redis |
-| `alarm` | Online-state REST API and FCM token storage | Rust 2024, Rocket, Redis |
+| `alarm-api` | Online-state REST API and FCM token storage | Rust 2024, Rocket, Redis |
 | `alarm-notifier` | Offline-device detector and FCM notifier | Rust 2024, Rocket, Redis, Firebase Cloud Messaging |
 | `alarm-receiver` | MQTT presence receiver | Rust 2024, Rocket health endpoint, MQTT, Redis, MongoDB |
 | `private-config` | Local deployment override and secret values | YAML, intentionally not analyzed in detail |
@@ -54,7 +54,7 @@ gui / app
   v
 api-server --> MongoDB api-server DB
   |--> register HTTP for sensor values
-  |--> alarm HTTP for online state and token rotation
+  |--> alarm-api HTTP for online state and token rotation
   |--> api-devices gRPC for controller commands
 
 admission REST --> api-devices gRPC + register HTTP
@@ -72,7 +72,7 @@ alarm-notifier --> Redis offline scan --> Firebase Cloud Messaging --> app
 | `register` | Rust/Rocket | Sensor registration and latest value reads | MongoDB | REST |
 | `producer` | Rust/Tokio | Subscribe to sensor MQTT topics and publish AMQP messages | None | MQTT, AMQP |
 | `consumer` | Rust/Tokio | Validate and persist signed sensor readings | MongoDB, Redis | AMQP |
-| `alarm` | Rust/Rocket | Read/delete online records, store FCM tokens, alarm preferences, API-token migration, and notification history | Redis DB 0/1/3 | REST |
+| `alarm-api` | Rust/Rocket | Read/delete online records, store FCM tokens, alarm preferences, API-token migration, and notification history | Redis DB 0/1/3 | REST |
 | `alarm-receiver` | Rust/Tokio/Rocket | Validate signed online/alarm MQTT messages and update Redis | Redis DB 0/2/3, MongoDB | MQTT, REST health |
 | `alarm-notifier` | Rust/Tokio/Rocket | Poll offline state and pending alarms, send grouped push notifications, and persist notification history | Redis DB 0/1/3 | REST health, FCM |
 | `gui` | React/Vite/Nx | Browser dashboard for homes, devices, profile, values | Browser state | REST |
@@ -102,9 +102,9 @@ The consumer validates:
 
 ```text
 ESP32 -> Mosquitto -> alarm-receiver -> Redis
-alarm -> Redis
+alarm-api -> Redis
 alarm-notifier -> Redis -> FCM -> Android app
-alarm-notifier -> notifications Redis history -> alarm -> api-server -> gui/app
+alarm-notifier -> notifications Redis history -> alarm-api -> api-server -> gui/app
 ```
 
 `alarm-receiver` subscribes to `online/+/features/+` and `alarms/+/features/+/+`, verifies the signed envelope against the registered MongoDB feature, claims a replay nonce in Redis DB 2, then updates online state in DB 0 or stores a pending alarm in DB 3. `alarm-notifier` scans every 10 seconds, applies DB 3 silence preferences to offline and generic alarms, groups notifications by recipient/type, acknowledges alarms after successful FCM delivery, and stores sent-notification history in DB 1 with a 90 day retention window.
@@ -234,7 +234,7 @@ JWT-protected routes:
 | `DELETE` | `/sensors/:deviceUuid/features/:featureUuid` | Delete a sensor feature value |
 | `GET` | `/keepalive` | Health check |
 
-### `alarm` REST
+### `alarm-api` REST
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -278,7 +278,7 @@ Responsibilities found in source:
 | `admission` | `8099` commonly used in tests/docs | `80` | Gin HTTP |
 | `api-devices` | `50051` | `50051` | gRPC |
 | `register` | Rocket debug default or `8000` in docs/tests | `80` | Rocket release chart exposes 80 |
-| `alarm` | `8089` | `80` | Rocket debug port is configured |
+| `alarm-api` | `8089` | `80` | Rocket debug port is configured |
 | `alarm-receiver` | `8088` | `80` | Health endpoint plus MQTT background loop |
 | `alarm-notifier` | `8091` | `80` | Health endpoint plus notification loop |
 | `gui` | Vite/Nx dev server | `80` | Built assets served by standalone GUI image or copied to `api-server/public` for dev |
@@ -312,10 +312,10 @@ Responsibilities found in source:
 - Uses cert-manager Issuers/Certificates for web and MQTT TLS.
 - Uses Cilium LB-IPAM/L2 announcement and Cilium network policies for selected egress.
 - Uses RabbitMQ Cluster Operator resources for RabbitMQ users and permissions.
-- Deploys Redis, Mosquitto, GUI, admission, api-server, api-devices, register, producer, consumer, alarm, alarm-receiver, and alarm-notifier.
+- Deploys Redis, Mosquitto, GUI, admission, api-server, api-devices, register, producer, consumer, alarm-api, alarm-receiver, and alarm-notifier.
 - Uses Redis DB 1 as the default notifications Redis store for sent-notification history.
 - Uses Redis DB 3 for alarm notification settings and pending generic alarm events.
-- Includes smoke tests for GUI, API, alarm, Redis, Mosquitto, and RabbitMQ.
+- Includes smoke tests for GUI, API, alarm-api, Redis, Mosquitto, and RabbitMQ.
 - Uses external MongoDB through `mongodbUrl`, typically MongoDB Atlas.
 
 Important deployment sidecars/helpers:

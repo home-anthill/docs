@@ -509,7 +509,7 @@ register:
   rocketSecretKey:
     release: "<ROCKET_REGISTER_SECRET_KEY>"
 
-alarm:
+alarmApi:
   rocketSecretKey:
     release: "<ROCKET_ALARM_SECRET_KEY>"
 

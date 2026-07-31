@@ -108,7 +108,7 @@
             <mxPoint x="275" y="351" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="wbKME3ZPZhuUY4EkIvGF-19" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;container=1;collapsible=0;recursiveResize=0;rounded=0;shadow=0;strokeWidth=1;" value="alarm" vertex="1">
+        <mxCell id="wbKME3ZPZhuUY4EkIvGF-19" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;container=1;collapsible=0;recursiveResize=0;rounded=0;shadow=0;strokeWidth=1;" value="alarm-api" vertex="1">
           <mxGeometry height="169" width="104.97999999999999" x="340" y="271" as="geometry" />
         </mxCell>
         <mxCell id="wbKME3ZPZhuUY4EkIvGF-20" parent="wbKME3ZPZhuUY4EkIvGF-19" style="points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;strokeWidth=1;" value="" vertex="1">

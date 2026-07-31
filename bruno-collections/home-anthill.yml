@@ -1089,7 +1089,7 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: alarm - update feature notification
+          name: alarm-api - update feature notification
           type: http
           seq: 6
         http:

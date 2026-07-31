@@ -110,7 +110,7 @@ preflight_checks() {
   check_http "GUI" "$LOGIN_SERVER" || failed=1
   check_http "api-server" "$API_SERVER/api/keepalive" || failed=1
   check_http "admission" "$ADMISSION_SERVER/admission/keepalive" || failed=1
-  check_http "alarm" "$ALARM_SERVER/keepalive" || failed=1
+  check_http "alarm-api" "$ALARM_SERVER/keepalive" || failed=1
   check_http "register" "$REGISTER_SERVER/keepalive" || failed=1
   check_tcp "api-devices gRPC" "$API_DEVICES_HOST" "$API_DEVICES_PORT" || failed=1
 

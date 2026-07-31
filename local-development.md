@@ -402,10 +402,10 @@ make deps
 make run
 ```
 
-8. alarm
+8. alarm-api
 
 ```bash
-cd home-anthill/alarm
+cd home-anthill/alarm-api
 cp .env_template .env
 make deps
 make run
@@ -458,7 +458,7 @@ However, you do not have any other data yet.
 
 ### Fill MongoDB with useful data
 
-The script can start the OAuth2 login for you. Before opening the browser, it checks MongoDB, Mosquitto, Redis, GUI, `api-server`, `admission`, `alarm`, `register`, and `api-devices`, then asks for confirmation. It opens the browser at `http://localhost:4200/api/oauth/app/login`, waits for the issued app login code in local MongoDB, exchanges that code for a JWT, and fills MongoDB with sample data. This requires `mongosh` and uses `MONGODB_URL=mongodb://localhost:27017` by default.
+The script can start the OAuth2 login for you. Before opening the browser, it checks MongoDB, Mosquitto, Redis, GUI, `api-server`, `admission`, `alarm-api`, `register`, and `api-devices`, then asks for confirmation. It opens the browser at `http://localhost:4200/api/oauth/app/login`, waits for the issued app login code in local MongoDB, exchanges that code for a JWT, and fills MongoDB with sample data. This requires `mongosh` and uses `MONGODB_URL=mongodb://localhost:27017` by default.
 
 After regenerating the profile API token and creating the home/rooms, the script asks for confirmation before registering sample devices.
 
