@@ -23,7 +23,6 @@ and 4 `Resistor 200 Ohm 1/4 W` [HERE](https://www.amazon.it/ELEGOO-Resistenze-Re
 - 1 x `Grove - High Precision Barometric Pressure Sensor (DPS310)` (SKU 101020812) [HERE](https://www.seeedstudio.com/Grove-High-Precision-Barometer-Sensor-DPS310-p-4397.html?queryID=550beac2830c58583bcc256e3bf3f245&objectID=4397&indexName=bazaar_retailer_products)
 - 1 x `Mini AM312 PIR sensor` [HERE](https://www.amazon.it/gp/product/B07FGG87JM/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1)
 - 1 x `DHT22 AM2302 sensor` [HERE](https://www.amazon.it/AZDelivery-temperatura-circuito-Raspberry-gratuito/dp/B078SVZB1X/ref=sr_1_1_sspa?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=5C1HXGIU9M4H&keywords=dht22&qid=1670794113&sprefix=dht22%2Caps%2C90&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1&smid=A1X7QLRQH87QA3)
-- 1 x `Grove - High Precision Barometric Pressure Sensor (DPS310)` [HERE](https://it.farnell.com/en-IT/seeed-studio/101020812/pressure-sensor-board-arduino/dp/4007743?CMP=e-email-sys-orderack-GLB)
 - 1 x  `Adafruit MCP9600 I2C Thermocouple Amplifier - K, J, T, N, S, E, B and R Type T` [HERE](https://www.adafruit.com/product/4101?srsltid=AfmBOop2GS--fyHQFLK_w9Hz3XF21xN-o0HnBQf9MVE9l1vp0C1ncZiX)
 - 1 x `Thermocouple K-Type` to connect to the `Adafruit MCP9600`
 
