@@ -390,7 +390,7 @@ register_device "AA:99:77:22:12:AA" "dht-light" '[
   { "type": "sensor", "name": "online", "enable": true, "order": 4, "unit": "-", "spec": { "format": "bool" } }
 ]'
 
-register_device "BB:99:77:22:12:04" "airquality-pir" '[
+register_device "BB:99:77:22:12:04" "airquality-motion" '[
   { "type": "sensor", "name": "motion", "enable": true, "order": 1, "unit": "-", "spec": { "format": "bool" } },
   { "type": "sensor", "name": "airquality", "enable": true, "order": 2, "unit": "-", "spec": { "format": "int", "min": 0, "max": 3, "step": 1 } },
   { "type": "sensor", "name": "online", "enable": true, "order": 3, "unit": "-", "spec": { "format": "bool" } }

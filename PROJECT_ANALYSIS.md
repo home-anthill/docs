@@ -391,7 +391,7 @@ Firmware variants present:
 
 - `ac-beko`: Beko air-conditioner controller, IR handling, MQTT, registration, storage, Wi-Fi.
 - `ac-lg`: LG air-conditioner controller, IR handling, MQTT, registration, storage, Wi-Fi.
-- `airquality-pir`: Air quality plus PIR motion sensor.
+- `airquality-motion`: Air quality plus motion sensor.
 - `barometer`: Air pressure sensor.
 - `dht-light`: Temperature/humidity plus light sensor.
 - `thermostat`: Controller, display, temperature sensor, MQTT, registration, storage, Wi-Fi.

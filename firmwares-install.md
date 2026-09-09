@@ -17,11 +17,11 @@ Suggested hardware:
 - 4 (all optional, only useful to show thermostat outputs) x `LED 5mm` [HERE](https://www.amazon.it/Assortimento-Progetti-Arduino-Esperimenti-Scientifici/dp/B0GHNSR6X8/)
 and 4 `Resistor 200 Ohm 1/4 W` [HERE](https://www.amazon.it/ELEGOO-Resistenze-Resistori-Tolleranza-Resistenza/dp/B071Z66XDV)
 - 5 x `Grove - 4 pin Male Jumper to Grove 4 pin Conversion Cable` (SKU 110990210) [HERE](https://www.seeedstudio.com/Grove-4-pin-Male-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-Pack.html?queryID=2303afdc4903ae3d41e29da30f358b96&objectID=1321&indexName=bazaar_retailer_products)
-- 1 x `Grove - Digital Light Sensor - TSL2561` (SKU 101020030) [HERE](https://www.seeedstudio.com/Grove-Digital-Light-Sensor-TSL2561.html?queryID=4a3675ce800dd579fb0e50d00ef6b601&objectID=1594&indexName=bazaar_retailer_products)
+- 1 x `Adafruit TSL2591 - High Dynamic Range Digital Light Sensor` (SKU 1980) [HERE](https://www.adafruit.com/product/1980?srsltid=AfmBOormuLaAuLdC5c9iU3ZmF9hiraX6dFdhGGYvwfYVdaNdxMoL_GHg)
 - 1 x `Grove - Infrared Emitter` (SKU 101020026) [HERE](https://www.seeedstudio.com/Grove-Infrared-Emitter.html?queryID=160934d31f7e88ba03efa75a63d27010&objectID=2248&indexName=bazaar_retailer_products)
 - 1 x `Grove - Air Quality Sensor v1.3 - Arduino Compatible` (SKU 101020078) [HERE](https://www.seeedstudio.com/Grove-Air-Quality-Sensor-v1-3-Arduino-Compatible.html?queryID=b39ed7edc031e50e2d00e646247cba7c&objectID=700&indexName=bazaar_retailer_products)
-- 1 x `Grove - High Precision Barometric Pressure Sensor (DPS310)` (SKU 101020812) [HERE](https://www.seeedstudio.com/Grove-High-Precision-Barometer-Sensor-DPS310-p-4397.html?queryID=550beac2830c58583bcc256e3bf3f245&objectID=4397&indexName=bazaar_retailer_products)
-- 1 x `Mini AM312 PIR sensor` [HERE](https://www.amazon.it/gp/product/B07FGG87JM/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&psc=1)
+- 1 x `Adafruit BMP280 I2C or SPI Barometric Pressure & Altitude Sensor` (SKU 2651) [HERE](https://www.adafruit.com/product/2651)
+- 1 x `Radar module 24G MmWave HLK-LD2410C` [HERE](https://www.amazon.it/Benefischl-HLK-LD2410C-Rilevazione-Movimento-Presenza/dp/B0CMCH34FY)
 - 1 x `DHT22 AM2302 sensor` [HERE](https://www.amazon.it/AZDelivery-temperatura-circuito-Raspberry-gratuito/dp/B078SVZB1X/ref=sr_1_1_sspa?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=5C1HXGIU9M4H&keywords=dht22&qid=1670794113&sprefix=dht22%2Caps%2C90&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1&smid=A1X7QLRQH87QA3)
 - 1 x  `Adafruit MCP9600 I2C Thermocouple Amplifier - K, J, T, N, S, E, B and R Type T` [HERE](https://www.adafruit.com/product/4101?srsltid=AfmBOop2GS--fyHQFLK_w9Hz3XF21xN-o0HnBQf9MVE9l1vp0C1ncZiX)
 - 1 x `Thermocouple K-Type` to connect to the `Adafruit MCP9600`
@@ -37,9 +37,9 @@ Barometer
 <img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-barometer.jpg" alt="barometer">
 <br/>
 
-Air quality + PIR
+Air quality + motion
 <br/>
-<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-airquality-pir.jpg" alt="airquality and pir">
+<img src="https://raw.githubusercontent.com/home-anthill/docs/master/images/hardware/sensor-airquality-motion.jpg" alt="airquality and motion">
 <br/>
 
 Air Conditioner Beko or LG
@@ -58,11 +58,11 @@ Thermostat (outputs connected to LEDS) with MCP9600 simulator (development only)
 <br/>
 
 Connections:
-- all sensors are powered with 3.3V
+- all sensors are powered with 3.3V, except for MmWave HLK-LD2410C module
 - DHT signal input on pin 4
-- PIR signal input on pin 5
 - IR emitter on pin 4
 - Air quality signal on pin 4
+- 24G MmWave HLK-LD2410C motion sensor I2C (SCL on pin 39, SDL on pin 40)
 - Barometric Pressure sensor I2C (SCL on pin 39, SDL on pin 40)
 - Digital light sensor I2C (SCL on pin 39, SDL on pin 40)
 - Thermocouple amplifier I2C (SCL on pin 39, SDL on pin 40)
@@ -86,9 +86,10 @@ These firmwares are known to build with the `esp32` board package from Espressif
 - `DHT sensor library` by Adafruit (version `1.4.6`)
 - `IRremoteESP8266` by David Conran, Sebastien Warin, Mark Szabo, Ken Shirriff (version `2.9.0`)
 - `Time` by Michael Margolis (version `1.6.1`) (not used directly, but it's an indirect dependency of `TimeAlarms`)
-- `XENSIV Digital Pressure Sensor` by Infineon Technologies (version `1.0.2`)
+- `Adafruit BMP280 library` by Adafruit (version `3.0.0`)
+- `ld2410` by Nick Reynolds (version `0.2.2`)
 - `Grove - Air quality sensor` by Seeed Studio (version `1.0.2`)
-- `Grove - Digital Light Sensor` by Seeed Studio (version `2.0.0`)
+- `Adafruit TSL2591 Library` by Adafruit (version `1.4.5`)
 - `Adafruit GFX Library` by Adafruit (version `1.12.6`)
 - `Adafruit SSD1306` by Adafruit (version `2.5.16`)
 - `Adafruit BusIO` by Adafruit (version `1.17.4`)
@@ -110,16 +111,18 @@ manufacturer: 'ks89'
 api_token: '<PROFILE API TOKEN>' # from your local DB or via `regenApiToken` in Bruno
 
 ssl: false
-
+# HTTP server
 server_domain: '192.168.1.7' # your local IP discovered above
-server_port: '8099'
+server_port: 8099
 server_path: '/admission/register'
-
+# MQTT server
 mqtt_domain: '192.168.1.7' # your local IP discovered above
 mqtt_port: 1883
 mqtt_auth: true
 mqtt_username: "<YOUR MOSQUITTO USERNAME>"
 mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
+
+oled_display: false
 ```
 
 For production:
@@ -136,16 +139,18 @@ api_token: '<PROFILE API TOKEN>' # from your local DB
 # https port: 443
 # mqtts port: 8883
 ssl: true
-
+# HTTP server
 server_domain: '<YOUR HTTPS PUBLIC DOMAIN>'
 server_port: '443'
 server_path: '/admission/register'
-
+# MQTT server
 mqtt_domain: '<YOUR MQTTS PUBLIC DOMAIN>'
 mqtt_port: 8883
 mqtt_auth: true
 mqtt_username: "<YOUR MOSQUITTO USERNAME>"
 mqtt_password: "<YOUR MOSQUITTO PASSWORD>"
+
+oled_display: false
 ```
 
 4. Run the `esp32-configurator` Python script:
@@ -158,7 +163,7 @@ poetry install
 
 # run these commands
 poetry run python -m src --model=dht-light --source=../private-config/secrets.yaml --destination=../firmwares/dht-light
-poetry run python -m src --model=airquality-pir --source=../private-config/secrets.yaml --destination=../firmwares/airquality-pir
+poetry run python -m src --model=airquality-motion --source=../private-config/secrets.yaml --destination=../firmwares/airquality-motion
 poetry run python -m src --model=barometer --source=../private-config/secrets.yaml --destination=../firmwares/barometer
 
 poetry run python -m src --model=thermostat --source=../private-config/secrets.yaml --destination=../firmwares/thermostat
@@ -172,7 +177,7 @@ poetry run python -m src --model=ac-lg --source=../private-config/secrets.yaml -
 - Open `firmwares/ac-beko/ac-beko.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/ac-lg/ac-lg.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/dht-light/dht-light.ino` in Arduino IDE and flash the firmware.
-- Open `firmwares/airquality-pir/airquality-pir.ino` in Arduino IDE and flash the firmware.
+- Open `firmwares/airquality-motion/airquality-motion.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/barometer/barometer.ino` in Arduino IDE and flash the firmware.
 - Open `firmwares/thermostat/thermostat.ino` in Arduino IDE and flash the firmware.
 

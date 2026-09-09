@@ -371,7 +371,7 @@ items:
           followRedirects: true
           maxRedirects: 5
       - info:
-          name: registerSensor airquality-pir
+          name: registerSensor airquality-motion
           type: http
           seq: 7
         http:
@@ -383,7 +383,7 @@ items:
               {
                 "mac": "C6:99:77:22:12:AB",
                 "manufacturer": "ks89",
-                "model": "airquality-pir",
+                "model": "airquality-motion",
                 "apiToken": "8a98059f-a71d-47b6-a36a-582b7d31d398",
                 "features": [
                   {
